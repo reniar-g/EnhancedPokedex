@@ -1,39 +1,38 @@
-
 public class Move {
 
-    private String name;
-    private String description;
-    private String classification; // TM or HM
-    private String type1;
-    private String type2;
+    private String moveName;
+    private String moveDescription;
+    private String moveClassification; // TM or HM
+    private String moveType1;
+    private String moveType2;
 
 // constructor
     public Move(String name, String description, String classification, String type1, String type2) {
-        this.name = name;
-        this.description = description;
-        this.classification = classification;
-        this.type1 = type1;
-        this.type2 = type2;
+        this.moveName = name;
+        this.moveDescription = description;
+        this.moveClassification = classification;
+        this.moveType1 = type1;
+        this.moveType2 = type2;
     }
 
-    public String getName() {
-        return name;
+    public String getMoveName() {
+        return moveName;
     }
 
-    public String getType1() {
-        return type1;
+    public String getMoveType1() {
+        return moveType1;
     }
 
-    public String getType2() {
-        return type2;
+    public String getMoveType2() {
+        return moveType2;
     }
 
-    public String getClassification() {
-        return classification;
+    public String getMoveClassification() {
+        return moveClassification;
     }
 
     public String displayMove() {
-        return name + " (" + classification + ") - Type: " + type1
-                + (type2 != null ? "/" + type2 : "") + " | " + description;
+        return moveName + " (" + moveClassification + ") - Type: " + moveType1
+                + (moveType2 != null ? "/" + moveType2 : "") + " | " + moveDescription;
     }
 }

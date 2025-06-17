@@ -1,12 +1,11 @@
-
 import java.util.ArrayList;
 
 public class Pokemon {
 
     private int pokedexNumber;
-    private String name;
-    private String type1;
-    private String type2;
+    private String pokemonName;
+    private String pokemonType1;
+    private String pokemonType2;
     private int baseLevel;
     private int evolvesFrom;
     private int evolvesTo;
@@ -21,9 +20,9 @@ public class Pokemon {
             int hp, int attack, int defense, int speed) {
 
         this.pokedexNumber = pokedexNumber;
-        this.name = name;
-        this.type1 = type1;
-        this.type2 = type2;
+        this.pokemonName = name;
+        this.pokemonType1 = type1;
+        this.pokemonType2 = type2;
         this.baseLevel = baseLevel;
         this.evolvesFrom = evolvesFrom;
         this.evolvesTo = evolvesTo;
@@ -41,7 +40,7 @@ public class Pokemon {
     }
 
     public void cry() {
-        System.out.println(name + " cries out!");
+        System.out.println(pokemonName + " cries out!");
     }
 
     //setter for held item kasi nagbabago value
@@ -51,7 +50,7 @@ public class Pokemon {
 
     public boolean hasMove(String moveName) {
         for (Move move : moves) {
-            if (move.getName().equalsIgnoreCase(moveName)) {
+            if (move.getMoveName().equalsIgnoreCase(moveName)) {
                 return true;
             }
         }
@@ -62,16 +61,16 @@ public class Pokemon {
         return pokedexNumber;
     }
 
-    public String getName() {
-        return name;
+    public String getPokemonName() {
+        return pokemonName;
     }
 
-    public String getType1() {
-        return type1;
+    public String getPokemonType1() {
+        return pokemonType1;
     }
 
-    public String getType2() {
-        return type2;
+    public String getPokemonType2() {
+        return pokemonType2;
     }
 
     public int getEvolvesFrom() {
@@ -111,12 +110,12 @@ public class Pokemon {
     }
 
     public String displayPokemon() {
-        String typeInfo = type1 + (type2 != null ? "/" + type2 : "");
+        String typeInfo = pokemonType1 + (pokemonType2 != null ? "/" + pokemonType2 : "");
         String evolvesFromInfo = evolvesFrom != -1 ? String.valueOf(evolvesFrom) : "None";
         String evolvesToInfo = evolvesTo != -1 ? String.valueOf(evolvesTo) : "None";
-        String heldItemInfo = heldItem != null ? heldItem.getName() : "None";
+        String heldItemInfo = heldItem != null ? heldItem.getItemName() : "None";
 
-        return "[" + pokedexNumber + "] " + name
+        return "[" + pokedexNumber + "] " + pokemonName
                 + " | Type: " + typeInfo
                 + " | HP: " + hp + " ATK: " + attack + " DEF: " + defense + " SPD: " + speed
                 + " | Evolves From: " + evolvesFromInfo
