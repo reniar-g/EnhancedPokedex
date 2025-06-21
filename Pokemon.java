@@ -1,24 +1,30 @@
-import java.util.ArrayList;
 
-public class Pokemon {
+import java.util.ArrayList;
+import java.util.List;
+
+class Pokemon {
 
     private int pokedexNumber;
     private String pokemonName;
     private String pokemonType1;
-    private String pokemonType2;
+    private String pokemonType2; // Optional, nullable
     private int baseLevel;
-    private int evolvesFrom;
-    private int evolvesTo;
-    private int evolutionLevel;
-    private int hp, attack, defense, speed;
-    private ArrayList<Move> moves;
+    private Integer evolvesFrom; // Pokédex Number, nullable
+    private Integer evolvesTo;   // Pokédex Number, nullable
+    private Integer evolutionLevel; // Nullable
+    private int hp;
+    private int attack;
+    private int defense;
+    private int speed;
+    private List<Move> moveSet;
     private Item heldItem;
 
-    // constructor
-    public Pokemon(int pokedexNumber, String name, String type1, String type2,
-            int baseLevel, int evolvesFrom, int evolvesTo, int evolutionLevel,
+    /**
+     * Constructs a new Pokémon with the required attributes.
+     */
+    public Pokemon(int pokedexNumber, String name, String type1, String type2, int baseLevel,
+            Integer evolvesFrom, Integer evolvesTo, Integer evolutionLevel,
             int hp, int attack, int defense, int speed) {
-
         this.pokedexNumber = pokedexNumber;
         this.pokemonName = name;
         this.pokemonType1 = type1;
@@ -31,30 +37,12 @@ public class Pokemon {
         this.attack = attack;
         this.defense = defense;
         this.speed = speed;
-        this.moves = new ArrayList<>();
-        this.heldItem = null; // null kasi wala pang hawak
+        this.moveSet = new ArrayList<>();
 
-        // default moves
-        this.moves.add(new Move("Tackle", "A basic attack", "TM", type1, null));
-        this.moves.add(new Move("Defend", "Raises defense", "TM", type1, null));
-    }
-
-    public void cry() {
-        System.out.println(pokemonName + " cries out!");
-    }
-
-    //setter for held item kasi nagbabago value
-    public void setHeldItem(Item item) {
-        this.heldItem = item;
-    }
-
-    public boolean hasMove(String moveName) {
-        for (Move move : moves) {
-            if (move.getMoveName().equalsIgnoreCase(moveName)) {
-                return true;
-            }
-        }
-        return false;
+        // Default moves
+        moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal", null));
+        moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal", null));
+        this.heldItem = null;
     }
 
     public int getPokedexNumber() {
@@ -73,15 +61,19 @@ public class Pokemon {
         return pokemonType2;
     }
 
-    public int getEvolvesFrom() {
+    public int getBaseLevel() {
+        return baseLevel;
+    }
+
+    public Integer getEvolvesFrom() {
         return evolvesFrom;
     }
 
-    public int getEvolvesTo() {
+    public Integer getEvolvesTo() {
         return evolvesTo;
     }
 
-    public int getEvolutionLevel() {
+    public Integer getEvolutionLevel() {
         return evolutionLevel;
     }
 
@@ -101,27 +93,29 @@ public class Pokemon {
         return speed;
     }
 
-    public ArrayList<Move> getMoves() {
-        return moves;
+    public List<Move> getMoveSet() {
+        return moveSet;
     }
 
     public Item getHeldItem() {
         return heldItem;
     }
 
-    public String displayPokemon() {
-        String typeInfo = pokemonType1 + (pokemonType2 != null ? "/" + pokemonType2 : "");
-        String evolvesFromInfo = evolvesFrom != -1 ? String.valueOf(evolvesFrom) : "None";
-        String evolvesToInfo = evolvesTo != -1 ? String.valueOf(evolvesTo) : "None";
-        String heldItemInfo = heldItem != null ? heldItem.getItemName() : "None";
-
-        return "[" + pokedexNumber + "] " + pokemonName
-                + " | Type: " + typeInfo
-                + " | HP: " + hp + " ATK: " + attack + " DEF: " + defense + " SPD: " + speed
-                + " | Evolves From: " + evolvesFromInfo
-                + " | Evolves To: " + evolvesToInfo
-                + " | Evo Level: " + evolutionLevel
-                + " | Held Item: " + heldItemInfo;
+    public void setHeldItem(Item heldItem) {
+        this.heldItem = heldItem;
     }
 
+    /**
+     * Simulates the Pokémon's cry.
+     */
+    public void cry() {
+        System.out.println(pokemonName + " cries: " + pokemonName.toUpperCase() + "!");
+    }
+
+    public String displayPokemon() {
+        return "#" + pokedexNumber + " " + pokemonName + " (" + pokemonType1
+                + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : "") + ") - Level " + baseLevel
+                + " | HP: " + hp + ", Atk: " + attack + ", Def: " + defense + ", Spd: " + speed
+                + " | Evolves from: " + evolvesFrom + ", Evolves to: " + evolvesTo + ", Evo Level: " + evolutionLevel;
+    }
 }
