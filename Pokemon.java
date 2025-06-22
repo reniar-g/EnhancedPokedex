@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-class Pokemon {
+public class Pokemon {
 
     private int pokedexNumber;
     private String pokemonName;
@@ -112,10 +112,22 @@ class Pokemon {
         System.out.println(pokemonName + " cries: " + pokemonName.toUpperCase() + "!");
     }
 
+    /**
+     * Helper method to convert null Integer to "N/A" string
+     */
+    private String formatNullableInteger(Integer value) {
+        return value == null ? "N/A" : value.toString();
+    }
+
+    /**
+     * Displays Pokemon information with N/A for null values
+     */
     public String displayPokemon() {
         return "#" + pokedexNumber + " " + pokemonName + " (" + pokemonType1
                 + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : "") + ") - Level " + baseLevel
                 + " | HP: " + hp + ", Atk: " + attack + ", Def: " + defense + ", Spd: " + speed
-                + " | Evolves from: " + evolvesFrom + ", Evolves to: " + evolvesTo + ", Evo Level: " + evolutionLevel;
+                + " | Evolves from: " + formatNullableInteger(evolvesFrom)
+                + ", Evolves to: " + formatNullableInteger(evolvesTo)
+                + ", Evo Level: " + formatNullableInteger(evolutionLevel);
     }
 }
