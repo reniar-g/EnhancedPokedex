@@ -16,7 +16,8 @@ public class EnhancedPokedex {
 
     public static void main(String[] args) {
 
-        loadDefaultItems();
+        loadDefaultItems(); // Load default items into the itemList
+        loadDefaultMoves(); // Load default moves into the moveList
 
         boolean running = true;
         while (running) {
@@ -39,6 +40,122 @@ public class EnhancedPokedex {
                 case 0:
                     running = false;
                     System.out.println("Exiting. Thank you!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    // --- Sub-Menu Methods ---
+    /**
+     * Pokemon Management submenu
+     */
+    private static void pokemonManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.pokemonArt();
+            MenuArts.printPokemonMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addPokemon();
+                    break;
+                case 2:
+                    viewAllPokemon();
+                    break;
+                case 3:
+                    viewPokemonDetails();
+                    break;
+                case 4:
+                    searchPokemon();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    /**
+     * Moves Management submenu
+     */
+    private static void movesManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.movesArt();
+            MenuArts.printMovesMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addMove();
+                    break;
+                case 2:
+                    viewAllMoves();
+                    break;
+                case 3:
+                    searchMoves();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    /**
+     * Item Management submenu
+     */
+    private static void itemManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.itemsArt();
+            MenuArts.printItemMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    viewAllItems();
+                    break;
+                case 2:
+                    searchItems();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    /**
+     * Trainer Management submenu
+     */
+    private static void trainerManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.trainersArt();
+            MenuArts.printTrainerMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addTrainer();
+                    break;
+                case 2:
+                    viewAllTrainers();
+                    break;
+                case 3:
+                    searchTrainers();
+                    break;
+                case 4:
+                    manageTrainer();
+                    break;
+                case 0:
+                    running = false;
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -116,6 +233,40 @@ public class EnhancedPokedex {
     }
 
     /**
+     * Views detailed information about a specific Pokémon, including its moves.
+     * If no Pokémon are available, it informs the user.
+     */
+    private static void viewPokemonDetails() {
+        System.out.println("\n-- View Pokémon Details --");
+        if (pokedex.isEmpty()) {
+            System.out.println("No Pokémon in the database.");
+            return;
+        }
+
+        // Show available Pokemon
+        System.out.println("Available Pokémon:");
+        for (int i = 0; i < pokedex.size(); i++) {
+            Pokemon p = pokedex.get(i);
+            System.out.println((i + 1) + ". " + p.getPokemonName() + " (#" + p.getPokedexNumber() + ")");
+        }
+
+        int choice = getIntInput("Select Pokémon (enter number): ") - 1;
+        if (choice < 0 || choice >= pokedex.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Pokemon selectedPokemon = pokedex.get(choice);
+        System.out.println("\n" + selectedPokemon.displayPokemon());
+
+        // Display default moves (since all Pokemon start with these)
+        System.out.println("\n=== Moves ===");
+        System.out.println("- Tackle (Normal)");
+        System.out.println("- Defend (Normal)");
+        System.out.println("\nNote: All Pokémon start with these default moves.");
+    }
+
+    /**
      * Checks if a Pokédex number already exists in the Pokédex.
      */
     private static boolean isPokedexNumberExists(int number) {
@@ -160,7 +311,6 @@ public class EnhancedPokedex {
             System.out.println("Invalid classification. Please enter HM or TM.");
         }
 
-        // Use type validation for moves too
         String type1 = getValidTypeInput("Type 1: ", false);
         String type2 = getValidTypeInput("Type 2 (press Enter if none): ", true);
 
@@ -214,6 +364,19 @@ public class EnhancedPokedex {
             }
         }
         return false;
+    }
+
+    /**
+     * Loads default moves into the move list.
+     */
+    private static void loadDefaultMoves() {
+        // Add default moves that all Pokemon start with
+        if (!isMoveNameExists("Tackle")) {
+            moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
+        }
+        if (!isMoveNameExists("Defend")) {
+            moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
+        }
     }
 
     // --- Items Management ---
@@ -272,7 +435,7 @@ public class EnhancedPokedex {
             if (i.getItemName().toLowerCase().contains(keyword)
                     || i.getItemCategory().toLowerCase().contains(keyword)
                     || i.getItemEffect().toLowerCase().contains(keyword)) {
-                System.out.println(i.displayItem()); // Fix: was System.out.println(i);
+                System.out.println(i.displayItem());
                 found = true;
             }
         }
@@ -319,14 +482,6 @@ public class EnhancedPokedex {
             }
         }
         return input;
-    }
-
-    /**
-     * Gets an optional string input from the user.
-     */
-    private static String getOptionalStringInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine().trim();
     }
 
     /**
@@ -499,11 +654,11 @@ public class EnhancedPokedex {
         int trainerIndex = getIntInput("Select trainer (enter number): ") - 1;
         if (trainerIndex < 0 || trainerIndex >= trainerList.size()) {
             System.out.println("Invalid trainer selection.");
-            return;
+            // return;
         }
 
-        Trainer selectedTrainer = trainerList.get(trainerIndex);
-        //manageTrainerMenu(selectedTrainer); para to sa next method tinatamad na ko
+        //Trainer selectedTrainer = trainerList.get(trainerIndex);
+        //manageTrainerMenu(selectedTrainer); To be implemented for MCO2
     }
 
     private static boolean isTrainerIdExists(int trainerId) {
@@ -513,118 +668,5 @@ public class EnhancedPokedex {
             }
         }
         return false;
-    }
-
-    // --- Sub-Menu Methods ---
-    /**
-     * Pokemon Management submenu
-     */
-    private static void pokemonManagement() {
-        boolean running = true;
-        while (running) {
-            MenuArts.pokemonArt();
-            MenuArts.printPokemonMenu();
-            int choice = getIntInput("Enter your choice: ");
-            switch (choice) {
-                case 1:
-                    addPokemon();
-                    break;
-                case 2:
-                    viewAllPokemon();
-                    break;
-                case 3:
-                    searchPokemon();
-                    break;
-                case 0:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
-
-    /**
-     * Moves Management submenu
-     */
-    private static void movesManagement() {
-        boolean running = true;
-        while (running) {
-            MenuArts.movesArt();
-            MenuArts.printMovesMenu();
-            int choice = getIntInput("Enter your choice: ");
-            switch (choice) {
-                case 1:
-                    addMove();
-                    break;
-                case 2:
-                    viewAllMoves();
-                    break;
-                case 3:
-                    searchMoves();
-                    break;
-                case 0:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
-
-    /**
-     * Item Management submenu
-     */
-    private static void itemManagement() {
-        boolean running = true;
-        while (running) {
-            MenuArts.itemsArt();
-            MenuArts.printItemMenu();
-            int choice = getIntInput("Enter your choice: ");
-            switch (choice) {
-                case 1:
-                    viewAllItems();
-                    break;
-                case 2:
-                    searchItems();
-                    break;
-                case 0:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
-
-    /**
-     * Trainer Management submenu
-     */
-    private static void trainerManagement() {
-        boolean running = true;
-        while (running) {
-            MenuArts.trainersArt();
-            MenuArts.printTrainerMenu();
-            int choice = getIntInput("Enter your choice: ");
-            switch (choice) {
-                case 1:
-                    addTrainer();
-                    break;
-                case 2:
-                    viewAllTrainers();
-                    break;
-                case 3:
-                    searchTrainers();
-                    break;
-                case 4:
-                    manageTrainer();
-                    break;
-                case 0:
-                    running = false;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
     }
 }

@@ -1,3 +1,7 @@
 *.iml
 *.xml
 *.json
+*.class
+*.class
+Pokemon.class
+EnhancedPokedex.class
