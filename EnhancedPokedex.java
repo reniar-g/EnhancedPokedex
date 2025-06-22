@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// EnhancedPokedex class is the main class for managing Pokémon, moves, items, and trainers.
 public class EnhancedPokedex {
 
     private static ArrayList<Pokemon> pokedex = new ArrayList<>();
@@ -16,8 +17,8 @@ public class EnhancedPokedex {
 
     public static void main(String[] args) {
 
-        loadDefaultItems(); // Load default items into the itemList
-        loadDefaultMoves(); // Load default moves into the moveList
+        loadDefaultItems();
+        loadDefaultMoves();
 
         boolean running = true;
         while (running) {
@@ -180,7 +181,6 @@ public class EnhancedPokedex {
             return;
         }
 
-        // Use new type validation methods
         String type1 = getValidTypeInput("Type 1: ", false);
         String type2 = getValidTypeInput("Type 2 (press Enter if none): ", true);
 
@@ -194,7 +194,7 @@ public class EnhancedPokedex {
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
         pokedex.add(p);
-        System.out.println("Pokémon added successfully at Level 1! Default moves assigned: Tackle, Defend.");
+        System.out.println("Pokémon added successfully!");
     }
 
     /**
@@ -243,7 +243,7 @@ public class EnhancedPokedex {
             return;
         }
 
-        // Show available Pokemon
+        // Show available Pokémon
         System.out.println("Available Pokémon:");
         for (int i = 0; i < pokedex.size(); i++) {
             Pokemon p = pokedex.get(i);
@@ -259,11 +259,23 @@ public class EnhancedPokedex {
         Pokemon selectedPokemon = pokedex.get(choice);
         System.out.println("\n" + selectedPokemon.displayPokemon());
 
-        // Display default moves (since all Pokemon start with these)
+        // Display actual moves from the Pokémon's moveSet
         System.out.println("\n=== Moves ===");
-        System.out.println("- Tackle (Normal)");
-        System.out.println("- Defend (Normal)");
-        System.out.println("\nNote: All Pokémon start with these default moves.");
+        if (selectedPokemon.getMoveSet().isEmpty()) {
+            System.out.println("This Pokémon has no moves.");
+        } else {
+            for (Move move : selectedPokemon.getMoveSet()) {
+                System.out.println("- " + move.getMoveName() + " (" + move.getMoveType1() + ")");
+            }
+        }
+
+        // Display held item if any
+        System.out.println("\n=== Held Item ===");
+        if (selectedPokemon.getHeldItem() == null) {
+            System.out.println("No held item.");
+        } else {
+            System.out.println("- " + selectedPokemon.getHeldItem().getItemName());
+        }
     }
 
     /**
@@ -310,11 +322,8 @@ public class EnhancedPokedex {
             }
             System.out.println("Invalid classification. Please enter HM or TM.");
         }
-
-        String type1 = getValidTypeInput("Type 1: ", false);
-        String type2 = getValidTypeInput("Type 2 (press Enter if none): ", true);
-
-        Move m = new Move(name, description, classification, type1, type2);
+        String type1 = getValidTypeInput("Type: ", false);
+        Move m = new Move(name, description, classification, type1);
         moveList.add(m);
         System.out.println("Move added successfully!");
     }
@@ -343,8 +352,8 @@ public class EnhancedPokedex {
         for (Move m : moveList) {
             if (m.getMoveName().toLowerCase().contains(keyword)
                     || m.getMoveType1().toLowerCase().contains(keyword)
-                    || (m.getMoveType2() != null && m.getMoveType2().toLowerCase().contains(keyword))
-                    || m.getMoveClassification().toLowerCase().contains(keyword)) {
+                    || m.getMoveClassification().toLowerCase().contains(keyword)
+                    || m.getMoveDescription().toLowerCase().contains(keyword)) {
                 System.out.println(m.displayMove());
                 found = true;
             }
@@ -370,12 +379,12 @@ public class EnhancedPokedex {
      * Loads default moves into the move list.
      */
     private static void loadDefaultMoves() {
-        // Add default moves that all Pokemon start with
+        // Add default moves that all Pokémon start with
         if (!isMoveNameExists("Tackle")) {
-            moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
+            moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal"));
         }
         if (!isMoveNameExists("Defend")) {
-            moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
+            moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal"));
         }
     }
 
@@ -607,7 +616,7 @@ public class EnhancedPokedex {
 
         Trainer trainer = new Trainer(trainerId, name, birthdate, sex, hometown, description);
         trainerList.add(trainer);
-        System.out.println("Trainer " + name + " added successfully with P1,000,000 starting money!");
+        System.out.println("Trainer " + name + " added successfully!");
     }
 
     /**
@@ -664,11 +673,8 @@ public class EnhancedPokedex {
         int trainerIndex = getIntInput("Select trainer (enter number): ") - 1;
         if (trainerIndex < 0 || trainerIndex >= trainerList.size()) {
             System.out.println("Invalid trainer selection.");
-            // return;
+            return;
         }
-
-        //Trainer selectedTrainer = trainerList.get(trainerIndex);
-        //manageTrainerMenu(selectedTrainer); To be implemented for MCO2
     }
 
     /**
