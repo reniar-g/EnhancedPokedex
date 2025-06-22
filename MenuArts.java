@@ -13,11 +13,12 @@ public class MenuArts {
     }
 
     public static void printPokemonMenu() {
-        System.out.println("\n                          === Pokémon Management ===");
-        System.out.println("                             1. Add New Pokémon");
-        System.out.println("                             2. View All Pokémon");
-        System.out.println("                             3. Search Pokémon");
-        System.out.println("                             0. Back to Main Menu");
+        System.out.println("\n                      === Pokémon Management ===");
+        System.out.println("                         1. Add New Pokémon");
+        System.out.println("                         2. View All Pokémon");
+        System.out.println("                         3. View Pokémon Details");
+        System.out.println("                         4. Search Pokémon");
+        System.out.println("                         0. Back to Main Menu");
     }
 
     public static void printMovesMenu() {
