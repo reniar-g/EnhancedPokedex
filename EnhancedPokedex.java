@@ -10,51 +10,31 @@ public class EnhancedPokedex {
     private static ArrayList<Trainer> trainerList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
+    private static final String[] VALID_TYPES = {
+        "Normal", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon",
+        "Dark", "Fairy", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Stellar"};
+
     public static void main(String[] args) {
 
         loadDefaultItems();
 
         boolean running = true;
         while (running) {
-            pokedexArt();
-            printMainMenu();
+            MenuArts.pokedexArt();
+            MenuArts.printMainMenu();
             int choice = getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1:
-                    addPokemon();
+                    pokemonManagement();
                     break;
                 case 2:
-                    viewAllPokemon();
+                    movesManagement();
                     break;
                 case 3:
-                    searchPokemon();
+                    itemManagement();
                     break;
                 case 4:
-                    addMove();
-                    break;
-                case 5:
-                    viewAllMoves();
-                    break;
-                case 6:
-                    searchMoves();
-                    break;
-                case 7:
-                    viewAllItems();
-                    break;
-                case 8:
-                    searchItems();
-                    break;
-                case 9:
-                    addTrainer();
-                    break;
-                case 10:
-                    viewAllTrainers();
-                    break;
-                case 11:
-                    searchTrainers();
-                    break;
-                case 12:
-                    manageTrainer();
+                    trainerManagement();
                     break;
                 case 0:
                     running = false;
@@ -82,9 +62,11 @@ public class EnhancedPokedex {
             System.out.println("Error: Pokémon Name already exists.");
             return;
         }
-        String type1 = getStringInput("Type 1: ");
-        String type2 = getOptionalStringInput("Type 2 (press Enter if none): ");
-        int baseLevel = getIntInput("Base Level: ");
+
+        // Use new type validation methods
+        String type1 = getValidTypeInput("Type 1: ", false);
+        String type2 = getValidTypeInput("Type 2 (press Enter if none): ", true);
+
         Integer evolvesFrom = getOptionalIntInput("Evolves From (Pokédex Number, press Enter if none): ");
         Integer evolvesTo = getOptionalIntInput("Evolves To (Pokédex Number, press Enter if none): ");
         Integer evolutionLevel = getOptionalIntInput("Evolution Level (press Enter if none): ");
@@ -93,9 +75,9 @@ public class EnhancedPokedex {
         int defense = getIntInput("Base Defense: ");
         int speed = getIntInput("Base Speed: ");
 
-        Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, baseLevel, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
+        Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
         pokedex.add(p);
-        System.out.println("Pokémon added successfully! Default moves assigned: Tackle, Defend.");
+        System.out.println("Pokémon added successfully at Level 1! Default moves assigned: Tackle, Defend.");
     }
 
     /**
@@ -108,7 +90,7 @@ public class EnhancedPokedex {
             return;
         }
         for (Pokemon p : pokedex) {
-            System.out.println(p);
+            System.out.println(p.displayPokemon());
         }
     }
 
@@ -124,7 +106,7 @@ public class EnhancedPokedex {
                     || p.getPokemonType1().toLowerCase().contains(keyword)
                     || (p.getPokemonType2() != null && p.getPokemonType2().toLowerCase().contains(keyword))
                     || String.valueOf(p.getPokedexNumber()).equals(keyword)) {
-                System.out.println(p);
+                System.out.println(p.displayPokemon());
                 found = true;
             }
         }
@@ -133,6 +115,9 @@ public class EnhancedPokedex {
         }
     }
 
+    /**
+     * Checks if a Pokédex number already exists in the Pokédex.
+     */
     private static boolean isPokedexNumberExists(int number) {
         for (Pokemon p : pokedex) {
             if (p.getPokedexNumber() == number) {
@@ -142,6 +127,9 @@ public class EnhancedPokedex {
         return false;
     }
 
+    /**
+     * Checks if a Pokémon name already exists in the Pokédex.
+     */
     private static boolean isPokemonNameExists(String name) {
         for (Pokemon p : pokedex) {
             if (p.getPokemonName().equalsIgnoreCase(name)) {
@@ -171,8 +159,10 @@ public class EnhancedPokedex {
             }
             System.out.println("Invalid classification. Please enter HM or TM.");
         }
-        String type1 = getStringInput("Type 1: ");
-        String type2 = getOptionalStringInput("Type 2 (press Enter if none): ");
+
+        // Use type validation for moves too
+        String type1 = getValidTypeInput("Type 1: ", false);
+        String type2 = getValidTypeInput("Type 2 (press Enter if none): ", true);
 
         Move m = new Move(name, description, classification, type1, type2);
         moveList.add(m);
@@ -189,7 +179,7 @@ public class EnhancedPokedex {
             return;
         }
         for (Move m : moveList) {
-            System.out.println(m);
+            System.out.println(m.displayMove());
         }
     }
 
@@ -205,7 +195,7 @@ public class EnhancedPokedex {
                     || m.getMoveType1().toLowerCase().contains(keyword)
                     || (m.getMoveType2() != null && m.getMoveType2().toLowerCase().contains(keyword))
                     || m.getMoveClassification().toLowerCase().contains(keyword)) {
-                System.out.println(m);
+                System.out.println(m.displayMove());
                 found = true;
             }
         }
@@ -214,6 +204,9 @@ public class EnhancedPokedex {
         }
     }
 
+    /**
+     * Checks if a move name already exists in the move list.
+     */
     private static boolean isMoveNameExists(String name) {
         for (Move m : moveList) {
             if (m.getMoveName().equalsIgnoreCase(name)) {
@@ -242,16 +235,16 @@ public class EnhancedPokedex {
         // Leveling
         itemList.add(new Item("Rare Candy", "Leveling Item", "A candy that is packed with energy.", "Increases level by 1", "Not sold", "P2,400"));
         // Evolution Stones
-        itemList.add(new Item("Fire Stone", "Evolution Stone", "A stone that radiates heat.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Water Stone", "Evolution Stone", "A stone with a blue, watery appearance.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Thunder Stone", "Evolution Stone", "A stone that sparkles with electricity.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Leaf Stone", "Evolution Stone", "A stone with a leaf pattern.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
+        itemList.add(new Item("Fire Stone", "Evolution Stone", "A stone that radiates heat.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Water Stone", "Evolution Stone", "A stone with a blue, watery appearance.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Thunder Stone", "Evolution Stone", "A stone that sparkles with electricity.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Leaf Stone", "Evolution Stone", "A stone with a leaf pattern.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
         itemList.add(new Item("Moon Stone", "Evolution Stone", "A stone that glows faintly in the moonlight.", "Evolves certain Pokémon.", "Not sold", "P1,500"));
-        itemList.add(new Item("Sun Stone", "Evolution Stone", "A stone that glows like the sun.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Shiny Stone", "Evolution Stone", "A stone that sparkles brightly.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Dusk Stone", "Evolution Stone", "A dark, ominous stone.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Dawn Stone", "Evolution Stone", "A stone that sparkles like the morning sky.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
-        itemList.add(new Item("Ice Stone", "Evolution Stone", "A stone that is cold to the touch.", "Evolves certain Pokémon.", "P3,000–P5,000", "P1,500"));
+        itemList.add(new Item("Sun Stone", "Evolution Stone", "A stone that glows like the sun.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Shiny Stone", "Evolution Stone", "A stone that sparkles brightly.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Dusk Stone", "Evolution Stone", "A dark, ominous stone.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Dawn Stone", "Evolution Stone", "A stone that sparkles like the morning sky.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
+        itemList.add(new Item("Ice Stone", "Evolution Stone", "A stone that is cold to the touch.", "Evolves certain Pokémon.", "P3,000-P5,000", "P1,500"));
     }
 
     /**
@@ -264,7 +257,7 @@ public class EnhancedPokedex {
             return;
         }
         for (Item item : itemList) {
-            System.out.println(item.displayItem()); // Call displayItem() method instead of printing item directly
+            System.out.println(item.displayItem());
         }
     }
 
@@ -279,7 +272,7 @@ public class EnhancedPokedex {
             if (i.getItemName().toLowerCase().contains(keyword)
                     || i.getItemCategory().toLowerCase().contains(keyword)
                     || i.getItemEffect().toLowerCase().contains(keyword)) {
-                System.out.println(i);
+                System.out.println(i.displayItem()); // Fix: was System.out.println(i);
                 found = true;
             }
         }
@@ -356,6 +349,77 @@ public class EnhancedPokedex {
             System.out.println("Invalid input. Skipping.");
             return null;
         }
+    }
+
+    private static String getValidTypeInput(String prompt, boolean optional) {
+        while (true) {
+            displayValidTypes();
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            // Handle optional input
+            if (optional && input.isEmpty()) {
+                return null;
+            }
+
+            // Check if input is empty for required fields
+            if (!optional && input.isEmpty()) {
+                System.out.println("Type cannot be empty. Please try again.");
+                continue;
+            }
+
+            // Validate type
+            if (isValidType(input)) {
+                return capitalizeFirstLetter(input);
+            } else {
+                System.out.println("Invalid type. Please choose from the list above.");
+            }
+        }
+    }
+
+    /**
+     * Displays all valid Pokémon types.
+     */
+    private static void displayValidTypes() {
+        System.out.println("\nValid Pokémon Types:");
+        for (int i = 0; i < VALID_TYPES.length; i++) {
+            System.out.print(VALID_TYPES[i]);
+            if (i < VALID_TYPES.length - 1) {
+                System.out.print(", ");
+            }
+
+            if ((i + 1) % 5 == 0) {
+                System.out.println();
+            }
+        }
+        System.out.println();
+        System.out.println();
+    }
+
+    /**
+     * Checks if a type is valid.
+     */
+    private static boolean isValidType(String type) {
+        if (type == null || type.trim().isEmpty()) {
+            return false;
+        }
+
+        for (String validType : VALID_TYPES) {
+            if (validType.equalsIgnoreCase(type.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Capitalizes the first letter of a string.
+     */
+    private static String capitalizeFirstLetter(String str) {
+        if (str == null || str.isEmpty()) {
+            return str;
+        }
+        return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
     // --- Trainer Management ---
@@ -451,32 +515,116 @@ public class EnhancedPokedex {
         return false;
     }
 
-    // --- Menus and ASCII Arts ---
-    private static void printMainMenu() {
-        System.out.println("\n                       === Enhanced Pokédex Menu ===");
-        System.out.println("                            1. Add New Pokémon");
-        System.out.println("                            2. View All Pokémon");
-        System.out.println("                            3. Search Pokémon");
-        System.out.println("                            4. Add New Move");
-        System.out.println("                            5. View All Moves");
-        System.out.println("                            6. Search Moves");
-        System.out.println("                            7. View All Items");
-        System.out.println("                            8. Search Items");
-        System.out.println("                            9. Add New Trainer");
-        System.out.println("                           10. View All Trainers");
-        System.out.println("                           11. Search Trainers");
-        System.out.println("                           12. Manage Trainer");
-        System.out.println("                            0. Exit");
+    // --- Sub-Menu Methods ---
+    /**
+     * Pokemon Management submenu
+     */
+    private static void pokemonManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.pokemonArt();
+            MenuArts.printPokemonMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addPokemon();
+                    break;
+                case 2:
+                    viewAllPokemon();
+                    break;
+                case 3:
+                    searchPokemon();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
     }
 
-    private static void pokedexArt() {
-        System.out.println("===========================================================================");
-        System.out.println("                 ______ _____ _   __ ___________ _______   __");
-        System.out.println("                 | ___ \\  _  | | / /|  ___|  _  \\  ___\\ \\ / /");
-        System.out.println("                 | |_/ / | | | |/ / | |__ | | | | |__  \\ V / ");
-        System.out.println("                 |  __/| | | |    \\ |  __|| | | |  __| /   \\ ");
-        System.out.println("                 | |   \\ \\_/ / |\\  \\| |___| |/ /| |___/ /^\\ \\");
-        System.out.println("                 \\_|    \\___/\\_| \\_/\\____/|___/ \\____/\\/   \\/ \n");
-        System.out.println("===========================================================================");
+    /**
+     * Moves Management submenu
+     */
+    private static void movesManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.movesArt();
+            MenuArts.printMovesMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addMove();
+                    break;
+                case 2:
+                    viewAllMoves();
+                    break;
+                case 3:
+                    searchMoves();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    /**
+     * Item Management submenu
+     */
+    private static void itemManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.itemsArt();
+            MenuArts.printItemMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    viewAllItems();
+                    break;
+                case 2:
+                    searchItems();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    /**
+     * Trainer Management submenu
+     */
+    private static void trainerManagement() {
+        boolean running = true;
+        while (running) {
+            MenuArts.trainersArt();
+            MenuArts.printTrainerMenu();
+            int choice = getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1:
+                    addTrainer();
+                    break;
+                case 2:
+                    viewAllTrainers();
+                    break;
+                case 3:
+                    searchTrainers();
+                    break;
+                case 4:
+                    manageTrainer();
+                    break;
+                case 0:
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
     }
 }
