@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+// Trainer class represents a Pokémon Trainer with attributes and methods to manage their Pokémon, items, and money.
 public class Trainer {
 
     private int trainerId;
@@ -16,7 +17,8 @@ public class Trainer {
     private List<Item> trainerInventory;
     private List<Integer> trainerInventoryQuantities; // Parallel list to track quantities
 
-    public Trainer(int trainerId, String trainerName, String trainerBirthdate, String trainerSex, String trainerHometown, String trainerDescription) {
+    public Trainer(int trainerId, String trainerName, String trainerBirthdate,
+            String trainerSex, String trainerHometown, String trainerDescription) {
         this.trainerId = trainerId;
         this.trainerName = trainerName;
         this.trainerBirthdate = trainerBirthdate;
@@ -30,7 +32,7 @@ public class Trainer {
         this.trainerInventoryQuantities = new ArrayList<>();
     }
 
-    // Getters
+    // Getters for trainer attributes
     public int getTrainerId() {
         return trainerId;
     }
@@ -71,9 +73,9 @@ public class Trainer {
         return trainerInventory;
     }
 
-    /**
+    /*
      * Buys an item and adds it to inventory if conditions are met.
-     */
+     
     public boolean buyItem(Item item) {
         // Parse price from string format (PX,XXX)
         double price = parsePrice(item.getItemPrice());
@@ -116,9 +118,9 @@ public class Trainer {
         return true;
     }
 
-    /**
+    
      * Sells an item from inventory for 50% of its price.
-     */
+     
     public boolean sellItem(String itemName) {
         int itemIndex = findItemIndex(itemName);
         if (itemIndex == -1) {
@@ -143,6 +145,7 @@ public class Trainer {
         return true;
     }
 
+    
     private int findItemIndex(String itemName) {
         for (int i = 0; i < trainerInventory.size(); i++) {
             if (trainerInventory.get(i).getItemName().equalsIgnoreCase(itemName)) {
@@ -175,6 +178,7 @@ public class Trainer {
         }
     }
 
+     */
     public String displayTrainer() {
         return "Trainer ID: " + trainerId + " | " + trainerName + " (" + trainerSex + ") from " + trainerHometown
                 + " | Money: P" + String.format("%.2f", trainerMoney)
@@ -182,5 +186,4 @@ public class Trainer {
                 + " | Stored Pokémon: " + trainerStorage.size()
                 + " | Items: " + trainerInventory.size(); //di pa tapos
     }
-
 }

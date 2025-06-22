@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
+// Pokémon class represents a Pokémon with various attributes and methods to manage its state and actions.
 public class Pokemon {
 
     private int pokedexNumber;
@@ -19,9 +20,7 @@ public class Pokemon {
     private List<Move> moveSet;
     private Item heldItem;
 
-    /**
-     * Constructs a new Pokémon with the required attributes.
-     */
+    // Constructor for Pokémon class
     public Pokemon(int pokedexNumber, String name, String type1, String type2, int baseLevel,
             Integer evolvesFrom, Integer evolvesTo, Integer evolutionLevel,
             int hp, int attack, int defense, int speed) {
@@ -39,12 +38,14 @@ public class Pokemon {
         this.speed = speed;
         this.moveSet = new ArrayList<>();
 
-        // Default moves
-        moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal", null));
-        moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal", null));
+        // Default moves - Updated constructor calls
+        moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal"));
+        moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal"));
+        // Removed: null parameter for type2 in both moves
         this.heldItem = null;
     }
 
+    // Getters for Pokémon attributes
     public int getPokedexNumber() {
         return pokedexNumber;
     }
@@ -101,6 +102,9 @@ public class Pokemon {
         return heldItem;
     }
 
+    /**
+     * Sets the Pokémon's held item.
+     */
     public void setHeldItem(Item heldItem) {
         this.heldItem = heldItem;
     }
