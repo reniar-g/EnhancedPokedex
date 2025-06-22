@@ -23,7 +23,7 @@ public class Trainer {
         this.trainerSex = trainerSex;
         this.trainerHometown = trainerHometown;
         this.trainerDescription = trainerDescription;
-        this.trainerMoney = 1000000.00; // Initial funds as per specifications
+        this.trainerMoney = 1000000.00;
         this.trainerActiveLineup = new ArrayList<>();
         this.trainerStorage = new ArrayList<>();
         this.trainerInventory = new ArrayList<>();
