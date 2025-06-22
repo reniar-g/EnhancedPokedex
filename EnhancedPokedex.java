@@ -47,7 +47,7 @@ public class EnhancedPokedex {
         }
     }
 
-    // --- Sub-Menu Methods ---
+    // ---------------------------------------------------- Sub-Menu Methods ----------------------------------------------------
     /**
      * Pokemon Management submenu
      */
@@ -163,7 +163,7 @@ public class EnhancedPokedex {
         }
     }
 
-    // --- Pokemon Management ---
+    // ---------------------------------------------------- Pokemon Management ----------------------------------------------------
     /**
      * Adds a new Pokémon to the Pokédex after validation.
      */
@@ -290,7 +290,7 @@ public class EnhancedPokedex {
         return false;
     }
 
-    // --- Moves Management ---
+    // ---------------------------------------------------- Moves Management ----------------------------------------------------
     /**
      * Adds a new move to the move list after validation.
      */
@@ -379,7 +379,7 @@ public class EnhancedPokedex {
         }
     }
 
-    // --- Items Management ---
+    // ---------------------------------------------------- Items Management ----------------------------------------------------
     /**
      * Loads the official item list into the itemList.
      */
@@ -444,7 +444,7 @@ public class EnhancedPokedex {
         }
     }
 
-    // --- Error Handling Methods ---
+    // ---------------------------------------------------- Error Handling Methods ----------------------------------------------------
     /**
      * Gets a validated integer input from the user.
      */
@@ -532,6 +532,16 @@ public class EnhancedPokedex {
         }
     }
 
+    private static String getValidSex() {
+        while (true) {
+            String sex = getStringInput("Sex (M/F): ").toUpperCase();
+            if (sex.equals("M") || sex.equals("F")) {
+                return sex;
+            }
+            System.out.println("Please enter M or F only.");
+        }
+    }
+
     /**
      * Displays all valid Pokémon types.
      */
@@ -577,7 +587,7 @@ public class EnhancedPokedex {
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
 
-    // --- Trainer Management ---
+    // ---------------------------------------------------- Trainer Management ----------------------------------------------------
     /**
      * Adds a new trainer to the system.
      */
@@ -591,7 +601,7 @@ public class EnhancedPokedex {
 
         String name = getStringInput("Name: ");
         String birthdate = getStringInput("Birthdate (YYYY-MM-DD): ");
-        String sex = getStringInput("Sex (M/F): ");
+        String sex = getValidSex(); // Use the validation method instead of getStringInput
         String hometown = getStringInput("Hometown: ");
         String description = getStringInput("Description: ");
 
