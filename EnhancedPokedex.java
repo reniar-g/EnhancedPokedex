@@ -506,6 +506,10 @@ public class EnhancedPokedex {
         }
     }
 
+    /**
+     * Gets a valid Pokémon type input from the user. If optional is true,
+     * allows empty input.
+     */
     private static String getValidTypeInput(String prompt, boolean optional) {
         while (true) {
             displayValidTypes();
@@ -532,6 +536,9 @@ public class EnhancedPokedex {
         }
     }
 
+    /**
+     * Gets a valid sex input from the user.
+     */
     private static String getValidSex() {
         while (true) {
             String sex = getStringInput("Sex (M/F): ").toUpperCase();
@@ -543,21 +550,14 @@ public class EnhancedPokedex {
     }
 
     /**
-     * Displays all valid Pokémon types.
+     * Displays all valid Pokémon types
      */
     private static void displayValidTypes() {
-        System.out.println("\nValid Pokémon Types:");
-        for (int i = 0; i < VALID_TYPES.length; i++) {
-            System.out.print(VALID_TYPES[i]);
-            if (i < VALID_TYPES.length - 1) {
-                System.out.print(", ");
-            }
-
-            if ((i + 1) % 5 == 0) {
-                System.out.println();
-            }
-        }
-        System.out.println();
+        System.out.println("\n        Valid Pokémon Types:");
+        System.out.println("Normal, Fire, Water, Grass, Electric,");
+        System.out.println("  Psychic, Ice, Dragon, Dark, Fairy,");
+        System.out.println("Fighting, Flying, Poison, Ground, Rock,");
+        System.out.println("     Bug, Ghost, Steel, Stellar.");
         System.out.println();
     }
 
@@ -671,6 +671,9 @@ public class EnhancedPokedex {
         //manageTrainerMenu(selectedTrainer); To be implemented for MCO2
     }
 
+    /**
+     * Checks if a trainer ID already exists in the trainer list.
+     */
     private static boolean isTrainerIdExists(int trainerId) {
         for (Trainer trainer : trainerList) {
             if (trainer.getTrainerId() == trainerId) {
