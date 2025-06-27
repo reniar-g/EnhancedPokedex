@@ -38,10 +38,8 @@ public class Pokemon {
         this.speed = speed;
         this.moveSet = new ArrayList<>();
 
-        // Default moves - Updated constructor calls
         moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal"));
         moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal"));
-        // Removed: null parameter for type2 in both moves
         this.heldItem = null;
     }
 
