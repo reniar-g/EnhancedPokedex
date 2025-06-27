@@ -1,1 +1,1 @@
-succ
+displayPokem

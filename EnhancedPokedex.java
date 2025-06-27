@@ -50,7 +50,7 @@ public class EnhancedPokedex {
                     break;
                 case 0:
                     running = false;
-                    System.out.println("Exiting. Thank you!");
+                    System.out.println("\n\u001B[31mExiting. Thank you!\u001B[0m");
                     break;
                 default:
                     System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
@@ -204,21 +204,25 @@ public class EnhancedPokedex {
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
         pokedex.add(p);
-        System.out.println("\n\u001B[32mPokémon added successfully!\u001B[0m\n");
+        System.out.println("\n\u001B[32mPokémon added successfully!\u001B[0m");
     }
 
     /**
      * Displays all Pokémon in the Pokédex.
      */
     private static void viewAllPokemon() {
-        System.out.println("\n-- All Pokémon --");
+        System.out.println("\n======================================================================================================================");
+        System.out.println("                                                     All Pokemons");
+        System.out.println("======================================================================================================================");
         if (pokedex.isEmpty()) {
             System.out.println("\u001B[31mNo Pokémon in the database.\u001B[0m");
             return;
         }
+        Pokemon.displayPokemonHeader();
         for (Pokemon p : pokedex) {
-            System.out.println(p.displayPokemon());
+            p.displayPokemon();
         }
+        System.out.println("");
     }
 
     /**
@@ -228,12 +232,17 @@ public class EnhancedPokedex {
         System.out.println("\n-- Search Pokémon --");
         String keyword = getStringInput("Enter keyword (name/type/attribute): ").toLowerCase();
         boolean found = false;
+        boolean headerDisplayed = false;
         for (Pokemon p : pokedex) {
             if (p.getPokemonName().toLowerCase().contains(keyword)
                     || p.getPokemonType1().toLowerCase().contains(keyword)
                     || (p.getPokemonType2() != null && p.getPokemonType2().toLowerCase().contains(keyword))
                     || String.valueOf(p.getPokedexNumber()).equals(keyword)) {
-                System.out.println(p.displayPokemon());
+                if (!headerDisplayed) {
+                    Pokemon.displayPokemonHeader();
+                    headerDisplayed = true;
+                }
+                p.displayPokemon();
                 found = true;
             }
         }
@@ -267,7 +276,9 @@ public class EnhancedPokedex {
         }
 
         Pokemon selectedPokemon = pokedex.get(choice);
-        System.out.println("\n" + selectedPokemon.displayPokemon());
+        System.out.println();
+        Pokemon.displayPokemonHeader();
+        selectedPokemon.displayPokemon();
 
         // Display actual moves from the Pokémon's moveSet
         System.out.println("\n=== Moves ===");
@@ -335,21 +346,25 @@ public class EnhancedPokedex {
         String type1 = getValidTypeInput("Type: ", false);
         Move m = new Move(name, description, classification, type1);
         moveList.add(m);
-        System.out.println("\n\u001B[32mMove added successfully!\u001B[0m\n");
+        System.out.println("\n\u001B[32mMove added successfully!\u001B[0m");
     }
 
     /**
      * Displays all moves in the move list.
      */
     private static void viewAllMoves() {
-        System.out.println("\n-- All Moves --");
+        System.out.println("\n======================================================================================================================================");
+        System.out.println("                                                                 All Moves");
+        System.out.println("======================================================================================================================================");
         if (moveList.isEmpty()) {
             System.out.println("\u001B[31mNo moves in the database.\u001B[0m");
             return;
         }
+        Move.displayMoveHeader();
         for (Move m : moveList) {
-            System.out.println(m.displayMove());
+            m.displayMove();
         }
+        System.out.println("");
     }
 
     /**
@@ -359,12 +374,17 @@ public class EnhancedPokedex {
         System.out.println("\n-- Search Moves --");
         String keyword = getStringInput("Enter keyword (name/type/classification): ").toLowerCase();
         boolean found = false;
+        boolean headerDisplayed = false;
         for (Move m : moveList) {
             if (m.getMoveName().toLowerCase().contains(keyword)
                     || m.getMoveType1().toLowerCase().contains(keyword)
                     || m.getMoveClassification().toLowerCase().contains(keyword)
                     || m.getMoveDescription().toLowerCase().contains(keyword)) {
-                System.out.println(m.displayMove());
+                if (!headerDisplayed) {
+                    Move.displayMoveHeader();
+                    headerDisplayed = true;
+                }
+                m.displayMove();
                 found = true;
             }
         }
@@ -433,14 +453,19 @@ public class EnhancedPokedex {
      * Displays all items in the database.
      */
     private static void viewAllItems() {
-        System.out.println("\n-- All Items --");
+        System.out.println("\n======================================================================================================================================");
+        System.out.println("                                                                 All Items");
+        System.out.println("======================================================================================================================================");
+
         if (itemList.isEmpty()) {
             System.out.println("\u001B[31mNo items in the database.\u001B[0m");
             return;
         }
+        Item.displayItemHeader();
         for (Item item : itemList) {
-            System.out.println(item.displayItem());
+            item.displayItem();
         }
+        System.out.println("");
     }
 
     /**
@@ -450,11 +475,16 @@ public class EnhancedPokedex {
         System.out.println("\n-- Search Items --");
         String keyword = getStringInput("Enter keyword (name/category/effect): ").toLowerCase();
         boolean found = false;
+        boolean headerDisplayed = false;
         for (Item i : itemList) {
             if (i.getItemName().toLowerCase().contains(keyword)
                     || i.getItemCategory().toLowerCase().contains(keyword)
                     || i.getItemEffect().toLowerCase().contains(keyword)) {
-                System.out.println(i.displayItem());
+                if (!headerDisplayed) {
+                    Item.displayItemHeader();
+                    headerDisplayed = true;
+                }
+                i.displayItem();
                 found = true;
             }
         }
