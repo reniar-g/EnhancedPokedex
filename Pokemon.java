@@ -122,14 +122,31 @@ public class Pokemon {
     }
 
     /**
-     * Displays Pokemon information with N/A for null values
+     * Displays the header for Pokemon information table
      */
-    public String displayPokemon() {
-        return "#" + pokedexNumber + " " + pokemonName + " (" + pokemonType1
-                + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : "") + ") - Level " + baseLevel
-                + " | HP: " + hp + ", Atk: " + attack + ", Def: " + defense + ", Spd: " + speed
-                + " | Evolves from: " + formatNullableInteger(evolvesFrom)
-                + ", Evolves to: " + formatNullableInteger(evolvesTo)
-                + ", Evo Level: " + formatNullableInteger(evolutionLevel);
+    public static void displayPokemonHeader() {
+        System.out.printf("%-4s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
+                "ID", "Name", "Type", "Level", "HP", "Atk", "Def", "Spd", "Evolves From", "Evolves To", "Evo Level");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------");
+    }
+
+    /**
+     * Displays Pokemon information with N/A for null values in a formatted
+     * table style with labels using printf
+     */
+    public void displayPokemon() {
+        String type = pokemonType1 + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : "");
+        System.out.printf("%-4s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
+                "#" + pokedexNumber,
+                pokemonName,
+                "(" + type + ")",
+                "Lv." + baseLevel,
+                "HP:" + hp,
+                "Atk:" + attack,
+                "Def:" + defense,
+                "Spd:" + speed,
+                "From:" + formatNullableInteger(evolvesFrom),
+                "To:" + formatNullableInteger(evolvesTo),
+                "EvoLv:" + formatNullableInteger(evolutionLevel));
     }
 }

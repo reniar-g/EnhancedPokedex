@@ -45,9 +45,25 @@ public class Item {
         return itemSellPrice;
     }
 
-    // Method to display item details in a formatted string
-    public String displayItem() {
-        return itemName + " (" + itemCategory + ") - " + itemDescription
-                + " | Effect: " + itemEffect + " | Buy: " + itemPrice + ", Sell: " + itemSellPrice;
+    /**
+     * Displays the header for Item information table
+     */
+    public static void displayItemHeader() {
+        System.out.printf("%-16s %-17s %-45s %-26s %-15s %-15s%n",
+                "Item Name", "Category", "Description", "Effect", "Buy Price", "Sell Price");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    /**
+     * Displays item details in a formatted table style using printf
+     */
+    public void displayItem() {
+        System.out.printf("%-16s %-17s %-45s %-26s %-15s %-15s%n",
+                itemName,
+                itemCategory,
+                itemDescription,
+                itemEffect,
+                itemPrice,
+                itemSellPrice);
     }
 }

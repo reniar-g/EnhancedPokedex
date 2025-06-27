@@ -32,9 +32,23 @@ public class Move {
         return moveDescription;
     }
 
-    // Method to display move details
-    public String displayMove() {
-        return moveName + " (" + moveClassification + ") - Type: " + moveType1
-                + " | " + moveDescription;
+    /**
+     * Displays the header for Move information table
+     */
+    public static void displayMoveHeader() {
+        System.out.printf("%-15s %-16s %-10s %-60s%n",
+                "Move Name", "Classification", "Type", "Description");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    /**
+     * Displays move details in a formatted table style using printf
+     */
+    public void displayMove() {
+        System.out.printf("%-15s %-16s %-10s %-60s%n",
+                moveName,
+                moveClassification,
+                moveType1,
+                moveDescription);
     }
 }
