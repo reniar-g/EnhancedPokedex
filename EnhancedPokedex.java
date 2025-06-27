@@ -15,8 +15,18 @@ public class EnhancedPokedex {
         "Normal", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon",
         "Dark", "Fairy", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Stellar"};
 
+    private static void loadDefaultPokemons() {
+        pokedex.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 1, null, 2, 16, 45, 49, 49, 45));
+        pokedex.add(new Pokemon(2, "Ivysaur", "Grass", "Poison", 1, 1, 3, 32, 60, 62, 63, 60));
+        pokedex.add(new Pokemon(3, "Ivysaur", "Grass", "Poison", 1, 2, null, null, 80, 82, 83, 80));
+        pokedex.add(new Pokemon(4, "Charmander", "Fire", null, 1, null, 5, 16, 39, 52, 43, 65));
+        pokedex.add(new Pokemon(5, "Charmeleon", "Fire", null, 1, 4, 6, 36, 58, 64, 58, 80));
+        pokedex.add(new Pokemon(6, "Charizard", "Fire", "Flying", 1, 5, null, null, 78, 84, 78, 100));
+    }
+
     public static void main(String[] args) {
 
+        loadDefaultPokemons();
         loadDefaultItems();
         loadDefaultMoves();
 
@@ -43,7 +53,7 @@ public class EnhancedPokedex {
                     System.out.println("Exiting. Thank you!");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
     }
@@ -75,7 +85,7 @@ public class EnhancedPokedex {
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
     }
@@ -103,7 +113,7 @@ public class EnhancedPokedex {
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
     }
@@ -128,7 +138,7 @@ public class EnhancedPokedex {
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
     }
@@ -159,7 +169,7 @@ public class EnhancedPokedex {
                     running = false;
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
     }
@@ -172,12 +182,12 @@ public class EnhancedPokedex {
         System.out.println("\n-- Add New Pokémon --");
         int pokedexNumber = getIntInput("Pokédex Number: ");
         if (isPokedexNumberExists(pokedexNumber)) {
-            System.out.println("Error: Pokédex Number already exists.");
+            System.out.println("\u001B[31mError: Pokédex Number already exists.\u001B[0m");
             return;
         }
         String name = getStringInput("Name: ");
         if (isPokemonNameExists(name)) {
-            System.out.println("Error: Pokémon Name already exists.");
+            System.out.println("\u001B[31mError: Pokémon Name already exists.\u001B[0m");
             return;
         }
 
@@ -194,7 +204,7 @@ public class EnhancedPokedex {
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
         pokedex.add(p);
-        System.out.println("Pokémon added successfully!");
+        System.out.println("\n\u001B[32mPokémon added successfully!\u001B[0m\n");
     }
 
     /**
@@ -203,7 +213,7 @@ public class EnhancedPokedex {
     private static void viewAllPokemon() {
         System.out.println("\n-- All Pokémon --");
         if (pokedex.isEmpty()) {
-            System.out.println("No Pokémon in the database.");
+            System.out.println("\u001B[31mNo Pokémon in the database.\u001B[0m");
             return;
         }
         for (Pokemon p : pokedex) {
@@ -228,7 +238,7 @@ public class EnhancedPokedex {
             }
         }
         if (!found) {
-            System.out.println("No Pokémon found matching the search criteria.");
+            System.out.println("\u001B[31mNo Pokémon found matching the search criteria.\u001B[0m");
         }
     }
 
@@ -239,7 +249,7 @@ public class EnhancedPokedex {
     private static void viewPokemonDetails() {
         System.out.println("\n-- View Pokémon Details --");
         if (pokedex.isEmpty()) {
-            System.out.println("No Pokémon in the database.");
+            System.out.println("\u001B[31mNo Pokémon in the database.\u001B[0m");
             return;
         }
 
@@ -252,7 +262,7 @@ public class EnhancedPokedex {
 
         int choice = getIntInput("Select Pokémon (enter number): ") - 1;
         if (choice < 0 || choice >= pokedex.size()) {
-            System.out.println("Invalid selection.");
+            System.out.println("\u001B[31mInvalid selection.\u001B[0m");
             return;
         }
 
@@ -262,7 +272,7 @@ public class EnhancedPokedex {
         // Display actual moves from the Pokémon's moveSet
         System.out.println("\n=== Moves ===");
         if (selectedPokemon.getMoveSet().isEmpty()) {
-            System.out.println("This Pokémon has no moves.");
+            System.out.println("\u001B[31mThis Pokémon has no moves.\u001B[0m");
         } else {
             for (Move move : selectedPokemon.getMoveSet()) {
                 System.out.println("- " + move.getMoveName() + " (" + move.getMoveType1() + ")");
@@ -272,7 +282,7 @@ public class EnhancedPokedex {
         // Display held item if any
         System.out.println("\n=== Held Item ===");
         if (selectedPokemon.getHeldItem() == null) {
-            System.out.println("No held item.");
+            System.out.println("\u001B[31mNo held item.\u001B[0m");
         } else {
             System.out.println("- " + selectedPokemon.getHeldItem().getItemName());
         }
@@ -310,7 +320,7 @@ public class EnhancedPokedex {
         System.out.println("\n-- Add New Move --");
         String name = getStringInput("Move Name: ");
         if (isMoveNameExists(name)) {
-            System.out.println("Error: Move name already exists.");
+            System.out.println("\u001B[31mError: Move name already exists.\u001B[0m");
             return;
         }
         String description = getStringInput("Description: ");
@@ -320,12 +330,12 @@ public class EnhancedPokedex {
             if (classification.equals("HM") || classification.equals("TM")) {
                 break;
             }
-            System.out.println("Invalid classification. Please enter HM or TM.");
+            System.out.println("\u001B[31mInvalid classification. Please enter HM or TM.\u001B[0m");
         }
         String type1 = getValidTypeInput("Type: ", false);
         Move m = new Move(name, description, classification, type1);
         moveList.add(m);
-        System.out.println("Move added successfully!");
+        System.out.println("\n\u001B[32mMove added successfully!\u001B[0m\n");
     }
 
     /**
@@ -334,7 +344,7 @@ public class EnhancedPokedex {
     private static void viewAllMoves() {
         System.out.println("\n-- All Moves --");
         if (moveList.isEmpty()) {
-            System.out.println("No moves in the database.");
+            System.out.println("\u001B[31mNo moves in the database.\u001B[0m");
             return;
         }
         for (Move m : moveList) {
@@ -359,7 +369,7 @@ public class EnhancedPokedex {
             }
         }
         if (!found) {
-            System.out.println("No moves found matching the search criteria.");
+            System.out.println("\u001B[31mNo moves found matching the search criteria.\u001B[0m");
         }
     }
 
@@ -425,7 +435,7 @@ public class EnhancedPokedex {
     private static void viewAllItems() {
         System.out.println("\n-- All Items --");
         if (itemList.isEmpty()) {
-            System.out.println("No items in the database.");
+            System.out.println("\u001B[31mNo items in the database.\u001B[0m");
             return;
         }
         for (Item item : itemList) {
@@ -449,7 +459,7 @@ public class EnhancedPokedex {
             }
         }
         if (!found) {
-            System.out.println("No items found matching the search criteria.");
+            System.out.println("\u001B[31mNo items found matching the search criteria.\u001B[0m");
         }
     }
 
@@ -465,12 +475,12 @@ public class EnhancedPokedex {
             try {
                 input = Integer.parseInt(line);
                 if (input < 0) {
-                    System.out.println("Please enter a non-negative integer.");
+                    System.out.println("\u001B[31mPlease enter a non-negative integer.\u001B[0m");
                 } else {
                     break;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid integer.");
+                System.out.println("\u001B[31mInvalid input. Please enter a valid integer.\u001B[0m");
             }
         }
         return input;
@@ -485,7 +495,7 @@ public class EnhancedPokedex {
             System.out.print(prompt);
             input = scanner.nextLine().trim();
             if (input.isEmpty()) {
-                System.out.println("Input cannot be empty. Please try again.");
+                System.out.println("\u001B[31mInput cannot be empty. Please try again.\u001B[0m");
             } else {
                 break;
             }
@@ -505,12 +515,12 @@ public class EnhancedPokedex {
         try {
             int value = Integer.parseInt(line);
             if (value < 0) {
-                System.out.println("Negative values are not allowed. Skipping.");
+                System.out.println("\u001B[31mNegative values are not allowed. Skipping.\u001B[0m");
                 return null;
             }
             return value;
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Skipping.");
+            System.out.println("\u001B[31mInvalid input. Skipping.\u001B[0m");
             return null;
         }
     }
@@ -532,7 +542,7 @@ public class EnhancedPokedex {
 
             // Check if input is empty for required fields
             if (!optional && input.isEmpty()) {
-                System.out.println("Type cannot be empty. Please try again.");
+                System.out.println("\u001B[31mType cannot be empty. Please try again.\u001B[0m");
                 continue;
             }
 
@@ -540,7 +550,7 @@ public class EnhancedPokedex {
             if (isValidType(input)) {
                 return capitalizeFirstLetter(input);
             } else {
-                System.out.println("Invalid type. Please choose from the list above.");
+                System.out.println("\u001B[31mInvalid type. Please choose from the list above.\u001B[0m");
             }
         }
     }
