@@ -727,6 +727,6 @@ public class EnhancedPokedex {
         }
         Trainer selectedTrainer = trainerList.get(choice);
         System.out.println("Managing trainer: " + selectedTrainer.getTrainerName());
-        // Add further management options here as needed
+        // dito mo na lang ilagay yung mga methods for managing the trainer
     }
 }
