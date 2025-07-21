@@ -1,5 +1,6 @@
+package util;
 
-public class MenuArts {
+public class MenuArtUtils {
 
     // Main menu arts
     // Menu Display Methods

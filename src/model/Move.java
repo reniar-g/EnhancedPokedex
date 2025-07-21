@@ -1,5 +1,6 @@
-// Move class represents a Pokémon move with its attributes and methods.
+package model;
 
+// Move class represents a Pokémon move with its attributes and methods.
 public class Move {
 
     private String moveName;

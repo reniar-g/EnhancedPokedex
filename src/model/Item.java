@@ -1,5 +1,6 @@
-// Item class representing an item in the game
+package model;
 
+// Item class representing an item in the game
 public class Item {
 
     private String itemName;
