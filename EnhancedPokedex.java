@@ -669,7 +669,7 @@ public class EnhancedPokedex {
             return;
         }
         for (Trainer trainer : trainerList) {
-            System.out.println(trainer.displayTrainer());
+            trainer.displayTrainer();
         }
     }
 
@@ -685,35 +685,12 @@ public class EnhancedPokedex {
                     || trainer.getTrainerHometown().toLowerCase().contains(keyword)
                     || trainer.getTrainerDescription().toLowerCase().contains(keyword)
                     || String.valueOf(trainer.getTrainerId()).equals(keyword)) {
-                System.out.println(trainer.displayTrainer());
+                trainer.displayTrainer();
                 found = true;
             }
         }
         if (!found) {
             System.out.println("No trainers found matching the search criteria.");
-        }
-    }
-
-    /**
-     * Manages a specific trainer's activities.
-     */
-    private static void manageTrainer() {
-        System.out.println("\n-- Manage Trainer --");
-        if (trainerList.isEmpty()) {
-            System.out.println("No trainers in the database.");
-            return;
-        }
-
-        // Display trainers for selection
-        System.out.println("Available Trainers:");
-        for (int i = 0; i < trainerList.size(); i++) {
-            System.out.println((i + 1) + ". " + trainerList.get(i).getTrainerName() + " (ID: " + trainerList.get(i).getTrainerId() + ")");
-        }
-
-        int trainerIndex = getIntInput("Select trainer (enter number): ") - 1;
-        if (trainerIndex < 0 || trainerIndex >= trainerList.size()) {
-            System.out.println("Invalid trainer selection.");
-            return;
         }
     }
 
@@ -727,5 +704,29 @@ public class EnhancedPokedex {
             }
         }
         return false;
+    }
+
+    /**
+     * Manages a selected trainer (placeholder implementation lang muna to).
+     */
+    private static void manageTrainer() {
+        System.out.println("\n-- Manage Trainer --");
+        if (trainerList.isEmpty()) {
+            System.out.println("No trainers available to manage.");
+            return;
+        }
+        // List trainers
+        for (int i = 0; i < trainerList.size(); i++) {
+            Trainer trainer = trainerList.get(i);
+            System.out.println((i + 1) + ". " + trainer.getTrainerName() + " (ID: " + trainer.getTrainerId() + ")");
+        }
+        int choice = getIntInput("Select trainer by number: ") - 1;
+        if (choice < 0 || choice >= trainerList.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+        Trainer selectedTrainer = trainerList.get(choice);
+        System.out.println("Managing trainer: " + selectedTrainer.getTrainerName());
+        // Add further management options here as needed
     }
 }
