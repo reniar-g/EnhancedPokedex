@@ -55,8 +55,9 @@ public class MoveController {
             }
             System.out.println("\u001B[31mInvalid classification. Please enter HM or TM.\u001B[0m");
         }
-        String type1 = InputUtils.getValidTypeInput("Type: ", false);
-        Move m = new Move(name, description, classification, type1);
+        String type1 = InputUtils.getValidTypeInput("Type 1: ", false);
+        String type2 = InputUtils.getValidTypeInput("Type 2 (press Enter if none): ", true);
+        Move m = new Move(name, description, classification, type1, type2);
         moveList.add(m);
         System.out.println("\n\u001B[32mMove added successfully!\u001B[0m");
     }
