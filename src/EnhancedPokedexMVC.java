@@ -34,7 +34,7 @@ public class EnhancedPokedexMVC {
     private static void loadDefaultPokemons() {
         pokedex.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 1, null, 2, 16, 45, 49, 49, 45));
         pokedex.add(new Pokemon(2, "Ivysaur", "Grass", "Poison", 1, 1, 3, 32, 60, 62, 63, 60));
-        pokedex.add(new Pokemon(3, "Ivysaur", "Grass", "Poison", 1, 2, null, null, 80, 82, 83, 80));
+        pokedex.add(new Pokemon(3, "Venusaur", "Grass", "Poison", 1, 2, null, null, 80, 82, 83, 80));
         pokedex.add(new Pokemon(4, "Charmander", "Fire", null, 1, null, 5, 16, 39, 52, 43, 65));
         pokedex.add(new Pokemon(5, "Charmeleon", "Fire", null, 1, 4, 6, 36, 58, 64, 58, 80));
         pokedex.add(new Pokemon(6, "Charizard", "Fire", "Flying", 1, 5, null, null, 78, 84, 78, 100));
