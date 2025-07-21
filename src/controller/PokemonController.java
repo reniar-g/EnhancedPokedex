@@ -27,9 +27,9 @@ public class PokemonController {
                 case 2 ->
                     viewAllPokemon();
                 case 3 ->
-                     viewPokemonDetails();
+                    viewPokemonDetails();
                 case 4 ->
-                     searchPokemon();
+                    searchPokemon();
                 case 0 ->
                     running = false;
                 default ->
