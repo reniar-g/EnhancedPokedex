@@ -18,7 +18,7 @@ public class Trainer {
         this.trainerSex = trainerSex;
         this.trainerHometown = trainerHometown;
         this.trainerDescription = trainerDescription;
-        this.trainerMoney = 1000000.00; // Initial money for the trainer
+        this.trainerMoney = 1000000.00; // Initial money for the trainer (Requirement #4)
     }
 
     // Getters for trainer attributes

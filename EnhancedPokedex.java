@@ -11,10 +11,12 @@ public class EnhancedPokedex {
     private static ArrayList<Trainer> trainerList = new ArrayList<>();
     private static Scanner scanner = new Scanner(System.in);
 
+    // Valid Pokémon types
     private static final String[] VALID_TYPES = {
         "Normal", "Fire", "Water", "Grass", "Electric", "Psychic", "Ice", "Dragon",
-        "Dark", "Fairy", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel", "Stellar"};
+        "Dark", "Fairy", "Fighting", "Flying", "Poison", "Ground", "Rock", "Bug", "Ghost", "Steel"};
 
+    // Add default pokemons
     private static void loadDefaultPokemons() {
         pokedex.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 1, null, 2, 16, 45, 49, 49, 45));
         pokedex.add(new Pokemon(2, "Ivysaur", "Grass", "Poison", 1, 1, 3, 32, 60, 62, 63, 60));
@@ -26,10 +28,12 @@ public class EnhancedPokedex {
 
     public static void main(String[] args) {
 
+        // Load default pokemon, items, and moves
         loadDefaultPokemons();
         loadDefaultItems();
         loadDefaultMoves();
 
+        // Main menu loop
         boolean running = true;
         while (running) {
             MenuArts.pokedexArt();
@@ -183,12 +187,12 @@ public class EnhancedPokedex {
         int pokedexNumber = getIntInput("Pokédex Number: ");
         if (isPokedexNumberExists(pokedexNumber)) {
             System.out.println("\u001B[31mError: Pokédex Number already exists.\u001B[0m");
-            return;
+            return; // Exit if number already exists
         }
         String name = getStringInput("Name: ");
         if (isPokemonNameExists(name)) {
             System.out.println("\u001B[31mError: Pokémon Name already exists.\u001B[0m");
-            return;
+            return; // Exit if name already exists
         }
 
         String type1 = getValidTypeInput("Type 1: ", false);
@@ -211,15 +215,13 @@ public class EnhancedPokedex {
      * Displays all Pokémon in the Pokédex.
      */
     private static void viewAllPokemon() {
-        System.out.println("\n======================================================================================================================");
-        System.out.println("                                                     All Pokemons");
-        System.out.println("======================================================================================================================");
+        MenuArts.allPokemon();
         if (pokedex.isEmpty()) {
             System.out.println("\u001B[31mNo Pokémon in the database.\u001B[0m");
-            return;
+            return; // Exit if no Pokémon are available
         }
         Pokemon.displayPokemonHeader();
-        for (Pokemon p : pokedex) {
+        for (Pokemon p : pokedex) { // Display each Pokémon in the Pokédex
             p.displayPokemon();
         }
         System.out.println("");
@@ -266,6 +268,7 @@ public class EnhancedPokedex {
         System.out.println("Available Pokémon:");
         for (int i = 0; i < pokedex.size(); i++) {
             Pokemon p = pokedex.get(i);
+            // Zero-based index 
             System.out.println((i + 1) + ". " + p.getPokemonName() + " (#" + p.getPokedexNumber() + ")");
         }
 
@@ -300,7 +303,7 @@ public class EnhancedPokedex {
     }
 
     /**
-     * Checks if a Pokédex number already exists in the Pokédex.
+     * Checks if a Pokédex number already exists. (Requirement #1)
      */
     private static boolean isPokedexNumberExists(int number) {
         for (Pokemon p : pokedex) {
@@ -312,7 +315,7 @@ public class EnhancedPokedex {
     }
 
     /**
-     * Checks if a Pokémon name already exists in the Pokédex.
+     * Checks if a Pokémon name already exists in the Pokédex. (Requirement #2)
      */
     private static boolean isPokemonNameExists(String name) {
         for (Pokemon p : pokedex) {
@@ -325,7 +328,7 @@ public class EnhancedPokedex {
 
     // ---------------------------------------------------- Moves Management ----------------------------------------------------
     /**
-     * Adds a new move to the move list after validation.
+     * Adds a new move to the move list.
      */
     private static void addMove() {
         System.out.println("\n-- Add New Move --");
@@ -353,9 +356,7 @@ public class EnhancedPokedex {
      * Displays all moves in the move list.
      */
     private static void viewAllMoves() {
-        System.out.println("\n======================================================================================================================================");
-        System.out.println("                                                                 All Moves");
-        System.out.println("======================================================================================================================================");
+        MenuArts.allMoves();
         if (moveList.isEmpty()) {
             System.out.println("\u001B[31mNo moves in the database.\u001B[0m");
             return;
@@ -399,14 +400,14 @@ public class EnhancedPokedex {
     private static boolean isMoveNameExists(String name) {
         for (Move m : moveList) {
             if (m.getMoveName().equalsIgnoreCase(name)) {
-                return true;
+                return true; // Move name already exists
             }
         }
-        return false;
+        return false; // Move name does not exist
     }
 
     /**
-     * Loads default moves into the move list.
+     * Loads default moves into the move list. (Requirement #3)
      */
     private static void loadDefaultMoves() {
         // Add default moves that all Pokémon start with
@@ -453,10 +454,7 @@ public class EnhancedPokedex {
      * Displays all items in the database.
      */
     private static void viewAllItems() {
-        System.out.println("\n======================================================================================================================================");
-        System.out.println("                                                                 All Items");
-        System.out.println("======================================================================================================================================");
-
+        MenuArts.allItems();
         if (itemList.isEmpty()) {
             System.out.println("\u001B[31mNo items in the database.\u001B[0m");
             return;
@@ -502,14 +500,14 @@ public class EnhancedPokedex {
         while (true) {
             System.out.print(prompt);
             String line = scanner.nextLine().trim();
-            try {
+            try { // Try to parse the input as an integer
                 input = Integer.parseInt(line);
                 if (input < 0) {
                     System.out.println("\u001B[31mPlease enter a non-negative integer.\u001B[0m");
                 } else {
                     break;
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) { // Catch invalid input
                 System.out.println("\u001B[31mInvalid input. Please enter a valid integer.\u001B[0m");
             }
         }
@@ -586,7 +584,7 @@ public class EnhancedPokedex {
     }
 
     /**
-     * Gets a valid sex input from the user.
+     * Gets a valid sex input from the user for Trainer.
      */
     private static String getValidSex() {
         while (true) {
@@ -605,8 +603,8 @@ public class EnhancedPokedex {
         System.out.println("\n        Valid Pokémon Types:");
         System.out.println("Normal, Fire, Water, Grass, Electric,");
         System.out.println("  Psychic, Ice, Dragon, Dark, Fairy,");
-        System.out.println("Fighting, Flying, Poison, Ground, Rock,");
-        System.out.println("     Bug, Ghost, Steel, Stellar.");
+        System.out.println("Fighting, Flying, Poison, Ground,");
+        System.out.println("      Rock, Bug, Ghost, Steel.");
         System.out.println();
     }
 
@@ -614,13 +612,13 @@ public class EnhancedPokedex {
      * Checks if a type is valid.
      */
     private static boolean isValidType(String type) {
-        if (type == null || type.trim().isEmpty()) {
-            return false;
+        if (type == null || type.trim().isEmpty()) { // Check for null or empty input
+            return false; // Return false if the type is null or empty
         }
 
         for (String validType : VALID_TYPES) {
             if (validType.equalsIgnoreCase(type.trim())) {
-                return true;
+                return true; // Return true if the type matches any valid type
             }
         }
         return false;
@@ -631,7 +629,7 @@ public class EnhancedPokedex {
      */
     private static String capitalizeFirstLetter(String str) {
         if (str == null || str.isEmpty()) {
-            return str;
+            return str; // Return the original string if it's null or empty
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
@@ -645,12 +643,12 @@ public class EnhancedPokedex {
         int trainerId = getIntInput("Trainer ID: ");
         if (isTrainerIdExists(trainerId)) {
             System.out.println("Error: Trainer ID already exists.");
-            return;
+            return; // Exit if ID already exists
         }
 
         String name = getStringInput("Name: ");
         String birthdate = getStringInput("Birthdate (YYYY-MM-DD): ");
-        String sex = getValidSex(); // Use the validation method instead of getStringInput
+        String sex = getValidSex();
         String hometown = getStringInput("Hometown: ");
         String description = getStringInput("Description: ");
 
@@ -666,7 +664,7 @@ public class EnhancedPokedex {
         System.out.println("\n-- All Trainers --");
         if (trainerList.isEmpty()) {
             System.out.println("No trainers in the database.");
-            return;
+            return; // Exit if no trainers are available
         }
         for (Trainer trainer : trainerList) {
             trainer.displayTrainer();
