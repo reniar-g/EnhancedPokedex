@@ -12,6 +12,11 @@ public class ItemController {
         this.itemList = itemList;
     }
 
+    // Getters for item attributes used by TrainerController
+    public ArrayList<Item> getItemList() {
+        return itemList;
+    }
+
     /**
      * Item Management submenu
      */
@@ -35,9 +40,10 @@ public class ItemController {
     }
 
     /**
-     * Displays all items in the database.
+     * Displays all items in the database. Public so that it can be accessed by
+     * TrainerController for buying/selling items.
      */
-    private void viewAllItems() {
+    public void viewAllItems() {
         MenuArtUtils.allItems();
         if (itemList.isEmpty()) {
             System.out.println("\u001B[31mNo items in the database.\u001B[0m");
@@ -74,5 +80,4 @@ public class ItemController {
             System.out.println("\u001B[31mNo items found matching the search criteria.\u001B[0m");
         }
     }
-
 }

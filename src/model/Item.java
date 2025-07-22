@@ -1,8 +1,8 @@
 package model;
 
-// Item class representing an item in the game
 public class Item {
 
+    private int itemId;
     private String itemName;
     private String itemCategory;
     private String itemDescription;
@@ -10,9 +10,10 @@ public class Item {
     private String itemPrice;
     private String itemSellPrice;
 
-    // Constructor for Item class
-    public Item(String itemName, String itemCategory, String itemDescription,
+    // Update constructor
+    public Item(int itemId, String itemName, String itemCategory, String itemDescription,
             String itemEffect, String itemPrice, String itemSellPrice) {
+        this.itemId = itemId;
         this.itemName = itemName;
         this.itemCategory = itemCategory;
         this.itemDescription = itemDescription;
@@ -24,6 +25,10 @@ public class Item {
     // Getters for Item attributes
     public String getItemName() {
         return itemName;
+    }
+
+    public int getItemId() {
+        return itemId;
     }
 
     public String getItemCategory() {
@@ -50,16 +55,17 @@ public class Item {
      * Displays the header for Item information table
      */
     public static void displayItemHeader() {
-        System.out.printf("%-16s %-17s %-45s %-26s %-15s %-15s%n",
-                "Item Name", "Category", "Description", "Effect", "Buy Price", "Sell Price");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-6s %-16s %-17s %-45s %-26s %-15s %-15s%n",
+                "ID", "Item Name", "Category", "Description", "Effect", "Buy Price", "Sell Price");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     /**
      * Displays item details in a formatted table style using printf
      */
     public void displayItem() {
-        System.out.printf("%-16s %-17s %-45s %-26s %-15s %-15s%n",
+        System.out.printf("%-6d %-16s %-17s %-45s %-26s %-15s %-15s%n",
+                itemId,
                 itemName,
                 itemCategory,
                 itemDescription,
