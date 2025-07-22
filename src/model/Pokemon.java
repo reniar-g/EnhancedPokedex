@@ -14,17 +14,17 @@ public class Pokemon {
     private Integer evolvesFrom; // Pokédex Number, nullable
     private Integer evolvesTo;   // Pokédex Number, nullable
     private Integer evolutionLevel; // Nullable
-    private int hp;
-    private int attack;
-    private int defense;
-    private int speed;
+    private double hp;
+    private double attack;
+    private double defense;
+    private double speed;
     private List<Move> moveSet;
     private Item heldItem;
 
     // Constructor for Pokémon class
     public Pokemon(int pokedexNumber, String name, String type1, String type2, int baseLevel,
             Integer evolvesFrom, Integer evolvesTo, Integer evolutionLevel,
-            int hp, int attack, int defense, int speed) {
+            double hp, double attack, double defense, double speed) {
         this.pokedexNumber = pokedexNumber;
         this.pokemonName = name;
         this.pokemonType1 = type1;
@@ -86,19 +86,19 @@ public class Pokemon {
         return evolutionLevel;
     }
 
-    public int getHp() {
+    public double getHp() {
         return hp;
     }
 
-    public int getAttack() {
+    public double getAttack() {
         return attack;
     }
 
-    public int getDefense() {
+    public double getDefense() {
         return defense;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 
@@ -158,5 +158,31 @@ public class Pokemon {
                 "From:" + formatNullableInteger(evolvesFrom),
                 "To:" + formatNullableInteger(evolvesTo),
                 "EvoLv:" + formatNullableInteger(evolutionLevel));
+    }
+
+    //FOR USE ITEMS
+    public void addHP(double amount)
+    {
+        hp += amount;
+    }
+
+    public void addAttack(double amount)
+    {
+        attack += amount;
+    }
+
+    public void addDefense(double amount)
+    {
+        defense += amount;
+    }
+
+    public void addSpeed(double amount)
+    {
+        speed += amount;
+    }
+
+    public void baseLevelUp()
+    {
+        baseLevel += 1;
     }
 }

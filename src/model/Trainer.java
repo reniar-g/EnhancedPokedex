@@ -60,4 +60,16 @@ public class Trainer {
         System.out.println("Description: " + trainerDescription);
         System.out.println("Money: P" + String.format("%.2f", trainerMoney));
     }
+
+    //TRANSACTIONS
+
+    public void buyItem(Item item)
+    {
+        this.trainerMoney -= item.getItemPrice();
+    }
+
+    public void sellItem(Item item)
+    {
+        this.trainerMoney += item.getItemSellPrice();
+    }
 }
