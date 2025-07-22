@@ -38,19 +38,10 @@ public class Pokemon {
         this.defense = defense;
         this.speed = speed;
         this.moveSet = new ArrayList<>();
+
+        moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal"));
+        moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal"));
         this.heldItem = null;
-    }
-    
-    /**
-     * Adds default moves to this Pokémon.
-     * Should be called after a Pokémon is created.
-     */
-    public void addDefaultMoves(ArrayList<Move> globalMoveList) {
-        // Check if the move list has the default moves
-        if (globalMoveList.size() >= 2) {
-            moveSet.add(globalMoveList.get(0)); // Add Tackle
-            moveSet.add(globalMoveList.get(1)); // Add Defend
-        }
     }
 
     // Getters for Pokémon attributes

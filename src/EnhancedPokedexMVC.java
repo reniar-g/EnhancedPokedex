@@ -24,7 +24,7 @@ public class EnhancedPokedexMVC {
     }
 
     private static void initializeControllers() {
-        pokemonController = new PokemonController(pokedex, moveList);
+        pokemonController = new PokemonController(pokedex);
         moveController = new MoveController(moveList);
         itemController = new ItemController(itemList);
         trainerController = new TrainerController(trainerList);
@@ -40,15 +40,10 @@ public class EnhancedPokedexMVC {
         pokedex.add(new Pokemon(6, "Charizard", "Fire", "Flying", 1, 5, null, null, 78, 84, 78, 100));
     }
 
+    // Loads default moves into the move list. (Requirement #3)
     private static void loadDefaultMoves() {
-        moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
-        moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
-
-        // Add default moves to each Pokemon's moveSet (Requirement #3)
-        for (Pokemon pokemon : pokedex) {
-            pokemon.getMoveSet().add(moveList.get(0)); // Add Tackle
-            pokemon.getMoveSet().add(moveList.get(1)); // Add Defend
-        }
+        moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal"));
+        moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal"));
     }
 
     // Loads default items into the item list. (Requirement #5)
