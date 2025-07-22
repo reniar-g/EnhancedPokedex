@@ -7,9 +7,11 @@ import util.*;
 public class PokemonController {
 
     private final ArrayList<Pokemon> pokedex;
+    private final ArrayList<Move> moveList;
 
-    public PokemonController(ArrayList<Pokemon> pokedex) {
+    public PokemonController(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList) {
         this.pokedex = pokedex;
+        this.moveList = moveList;
     }
 
     /**
@@ -66,6 +68,7 @@ public class PokemonController {
         int speed = InputUtils.getIntInput("Base Speed: ");
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
+        p.addDefaultMoves(moveList); // Add default moves to the new Pokémon
         pokedex.add(p);
         System.out.println("\n\u001B[32mPokémon added successfully!\u001B[0m");
     }

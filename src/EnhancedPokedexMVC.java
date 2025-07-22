@@ -24,7 +24,7 @@ public class EnhancedPokedexMVC {
     }
 
     private static void initializeControllers() {
-        pokemonController = new PokemonController(pokedex);
+        pokemonController = new PokemonController(pokedex, moveList);
         moveController = new MoveController(moveList);
         itemController = new ItemController(itemList);
         trainerController = new TrainerController(trainerList);
@@ -40,16 +40,21 @@ public class EnhancedPokedexMVC {
         pokedex.add(new Pokemon(6, "Charizard", "Fire", "Flying", 1, 5, null, null, 78, 84, 78, 100));
     }
 
-    // Loads default moves into the move list. (Requirement #3)
     private static void loadDefaultMoves() {
-        moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal"));
-        moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal"));
+        moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
+        moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
+
+        // Add default moves to each Pokemon's moveSet (Requirement #3)
+        for (Pokemon pokemon : pokedex) {
+            pokemon.getMoveSet().add(moveList.get(0)); // Add Tackle
+            pokemon.getMoveSet().add(moveList.get(1)); // Add Defend
+        }
     }
 
     // Loads default items into the item list. (Requirement #5)
     private static void loadDefaultItems() {
         // Vitamins
-        itemList.add(new Item("HP Up", "Vitamin", "A nutritious drink for Pokémon.", "+10 HP EVs", "P10,000", "P5,000"));
+        itemList.add(new Item("HP Up", "Vitamin", "A nutritious drink for Pokémon.", "+10 HP EVs", "10,000", "P5,000"));
         itemList.add(new Item("Protein", "Vitamin", "A nutritious drink for Pokémon.", "+10 Attack EVs", "P10,000", "P5,000"));
         itemList.add(new Item("Iron", "Vitamin", "A nutritious drink for Pokémon.", "+10 Defense EVs", "P10,000", "P5,000"));
         itemList.add(new Item("Carbos", "Vitamin", "A nutritious drink for Pokémon.", "+10 Speed EVs", "P10,000", "P5,000"));
