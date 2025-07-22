@@ -24,7 +24,7 @@ public class Pokemon {
     // Constructor for Pokémon class
     public Pokemon(int pokedexNumber, String name, String type1, String type2, int baseLevel,
             Integer evolvesFrom, Integer evolvesTo, Integer evolutionLevel,
-            double hp, double attack, double defense, double speed) {
+            int hp, int attack, int defense, int speed) {
         this.pokedexNumber = pokedexNumber;
         this.pokemonName = name;
         this.pokemonType1 = type1;
@@ -38,10 +38,19 @@ public class Pokemon {
         this.defense = defense;
         this.speed = speed;
         this.moveSet = new ArrayList<>();
-
-        moveSet.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target.", "TM", "Normal"));
-        moveSet.add(new Move("Defend", "A defensive move that raises the user's Defense stat.", "TM", "Normal"));
         this.heldItem = null;
+    }
+
+    /**
+     * Adds default moves to this Pokémon. Should be called after a Pokémon is
+     * created.
+     */
+    public void addDefaultMoves(ArrayList<Move> globalMoveList) {
+        // Check if the move list has the default moves
+        if (globalMoveList.size() >= 2) {
+            moveSet.add(globalMoveList.get(0)); // Add Tackle
+            moveSet.add(globalMoveList.get(1)); // Add Defend
+        }
     }
 
     // Getters for Pokémon attributes
@@ -149,31 +158,5 @@ public class Pokemon {
                 "From:" + formatNullableInteger(evolvesFrom),
                 "To:" + formatNullableInteger(evolvesTo),
                 "EvoLv:" + formatNullableInteger(evolutionLevel));
-    }
-
-    //FOR USE ITEMS
-    public void addHP(double amount)
-    {
-        hp += amount;
-    }
-
-    public void addAttack(double amount)
-    {
-        attack += amount;
-    }
-
-    public void addDefense(double amount)
-    {
-        defense += amount;
-    }
-
-    public void addSpeed(double amount)
-    {
-        speed += amount;
-    }
-
-    public void baseLevelUp()
-    {
-        baseLevel += 1;
     }
 }

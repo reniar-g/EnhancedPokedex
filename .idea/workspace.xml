@@ -5,11 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9d23090f-388f-46a1-bc7b-74ac82f8d365" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/ItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/MoveController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/MoveController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/PokemonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/PokemonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/EnhancedPokedexMVC.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Item.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Move.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Pokemon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Trainer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/MenuArts.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
