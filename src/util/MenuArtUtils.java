@@ -45,6 +45,7 @@ public class MenuArtUtils {
         System.out.println("                           4. Manage Trainer");
         System.out.println("                           5. Buy Item");
         System.out.println("                           6. Sell Item");
+        System.out.println("                           7. Manage Pokémons");
         System.out.println("                           0. Back to Main Menu");
     }
 
