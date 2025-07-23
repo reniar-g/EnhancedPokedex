@@ -8,6 +8,7 @@ public class TrainerController {
 
     private final ArrayList<Trainer> trainerList;
     private ItemController itemController;
+    private PokemonController pokemonController;
 
     public TrainerController(ArrayList<Trainer> trainerList) {
         this.trainerList = trainerList;
@@ -16,6 +17,8 @@ public class TrainerController {
     public void setItemController(ItemController itemController) {
         this.itemController = itemController;
     }
+
+    public void setPokemonController(PokemonController pokemonController) { this.pokemonController = pokemonController; }
 
     /**
      * Trainer Management submenu
@@ -39,6 +42,8 @@ public class TrainerController {
                     handleItemTransaction(true);  // Buy Item
                 case 6 ->
                     handleItemTransaction(false); // Sell Item
+                case 7 ->
+                        manageTrainerPokemons();
                 case 0 ->
                     running = false;
                 default ->
@@ -268,4 +273,283 @@ public class TrainerController {
             System.out.println("This item cannot be sold.");
         }
     }
+
+    //Manages Trainer's pokemons
+
+    private void manageTrainerPokemons()
+    {
+        System.out.println("\n-- Manage Trainer's Pokémon --");
+        if(trainerList.isEmpty())
+        {
+            System.out.println("No trainers available to manage.");
+            return;
+        }
+
+        Trainer trainer = selectTrainer();
+        if(trainer == null) { return; }
+
+        boolean managing = true;
+        while(managing)
+        {
+            System.out.println("\n=== Managing Trainer: " + trainer.getTrainerName() + " ===");
+            System.out.println("Money: P" + trainer.getTrainerMoney());
+
+            System.out.println("\nActive Pokémon (Max 6):");
+            displayPokemonList(trainer.getPokemonLineup(), "Lineup");
+
+            System.out.println("\nStored Pokémon:");
+            displayPokemonList(trainer.getPokemonStorage(), "Storage");
+
+            System.out.println("\nOptions:");
+            System.out.println("1. Add Pokémon to Lineup");
+            System.out.println("2. Switch Pokémon between Lineup and Storage");
+            System.out.println("3. Release Pokémon");
+            System.out.println("4. Teach Moves to Pokémon");
+            System.out.println("5. Back to Trainer Menu");
+            int choice = InputUtils.getIntInput("Enter your choice: ");
+
+            switch (choice) {
+                case 1 -> addPokemonToTrainer(trainer);
+                case 2 -> switchPokemon(trainer);
+                case 3 -> releasePokemon(trainer);
+                //case 4 -> teachPokemonMoves(trainer);
+                case 5 -> managing = false;
+                default -> System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
+    //Adds a Pokemon to Lineup
+
+    private void addPokemonToTrainer(Trainer trainer)
+    {
+        System.out.println("\n-- Add Pokémon --");
+
+        ArrayList<Pokemon> pokedex = pokemonController.getPokedex();
+        if (pokedex.isEmpty()) {
+            System.out.println("No Pokémon available in the Pokédex.");
+            return;
+        }
+
+        System.out.println("Available Pokémon:");
+        Pokemon.displayPokemonHeader();
+        for (int i = 0; i < pokedex.size(); i++) {
+            System.out.print((i + 1) + ". ");
+            pokedex.get(i).displayPokemon();
+        }
+
+        int choice = InputUtils.getIntInput("Select Pokémon to Add (3 to cancel): ");
+        if (choice == 3) return;
+        if (choice < 1 || choice > pokedex.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Pokemon originalPokemon = pokedex.get(choice - 1);
+        Pokemon copyPokemon = new Pokemon(
+                originalPokemon.getPokedexNumber(),
+                originalPokemon.getPokemonName(),
+                originalPokemon.getPokemonType1(),
+                originalPokemon.getPokemonType2(),
+                originalPokemon.getBaseLevel(),
+                originalPokemon.getEvolvesFrom(),
+                originalPokemon.getEvolvesTo(),
+                originalPokemon.getEvolutionLevel(),
+                (int)originalPokemon.getHp(),
+                (int)originalPokemon.getAttack(),
+                (int)originalPokemon.getDefense(),
+                (int)originalPokemon.getSpeed()
+        );
+
+        for(Move move : originalPokemon.getMoveSet())
+        {
+            copyPokemon.getMoveSet().add(move);
+        }
+
+        if(trainer.getPokemonLineup().size() < 6)
+        {
+            trainer.getPokemonLineup().add(copyPokemon);
+            System.out.println(copyPokemon.getPokemonName() + " is added to your lineup.");
+        }
+        else
+        {
+            trainer.getPokemonStorage().add(copyPokemon);
+            System.out.println(copyPokemon.getPokemonName() + " is added to storage(Pokémon Lineup is full).");
+        }
+    }
+
+    //displays Pokemon's basic info
+
+    private void displayPokemonList(ArrayList<Pokemon> pokemonList, String listType) {
+        if (pokemonList.isEmpty()) {
+            System.out.println("(" + listType + " is empty)");
+            return;
+        }
+
+        System.out.printf("%-4s %-15s %-10s %-15s %-10s%n",
+                "No.", "Name", "Level", "Type", "HP");
+        System.out.println("--------------------------------------------------");
+
+        for (int i = 0; i < pokemonList.size(); i++) {
+            Pokemon p = pokemonList.get(i);
+            String type = p.getPokemonType1();
+            if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
+                type += "/" + p.getPokemonType2();
+            }
+
+            System.out.printf("%-4d %-15s %-10d %-15s %-10.0f%n",
+                    i + 1,
+                    p.getPokemonName(),
+                    p.getBaseLevel(),
+                    type,
+                    p.getHp());
+        }
+    }
+
+    //Switches pokemon
+    private void switchPokemon(Trainer trainer)
+    {
+        System.out.println("\n-- Switch Pokémon --");
+        System.out.println("1. Move from Storage to Lineup");
+        System.out.println("2. Move from Lineup to Storage");
+        System.out.println("3. Cancel");
+
+        int choice = InputUtils.getIntInput("Enter your Choice: ");
+        if (choice == 3) { return; }
+
+        if(choice == 1)
+        {
+            if(trainer.getPokemonStorage().isEmpty())
+            {
+                System.out.println("No Pokémon in storage.");
+                return;
+            }
+
+            if(trainer.getPokemonLineup().size() >= 6)
+            {
+                System.out.println("Lineup is full. Release a Pokémon first.");
+                return;
+            }
+
+            System.out.println("Select Pokémon to Move to Lineup: ");
+            displayPokemonList(trainer.getPokemonStorage(), "Storage");
+
+            int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number(Press 3 to Cancel): ");
+            if(pokemonChoice == 3) { return; }
+            if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonStorage().size())
+            {
+                System.out.println("Invalid option. Please try again!");
+                return;
+            }
+
+            Pokemon p = trainer.getPokemonStorage().remove(pokemonChoice - 1);
+            trainer.getPokemonLineup().add(p);
+            System.out.println(p.getPokemonName() + " is moved to Lineup!");
+        }
+        else if(choice == 2)
+        {
+            if(trainer.getPokemonLineup().isEmpty())
+            {
+                System.out.println("No Pokemon in lineup.");
+                return;
+            }
+
+            System.out.println("Select Pokémon to Move to Storage: ");
+            displayPokemonList(trainer.getPokemonLineup(), "Lineup");
+
+            int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number(Press 3 to Cancel): ");
+            if(pokemonChoice == 0) { return; }
+            if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size())
+            {
+                System.out.println("Invalid selection.");
+                return;
+            }
+
+            Pokemon p = trainer.getPokemonLineup().remove(pokemonChoice - 1);
+            trainer.getPokemonStorage().add(p);
+            System.out.println(p.getPokemonName() + " is moved to Storage!");
+        }
+        else
+        {
+            System.out.println("Invalid Option. Please Try Again!");
+        }
+    }
+
+    //RELEASES POKEMON
+    private void releasePokemon(Trainer trainer) {
+        System.out.println("\n-- Release Pokémon --");
+        System.out.println("1. Release from Lineup");
+        System.out.println("2. Release from Storage");
+        System.out.println("3. Exit");
+
+        int choice = InputUtils.getIntInput("Select source: ");
+        if (choice == 3) return;
+
+        ArrayList<Pokemon> sourceList = (choice == 1) ? trainer.getPokemonLineup() : trainer.getPokemonStorage();
+        String sourceName = (choice == 1) ? "Lineup" : "Storage";
+
+        if (sourceList.isEmpty()) {
+            System.out.println("No Pokémon in " + sourceName);
+            return;
+        }
+
+        System.out.println("Select Pokémon to release:");
+        displayPokemonList(sourceList, sourceName);
+
+        int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number (Press 3 to Cancel): ");
+        if (pokemonChoice == 3) return;
+        if (pokemonChoice < 1 || pokemonChoice > sourceList.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Pokemon released = sourceList.remove(pokemonChoice - 1);
+        System.out.println(released.getPokemonName() + " has been released.");
+    }
+
+    //Trainer teaches moves to a Pokemon (TO BE FINISHED TOMORROW, EXPECT BY 0300 PM).
+
+    private void teachPokemonMoves(Trainer trainer)
+    {
+        System.out.println("\n-- Teach Move to Pokémon --");
+
+        if(trainer.getPokemonLineup().isEmpty())
+        {
+            System.out.println("No Pokémon in your lineup.");
+            return;
+        }
+
+        System.out.println("Select Pokémon to Teach:");
+        displayPokemonList(trainer.getPokemonLineup(), "Lineup");
+
+        int pokemonChoice = InputUtils.getIntInput("Enter a Pokémon Number(Press 0 to Cancel): ");
+        if(pokemonChoice == 0) { return; }
+
+        if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size())
+        {
+            System.out.println("Invalid selection");
+            return;
+        }
+
+        Pokemon pokemon = trainer.getPokemonLineup().get(pokemonChoice - 1);
+        moveTutorial(pokemon);
+    }
+
+    private void moveTutorial(Pokemon pokemon)
+    {
+        System.out.println("\n=== Teaching Move to " + pokemon.getPokemonName() + " ===");
+
+        System.out.println("Current Moves: ");
+
+        if(pokemon.getMoveSet().isEmpty())
+        {
+            System.out.println("No Current Moves Being Taught!");
+        }
+        else
+        {
+
+        }
+
+    }
+
 }

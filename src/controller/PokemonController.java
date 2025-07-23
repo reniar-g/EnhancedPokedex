@@ -14,6 +14,11 @@ public class PokemonController {
         this.moveList = moveList;
     }
 
+    public ArrayList<Pokemon> getPokedex()
+    {
+        return pokedex;
+    }
+
     /**
      * Pokemon Management submenu
      */
