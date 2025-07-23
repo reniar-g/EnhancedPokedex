@@ -3,6 +3,7 @@ import controller.*;
 import java.util.ArrayList;
 import model.*;
 import util.*;
+import view.*;
 
 public class EnhancedPokedexMVC {
 
@@ -40,6 +41,28 @@ public class EnhancedPokedexMVC {
         pokedex.add(new Pokemon(4, "Charmander", "Fire", null, 1, null, 5, 16, 39, 52, 43, 65));
         pokedex.add(new Pokemon(5, "Charmeleon", "Fire", null, 1, 4, 6, 36, 58, 64, 58, 80));
         pokedex.add(new Pokemon(6, "Charizard", "Fire", "Flying", 1, 5, null, null, 78, 84, 78, 100));
+        pokedex.add(new Pokemon(7, "Squirtle", "Water", null, 1, null, 8, 16, 44, 48, 65, 43));
+        pokedex.add(new Pokemon(8, "Wartortle", "Water", null, 1, 7, 9, 36, 59, 63, 80, 58));
+        pokedex.add(new Pokemon(9, "Blastoise", "Water", null, 1, 8, null, null, 79, 83, 100, 78));
+        pokedex.add(new Pokemon(10, "Caterpie", "Bug", null, 1, null, 11, 7, 45, 30, 35, 45));
+        pokedex.add(new Pokemon(11, "Metapod", "Bug", null, 1, 10, 12, 10, 50, 20, 25, 30));
+        pokedex.add(new Pokemon(12, "Butterfree", "Bug", "Flying", 1, 11, null, null, 60, 45, 50, 70));
+        pokedex.add(new Pokemon(13, "Weedle", "Bug", "Poison", 1, null, 14, 7, 40, 35, 30, 50));
+        pokedex.add(new Pokemon(14, "Kakuna", "Bug", "Poison", 1, 13, 15, 10, 45, 25, 25, 35));
+        pokedex.add(new Pokemon(15, "Beedrill", "Bug", "Poison", 1, 14, null, null, 65, 80, 40, 75));
+        pokedex.add(new Pokemon(16, "Pidgey", "Normal", "Flying", 1, null, 17, 18, 40, 45, 40, 56));
+        pokedex.add(new Pokemon(17, "Pidgeotto", "Normal", "Flying", 1, 16, 18, 36, 63, 60, 55, 71));
+        pokedex.add(new Pokemon(18, "Pidgeot", "Normal", "Flying", 1, 17, null, null, 83, 80, 75, 91));
+        pokedex.add(new Pokemon(19, "Rattata", "Normal", null, 1, null, 20, 20, 30, 56, 35, 72));
+        pokedex.add(new Pokemon(20, "Raticate", "Normal", null, 1, 19, null, null, 65, 81, 60, 97));
+        pokedex.add(new Pokemon(21, "Spearow", "Normal", "Flying", 1, null, 22, 20, 40, 60, 30, 70));
+        pokedex.add(new Pokemon(22, "Fearow", "Normal", "Flying", 1, 21, null, null, 65, 90, 65, 100));
+        pokedex.add(new Pokemon(23, "Ekans", "Poison", null, 1, null, 24, 22, 35, 60, 44, 55));
+        pokedex.add(new Pokemon(24, "Arbok", "Poison", null, 1, 23, null, null, 60, 85, 69, 80));
+        pokedex.add(new Pokemon(25, "Pikachu", "Electric", null, 1, null, 26, 22, 35, 55, 40, 90));
+        pokedex.add(new Pokemon(26, "Raichu", "Electric", null, 1, 25, null, null, 60, 90, 55, 110));
+        pokedex.add(new Pokemon(27, "Sandshrew", "Ground", null, 1, null, 28, 22, 50, 75, 85, 40));
+        pokedex.add(new Pokemon(28, "Sandslash", "Ground", null, 1, 27, null, null, 75, 100, 110, 65));
     }
 
     private static void loadDefaultTrainers() {
@@ -88,6 +111,7 @@ public class EnhancedPokedexMVC {
     public static void main(String[] args) {
         initializeControllers(); // Initialize controllers first
         loadDefaultData(); // Load default data into the Array lists
+        MainPokedexView gui = new MainPokedexView(pokedex, moveList, itemList, trainerList);
         runPokedex(); // Run the Pokedex
 
         // Close scanner
@@ -118,4 +142,5 @@ public class EnhancedPokedexMVC {
             }
         }
     }
+
 }
