@@ -61,7 +61,6 @@ public class PokemonView extends JPanel {
         add(typeLabel2);
 
         updatePokemonLabels(); // Only update text, do not add new labels
-        nextButton();
 
         JButton btnAdd = new JButton("Add New Pokémon");
         btnAdd.setFont(new Font("Consolas", Font.BOLD, 14));
@@ -109,67 +108,6 @@ public class PokemonView extends JPanel {
         btnExit.setMargin(new Insets(0, 0, 0, 0));
     }
 
-    private void nextButton() {
-        int diameter = 66;
-        int xNext = 759;
-        int xPrev = 525;
-        int y = 561;
-
-        // Next Button
-        JButton nextButton = new JButton() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(100, 150, 255));
-                g2.fillOval(0, 0, diameter, diameter);
-                g2.setColor(Color.BLACK);
-                g2.drawOval(0, 0, diameter - 1, diameter - 1);
-                g2.setColor(Color.WHITE);
-                int[] xPoints = {diameter / 2 - 8, diameter / 2 - 8, diameter / 2 + 10};
-                int[] yPoints = {diameter / 2 - 10, diameter / 2 + 10, diameter / 2};
-                g2.fillPolygon(xPoints, yPoints, 3);
-                g2.dispose();
-            }
-        };
-        nextButton.setBounds(xNext, y, diameter, diameter);
-        nextButton.setOpaque(false);
-        nextButton.setContentAreaFilled(false);
-        nextButton.setBorderPainted(false);
-        nextButton.setFocusPainted(false);
-        nextButton.setToolTipText("Next Pokémon");
-        nextButton.addActionListener(e -> showNextPokemon());
-        add(nextButton);
-
-        // Previous Button
-        JButton prevButton = new JButton() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(100, 150, 255));
-                g2.fillOval(0, 0, diameter, diameter);
-                g2.setColor(Color.BLACK);
-                g2.drawOval(0, 0, diameter - 1, diameter - 1);
-                g2.setColor(Color.WHITE);
-                int[] xPoints = {diameter / 2 + 8, diameter / 2 + 8, diameter / 2 - 10};
-                int[] yPoints = {diameter / 2 - 10, diameter / 2 + 10, diameter / 2};
-                g2.fillPolygon(xPoints, yPoints, 3);
-                g2.dispose();
-            }
-        };
-        prevButton.setBounds(xPrev, y, diameter, diameter);
-        prevButton.setOpaque(false);
-        prevButton.setContentAreaFilled(false);
-        prevButton.setBorderPainted(false);
-        prevButton.setFocusPainted(false);
-        prevButton.setToolTipText("Previous Pokémon");
-        prevButton.addActionListener(e -> showPreviousPokemon());
-        add(prevButton);
-    }
-
     private void updatePokemonLabels() {
         if (pokedex.isEmpty()) {
             nameLabel.setText("No Pokémon");
@@ -197,7 +135,7 @@ public class PokemonView extends JPanel {
         }
     }
 
-    private void showNextPokemon() {
+    public void showNextPokemon() {
         if (pokedex.isEmpty()) {
             return;
         }
@@ -205,7 +143,7 @@ public class PokemonView extends JPanel {
         updatePokemonLabels();
     }
 
-    private void showPreviousPokemon() {
+    public void showPreviousPokemon() {
         if (pokedex.isEmpty()) {
             return;
         }

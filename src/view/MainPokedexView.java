@@ -1,7 +1,12 @@
 package view;
 
 import java.awt.*;
+import java.io.File;
 import java.util.List;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import javax.swing.border.Border;
 import model.*;
@@ -13,6 +18,7 @@ public class MainPokedexView extends JFrame {
     public static final Color POKEDEX_BLUE = new Color(10, 168, 255);
     public static final Color BUTTON_SHADOW = new Color(68, 95, 146);
     Border buttonShadowBorder = BorderFactory.createLineBorder(BUTTON_SHADOW, 1);
+    Border buttonShadowBorderThick = BorderFactory.createLineBorder(BUTTON_SHADOW, 3);
 
     private List<Pokemon> pokedex;
     private List<Move> moveList;
@@ -23,6 +29,11 @@ public class MainPokedexView extends JFrame {
     private JLabel backgroundLabel;
     private JLabel titleLabel;
 
+    private JButton nextButton;
+    private JButton prevButton;
+    private PokemonView pokemonView;
+    private boolean pokemonViewActive = false;
+
     public MainPokedexView(List<Pokemon> pokedex, List<Move> moveList, List<Item> itemList, List<Trainer> trainerList) {
         super("Enhanced Pokédex");
         this.pokedex = pokedex;
@@ -32,14 +43,56 @@ public class MainPokedexView extends JFrame {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
+
         backgroundLabel = loadBackgroundImage();
         backgroundLabel.setLayout(null);
+        nextButton = nextButton();
+        prevButton = backButton();
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
 
-        homeScreen();
+        backgroundLabel.add(nextButton);
+        backgroundLabel.add(prevButton);
+
+        showHomeScreen();
+        playPokemonSong();
 
         setContentPane(backgroundLabel);
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private JButton nextButton() {
+        JButton btnNext = new JButton("Next");
+        btnNext.setBounds(755, 559, 75, 75);
+        btnNext.setBackground(POKEDEX_BLUE);
+        btnNext.setForeground(Color.BLACK);
+        btnNext.setFont(new Font("Consolas", Font.BOLD, 14));
+        btnNext.setBorder(buttonShadowBorder);
+        btnNext.setOpaque(true);
+
+        btnNext.addActionListener(e -> {
+            if (pokemonViewActive && pokemonView != null) {
+                pokemonView.showNextPokemon();
+            }
+        });
+        return btnNext;
+    }
+
+    private JButton backButton() {
+        JButton btnBack = new JButton("Back");
+        btnBack.setBounds(520, 559, 75, 75);
+        btnBack.setBackground(POKEDEX_BLUE);
+        btnBack.setFont(new Font("Consolas", Font.BOLD, 14));
+        btnBack.setForeground(Color.BLACK);
+        btnBack.setOpaque(true);
+        btnBack.setBorder(buttonShadowBorder);
+        btnBack.addActionListener(e -> {
+            if (pokemonViewActive && pokemonView != null) {
+                pokemonView.showPreviousPokemon();
+            }
+        });
+        return btnBack;
     }
 
     private JLabel loadBackgroundImage() {
@@ -60,8 +113,13 @@ public class MainPokedexView extends JFrame {
         }
     }
 
-    private void homeScreen() {
+    private void showHomeScreen() {
+        pokemonViewActive = false;
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
         removeAllButtons();
+        backgroundLabel.add(nextButton);
+        backgroundLabel.add(prevButton);
         for (Component comp : backgroundLabel.getComponents()) {
             if (comp instanceof PokemonView) {
                 backgroundLabel.remove(comp);
@@ -103,16 +161,21 @@ public class MainPokedexView extends JFrame {
     private void showMenuOutput(int choice) {
         switch (choice) {
             case 1 ->
-                pokemonView();
+                showPokemonView();
             case 5 ->
-                homeScreen(); // Home button pressed
+                showHomeScreen(); // Home button pressed
             case 6 ->
                 System.exit(0);
         }
     }
 
-    private void pokemonView() {
+    private void showPokemonView() {
+        pokemonViewActive = true;
+        nextButton.setEnabled(true);
+        prevButton.setEnabled(true);
         removeAllButtons();
+        backgroundLabel.add(nextButton); // <-- Add this
+        backgroundLabel.add(prevButton); // <-- And this
         if (outputArea != null) {
             backgroundLabel.remove(outputArea);
             outputArea = null;
@@ -125,10 +188,9 @@ public class MainPokedexView extends JFrame {
                 backgroundLabel.remove(comp);
             }
         }
-        // Pass a callback to PokemonView for Home button
-        PokemonView pokemonPanel = new PokemonView(pokedex, () -> showMenuOutput(5));
-        pokemonPanel.setBounds(0, 0, getWidth(), getHeight());
-        backgroundLabel.add(pokemonPanel);
+        pokemonView = new PokemonView(pokedex, () -> showMenuOutput(5));
+        pokemonView.setBounds(0, 0, getWidth(), getHeight());
+        backgroundLabel.add(pokemonView);
 
         backgroundLabel.repaint();
     }
@@ -199,5 +261,32 @@ public class MainPokedexView extends JFrame {
                 backgroundLabel.remove(comp);
             }
         }
+    }
+
+    private void playPokemonSong() {
+        new Thread(() -> {
+            try {
+                File audioFile = new File("src/util/PokemonSong.wav");
+                if (audioFile.exists()) {
+                    AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audioStream);
+                    clip.start();
+
+                    // Set volume to 50%
+                    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                    float range = gainControl.getMaximum() - gainControl.getMinimum();
+                    float gain = (range * 0.8f) + gainControl.getMinimum(); // 50% volume
+                    gainControl.setValue(gain);
+
+                    // Keep the clip running
+                    clip.loop(Clip.LOOP_CONTINUOUSLY);
+                } else {
+                    System.out.println("Audio file not found: " + audioFile.getPath());
+                }
+            } catch (Exception e) {
+                System.out.println("Error playing song: " + e.getMessage());
+            }
+        }).start();
     }
 }
