@@ -14,6 +14,9 @@ public class Trainer {
     private ArrayList<Item> inventory = new ArrayList<>(); // Inventory of items owned by the trainer
     private ArrayList<Pokemon> pokemonList = new ArrayList<>(); // List of Pokémon owned by the trainer
 
+    private ArrayList<Pokemon> pokemonLineup = new ArrayList<>();
+    private ArrayList<Pokemon> pokemonStorage = new ArrayList<>();
+
     public Trainer(int trainerId, String trainerName, String trainerBirthdate,
             String trainerSex, String trainerHometown, String trainerDescription) {
         this.trainerId = trainerId;
@@ -59,6 +62,10 @@ public class Trainer {
         return inventory;
     }
 
+    public ArrayList<Pokemon> getPokemonLineup() { return pokemonLineup; }
+
+    public ArrayList<Pokemon> getPokemonStorage() { return pokemonStorage; }
+
     public void addItem(Item item) {
         inventory.add(item);
     }
@@ -86,6 +93,57 @@ public class Trainer {
         }
     }
 
+    public boolean addPokemonToLineup(Pokemon pokemon)
+    {
+        if(pokemonLineup.size() < 6)
+        {
+            pokemonLineup.add(pokemon);
+            return true;
+        }
+        else
+        {
+            pokemonStorage.add(pokemon);
+            return false;
+        }
+    }
+
+    public boolean switchPokemonToLineup(int storageIndex)
+    {
+        if(pokemonLineup.size() > 6)
+        {
+            return false;
+        }
+
+        if(storageIndex >= 0 && storageIndex < pokemonStorage.size())
+        {
+            pokemonLineup.add(pokemonStorage.remove(storageIndex));
+            return true;
+        }
+
+        return false;
+    }
+
+    public Pokemon releasePokemon(boolean isLineup, int index)
+    {
+        if(isLineup)
+        {
+            if(index >= 0 && index < pokemonLineup.size())
+            {
+                return pokemonLineup.remove(index);
+            }
+        }
+        else
+        {
+            if(index >= 0 && index < pokemonStorage.size())
+            {
+                return pokemonStorage.remove(index);
+            }
+        }
+
+        return null;
+    }
+
+    //SETTERS
     public void setTrainerMoney(double money) {
         this.trainerMoney = money;
     }
