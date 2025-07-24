@@ -12,6 +12,8 @@ public class MoveController {
         this.moveList = moveList;
     }
 
+    public ArrayList<Move> getMoveList() { return moveList; }
+
     /**
      * Moves Management submenu
      */
