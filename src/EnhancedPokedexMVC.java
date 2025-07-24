@@ -8,12 +8,12 @@ import view.*;
 
 public class EnhancedPokedexMVC {
 
+    // Array lists to hold data
     private static final ArrayList<Pokemon> pokedex = new ArrayList<>();
     private static final ArrayList<Move> moveList = new ArrayList<>();
     private static final ArrayList<Item> itemList = new ArrayList<>();
     private static final ArrayList<Trainer> trainerList = new ArrayList<>();
 
-    // Controllers
     private static PokemonController pokemonController;
     private static MoveController moveController;
     private static ItemController itemController;
@@ -24,6 +24,7 @@ public class EnhancedPokedexMVC {
         "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
     };
 
+    // Load default data into the Array lists
     private static void loadDefaultData() {
         loadDefaultPokemons();
         loadDefaultItems();
@@ -31,6 +32,7 @@ public class EnhancedPokedexMVC {
         loadDefaultTrainers();
     }
 
+    // Initialize controllers
     private static void initializeControllers() {
         pokemonController = new PokemonController(pokedex, moveList);
         moveController = new MoveController(moveList);
@@ -38,8 +40,8 @@ public class EnhancedPokedexMVC {
         trainerController = new TrainerController(trainerList);
         trainerController.setItemController(itemController);
     }
-
-    // add default pokemons
+    
+    // Add default pokemons
     private static void loadDefaultPokemons() {
         pokedex.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 1, null, 2, 16, 45, 49, 49, 45));
         pokedex.add(new Pokemon(2, "Ivysaur", "Grass", "Poison", 1, 1, 3, 32, 60, 62, 63, 60));
@@ -71,15 +73,16 @@ public class EnhancedPokedexMVC {
         pokedex.add(new Pokemon(28, "Sandslash", "Ground", null, 1, 27, null, null, 75, 100, 110, 65));
     }
 
+    // Load default trainers into the trainer list.
     private static void loadDefaultTrainers() {
         trainerList.add(new Trainer(1, "Ash Ketchum", "1987-05-22", "M", "Pallet Town, Kanto", "The Show's Protagonist"));
     }
 
+    // Add default moves to each Pokemon's moveSet (Requirement #3)
     private static void loadDefaultMoves() {
         moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
         moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
 
-        // Add default moves to each Pokemon's moveSet (Requirement #3)
         for (Pokemon pokemon : pokedex) {
             pokemon.getMoveSet().add(moveList.get(0)); // Add Tackle
             pokemon.getMoveSet().add(moveList.get(1)); // Add Defend
@@ -115,12 +118,11 @@ public class EnhancedPokedexMVC {
     }
 
     public static void main(String[] args) {
-        initializeControllers(); // Initialize controllers first
-        loadDefaultData(); // Load default data into the Array lists
-        MainPokedexView gui = new MainPokedexView(pokedex, moveList, itemList, trainerList);
-        runPokedex(); // Run the Pokedex
+        initializeControllers();
+        loadDefaultData();
+        MainPokedexView gui = new MainPokedexView(pokedex, moveList, itemList, trainerList); // Initialize GUI
+        runPokedex(); // Run the terminal-based Pokédex
 
-        // Close scanner
         InputUtils.closeScanner();
         System.out.println("Thank you for using Enhanced Pokédex!");
     }

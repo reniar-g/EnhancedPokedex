@@ -27,6 +27,13 @@ public class PokemonView extends JPanel {
 
     private PokemonController controller;
 
+    /**
+     * Constructs a new PokemonView panel. Initializes the view and displays the
+     * welcome panel.
+     *
+     * @param controller The PokemonController for managing Pokémon data.
+     * @param onHome Runnable callback to return to the home/main menu.
+     */
     public PokemonView(PokemonController controller, Runnable onHome) {
         this.controller = controller;
         this.pokedex = controller.getPokedex();
@@ -35,11 +42,17 @@ public class PokemonView extends JPanel {
         showWelcomePanel(onHome);
     }
 
+    /**
+     * Displays the welcome panel with options to add or view Pokémon.
+     *
+     * @param onHome Runnable callback to return to the home/main menu.
+     */
     private void showWelcomePanel(Runnable onHome) {
         welcomePanel = new JPanel(null);
         welcomePanel.setOpaque(false);
         welcomePanel.setBounds(0, 0, 901, 706);
 
+        // Welcome label and description
         JLabel welcomeLabel = new JLabel("Manage Pokémons");
         welcomeLabel.setFont(new Font("Consolas", Font.BOLD, 27));
         welcomeLabel.setForeground(Color.BLACK);
@@ -61,7 +74,7 @@ public class PokemonView extends JPanel {
         welcomeDesc.setOpaque(false);
         welcomePanel.add(welcomeDesc);
 
-        // Add buttons
+        // Add buttons for adding and viewing Pokémon
         JButton btnAdd = new JButton("Add New Pokémon");
         btnAdd.setFont(new Font("Consolas", Font.BOLD, 14));
         btnAdd.setBounds(493, 345, 140, 35);
@@ -78,7 +91,7 @@ public class PokemonView extends JPanel {
         btnViewAll.setMargin(new Insets(0, 0, 0, 0));
         welcomePanel.add(btnViewAll);
 
-        JButton btnHome = MainPokedexView.createHomeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -95,6 +108,7 @@ public class PokemonView extends JPanel {
             repaint();
         });
 
+        // Only show add Pokémon panel when "Add New Pokémon" is pressed
         btnAdd.addActionListener(e -> {
             remove(welcomePanel);
             showAddPokemon(onHome);
@@ -103,12 +117,19 @@ public class PokemonView extends JPanel {
         });
     }
 
+    /**
+     * Displays the main Pokémon view panel, showing details, evolution chain,
+     * scrollable list, and search controls.
+     *
+     * @param onHome Runnable callback to return to the home/main menu.
+     */
     private void showViewAllPokemons(Runnable onHome) {
+        // Create the main panel for viewing Pokémon
         mainPanel = new JPanel(null);
         mainPanel.setOpaque(false);
         mainPanel.setBounds(0, 0, 901, 706);
 
-        // Create and add labels for Pokémon info
+        // Pokemon details labels
         nameLabel = new JLabel();
         nameLabel.setFont(new Font("Consolas", Font.BOLD, 20));
         nameLabel.setBounds(40, 39, 300, 40);
@@ -158,6 +179,7 @@ public class PokemonView extends JPanel {
         pokemonImageLabel.setVerticalAlignment(SwingConstants.CENTER);
         mainPanel.add(pokemonImageLabel);
 
+        // Evolution panel for displaying evolution chain
         evolutionPanel = new JPanel(null);
         evolutionPanel.setOpaque(false);
         evolutionPanel.setBounds(35, 180, 900, 170);
@@ -176,14 +198,11 @@ public class PokemonView extends JPanel {
 
         mainPanel.add(evolutionPanel);
 
-        updatePokemonLabels();
-
-        // --- Evolution Chain Panel ---
         JPanel evolutionPanel = new JPanel(null);
         evolutionPanel.setOpaque(false);
         evolutionPanel.setBounds(35, 180, 800, 170);
 
-        // Next button
+        // Next and Previous buttons for navigating Pokémon
         JButton btnNext = new JButton("Next");
         btnNext.setFont(new Font("Consolas", Font.BOLD, 14));
         btnNext.setBounds(755, 559, 75, 75);
@@ -193,6 +212,16 @@ public class PokemonView extends JPanel {
         btnNext.setOpaque(true);
         btnNext.addActionListener(e -> showNextPokemon());
         mainPanel.add(btnNext);
+
+        JButton btnPrevious = new JButton("Previous");
+        btnPrevious.setFont(new Font("Consolas", Font.BOLD, 14));
+        btnPrevious.setBounds(520, 559, 75, 75);
+        btnPrevious.setBackground(POKEDEX_BLUE);
+        btnPrevious.setForeground(Color.BLACK);
+        btnPrevious.setOpaque(true);
+        btnPrevious.setBorder(buttonShadowBorder);
+        btnPrevious.addActionListener(e -> showPreviousPokemon());
+        mainPanel.add(btnPrevious);
 
         // Back Button
         JButton btnBack = new JButton("Previous");
@@ -205,14 +234,8 @@ public class PokemonView extends JPanel {
         btnBack.addActionListener(e -> showPreviousPokemon());
         mainPanel.add(btnBack);
 
-        // Add Home button
-        JButton btnHome = new JButton("Home");
-        btnHome.setFont(new Font("Consolas", Font.BOLD, 14));
-        btnHome.setBounds(787, 387, 67, 35);
-        btnHome.setBorder(buttonShadowBorder);
-        btnHome.setBackground(POKEDEX_BLUE);
-        btnHome.setMargin(new Insets(0, 0, 0, 0));
-        btnHome.addActionListener(e -> {
+        // Home button to return to the main menu
+        JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -222,7 +245,7 @@ public class PokemonView extends JPanel {
         // Add Back button to return to welcome panel
         JButton btnBackToMain = new JButton("Back");
         btnBackToMain.setFont(new Font("Consolas", Font.BOLD, 14));
-        btnBackToMain.setBounds(787, 345, 67, 35);
+        btnBackToMain.setBounds(787, 387, 67, 35);
         btnBackToMain.setBorder(buttonShadowBorder);
         btnBackToMain.setBackground(POKEDEX_BLUE);
         btnBackToMain.setMargin(new Insets(0, 0, 0, 0));
@@ -237,29 +260,9 @@ public class PokemonView extends JPanel {
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
+        updatePokemonLabels();
 
-// Add each Pokémon's stats as a label
-        for (Pokemon p : pokedex) {
-            JLabel pokeLabel = new JLabel(
-                    "<html><div>"
-                    + "<b>" + "#" + p.getPokedexNumber() + " " + p.getPokemonName() + "</b><br>"
-                    + "Level: " + p.getBaseLevel() + "<br>"
-                    + "HP: " + p.getHp()
-                    + " | Atk: " + p.getAttack()
-                    + " | Def: " + p.getDefense()
-                    + " | Spd: " + p.getSpeed() + "<br>"
-                    + "Type 1: " + p.getPokemonType1()
-                    + (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()
-                    ? " | Type 2: " + p.getPokemonType2()
-                    : "")
-                    + "<br><br>"
-                    + "</div></html>"
-            );
-            pokeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
-            pokeLabel.setHorizontalAlignment(SwingConstants.LEFT);
-            listPanel.add(pokeLabel);
-        }
-
+        // Create a label for the registered Pokémon
         JLabel registeredLabel = new JLabel("List of Registered Pokémons");
         registeredLabel.setFont(new Font("Consolas", Font.BOLD, 14));
         registeredLabel.setOpaque(true);
@@ -271,7 +274,7 @@ public class PokemonView extends JPanel {
         registeredLabel.setVerticalAlignment(SwingConstants.CENTER);
         mainPanel.add(registeredLabel);
 
-        // Put the list panel in a scroll pane
+        // List of Pokémon in a scrollable panel
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.setBounds(37, 527, 347, 105);
         scrollPane.setOpaque(false);
@@ -280,10 +283,10 @@ public class PokemonView extends JPanel {
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(null);
-
         mainPanel.add(scrollPane);
         add(mainPanel);
 
+        // Search field and button
         JLabel searchLabel = new JLabel("Search Pokémon:");
         searchLabel.setFont(new Font("Consolas", Font.BOLD, 25));
         searchLabel.setBounds(490, 442, 307, 50);
@@ -309,6 +312,28 @@ public class PokemonView extends JPanel {
         searchButton.setHorizontalAlignment(SwingConstants.CENTER);
         searchButton.setVerticalAlignment(SwingConstants.CENTER);
         mainPanel.add(searchButton);
+
+        // Add each Pokémon's stats as a label
+        for (Pokemon p : pokedex) {
+            JLabel pokeLabel = new JLabel(
+                    "<html><div>"
+                    + "<b>" + "#" + p.getPokedexNumber() + " " + p.getPokemonName() + "</b><br>"
+                    + "Level: " + p.getBaseLevel() + "<br>"
+                    + "HP: " + p.getHp()
+                    + " | Atk: " + p.getAttack()
+                    + " | Def: " + p.getDefense()
+                    + " | Spd: " + p.getSpeed() + "<br>"
+                    + "Type 1: " + p.getPokemonType1()
+                    + (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()
+                    ? " | Type 2: " + p.getPokemonType2()
+                    : "")
+                    + "<br><br>"
+                    + "</div></html>"
+            );
+            pokeLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+            pokeLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            listPanel.add(pokeLabel);
+        }
 
         searchButton.addActionListener(e -> {
             String query = searchField.getText().trim();
@@ -348,99 +373,12 @@ public class PokemonView extends JPanel {
 
     }
 
-    private void updatePokemonLabels() {
-        if (pokedex.isEmpty()) {
-            nameLabel.setText("No Pokémon");
-            levelLabel.setText("Lv. N/A");
-            hpLabel.setText("HP.......... N/A");
-            atkLabel.setText("Atk......... N/A");
-            defLabel.setText("Def......... N/A");
-            spdLabel.setText("Spd......... N/A");
-            typeLabel1.setText("Type 1..... N/A");
-            typeLabel2.setText("Type 2..... N/A");
-            // Update evolution boxes to show "No Data"
-            updateEvolutionBoxes(null, null, null);
-        } else {
-            Pokemon p = pokedex.get(currentPokemonIndex);
-            nameLabel.setText(p.getPokemonName());
-            levelLabel.setText("No. " + p.getPokedexNumber());
-            hpLabel.setText("HP.......... " + p.getHp());
-            atkLabel.setText("Atk......... " + p.getAttack());
-            defLabel.setText("Def......... " + p.getDefense());
-            spdLabel.setText("Spd......... " + p.getSpeed());
-            typeLabel1.setText(p.getPokemonType1());
-            if (p.getPokemonType2() == null || p.getPokemonType2().isEmpty()) {
-                typeLabel2.setText("N/A");
-            } else {
-                typeLabel2.setText(p.getPokemonType2());
-            }
-            // Set Pokémon image
-            int num = p.getPokedexNumber();
-            String imgPath;
-            if (num >= 1 && num <= 28) {
-                imgPath = "src/util/PokemonSprites/" + num + ".png";
-            } else {
-                imgPath = "src/util/PokemonSprites/noData.png";
-            }
-            ImageIcon icon = new ImageIcon(imgPath);
-            Image img = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
-            pokemonImageLabel.setIcon(new ImageIcon(img));
-
-            // Evolution logic
-            Pokemon base = null;
-            Pokemon secondEvo = null;
-            Pokemon thirdEvo = null;
-
-            // Find base form by tracing evolvesFrom
-            Pokemon current = p;
-            while (current.getEvolvesFrom() != null && current.getEvolvesFrom() != 0) {
-                for (Pokemon poke : pokedex) {
-                    if (poke.getPokedexNumber() == current.getEvolvesFrom()) {
-                        current = poke;
-                        break;
-                    }
-                }
-            }
-            base = current;
-
-            // Find second and third evolutions from base
-            if (base != null && base.getEvolvesTo() != null && base.getEvolvesTo() != 0) {
-                for (Pokemon poke : pokedex) {
-                    if (poke.getPokedexNumber() == base.getEvolvesTo()) {
-                        secondEvo = poke;
-                        break;
-                    }
-                }
-                if (secondEvo != null && secondEvo.getEvolvesTo() != null && secondEvo.getEvolvesTo() != 0) {
-                    for (Pokemon poke : pokedex) {
-                        if (poke.getPokedexNumber() == secondEvo.getEvolvesTo()) {
-                            thirdEvo = poke;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            updateEvolutionBoxes(base, secondEvo, thirdEvo);
-        }
-    }
-
-    public void showNextPokemon() {
-        if (pokedex.isEmpty()) {
-            return;
-        }
-        currentPokemonIndex = (currentPokemonIndex + 1) % pokedex.size();
-        updatePokemonLabels();
-    }
-
-    public void showPreviousPokemon() {
-        if (pokedex.isEmpty()) {
-            return;
-        }
-        currentPokemonIndex = (currentPokemonIndex - 1 + pokedex.size()) % pokedex.size();
-        updatePokemonLabels();
-    }
-
+    /**
+     * Displays the add Pokémon form, prompting for each field step-by-step with
+     * validation.
+     *
+     * @param onHome Runnable callback to return to the home/main menu.
+     */
     private void showAddPokemon(Runnable onHome) {
         String[] validTypes = EnhancedPokedexMVC.VALID_POKEMON_TYPES;
 
@@ -449,11 +387,13 @@ public class PokemonView extends JPanel {
         addPanel.setOpaque(false);
         addPanel.setBounds(0, 0, 901, 706);
 
+        // Title label
         JLabel titleLabel = new JLabel("Add New Pokémon");
         titleLabel.setFont(new Font("Consolas", Font.BOLD, 20));
         titleLabel.setBounds(40, 39, 300, 40);
         addPanel.add(titleLabel);
 
+        // Question label and answer field
         JLabel questionLabel = new JLabel();
         questionLabel.setFont(new Font("Consolas", Font.PLAIN, 16));
         questionLabel.setBounds(49, 160, 334, 500);
@@ -465,6 +405,7 @@ public class PokemonView extends JPanel {
         answerField.setBounds(50, 180, 300, 30);
         addPanel.add(answerField);
 
+        // Enter button to submit answers
         JButton enterButton = new JButton("Enter");
         enterButton.setFont(new Font("Consolas", Font.BOLD, 14));
         enterButton.setBounds(787, 345, 67, 35);
@@ -473,15 +414,7 @@ public class PokemonView extends JPanel {
         enterButton.setBackground(POKEDEX_BLUE);
         addPanel.add(enterButton);
 
-        JLabel instructionLabel = new JLabel(
-                "<html>Enter the following variables and press the <b>\"enter\"</b> button on the right side.</html>"
-        );
-        instructionLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-        instructionLabel.setBounds(49, 105, 334, 500);
-        instructionLabel.setVerticalAlignment(SwingConstants.TOP);
-        instructionLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        addPanel.add(instructionLabel);
-
+        // Valid types label
         JLabel validTypesLabel = new JLabel();
         validTypesLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         validTypesLabel.setBounds(49, 230, 334, 500);
@@ -490,6 +423,16 @@ public class PokemonView extends JPanel {
         validTypesLabel.setVerticalAlignment(SwingConstants.TOP);
         addPanel.add(validTypesLabel);
         add(addPanel);
+
+        // Instruction label
+        JLabel instructionLabel = new JLabel(
+                "<html>Enter the following variables and press the <b>\"enter\"</b> button on the right side.</html>"
+        );
+        instructionLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        instructionLabel.setBounds(49, 105, 334, 500);
+        instructionLabel.setVerticalAlignment(SwingConstants.TOP);
+        instructionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        addPanel.add(instructionLabel);
 
         String[] questions = {
             "<html><b>Pokédex Number:</b></html>",
@@ -520,7 +463,7 @@ public class PokemonView extends JPanel {
         enterButton.addActionListener(e -> {
             String input = answerField.getText().trim();
             switch (current[0]) {
-                case 0: // Pokédex Number
+                case 0 -> { // Pokédex Number
                     try {
                         int num = Integer.parseInt(input);
                         if (controller.isPokedexNumberExists(num)) {
@@ -532,8 +475,8 @@ public class PokemonView extends JPanel {
                         JOptionPane.showMessageDialog(this, "Invalid Pokédex Number.");
                         return;
                     }
-                    break;
-                case 1: // Name
+                }
+                case 1 -> { // Name
                     if (input.isEmpty()) {
                         JOptionPane.showMessageDialog(this, "Name cannot be empty.");
                         return;
@@ -543,8 +486,8 @@ public class PokemonView extends JPanel {
                         return;
                     }
                     answers[1] = input;
-                    break;
-                case 2: // Type 1
+                }
+                case 2 -> { // Type 1
                     boolean validType1 = false;
                     for (String t : validTypes) {
                         if (t.equalsIgnoreCase(input)) {
@@ -557,8 +500,8 @@ public class PokemonView extends JPanel {
                         return;
                     }
                     answers[2] = input;
-                    break;
-                case 3: // Type 2
+                }
+                case 3 -> { // Type 2
                     if (input.isEmpty()) {
                         answers[3] = "";
                     } else {
@@ -575,10 +518,8 @@ public class PokemonView extends JPanel {
                         }
                         answers[3] = input;
                     }
-                    break;
-                case 4: // Evolves From
-                case 5: // Evolves To
-                case 6: // Evolution Level
+                }
+                case 4, 5, 6 -> { // Evolves From, Evolves To, Evolution Level
                     if (input.isEmpty()) {
                         answers[current[0]] = null;
                     } else {
@@ -589,18 +530,15 @@ public class PokemonView extends JPanel {
                             return;
                         }
                     }
-                    break;
-                case 7: // Base HP
-                case 8: // Base Attack
-                case 9: // Base Defense
-                case 10: // Base Speed
+                }
+                case 7, 8, 9, 10 -> { // Base HP, Base Attack, Base Defense, Base Speed
                     try {
                         answers[current[0]] = Double.parseDouble(input);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(this, "Invalid number.");
                         return;
                     }
-                    break;
+                }
             }
             current[0]++;
             if (current[0] < questions.length) {
@@ -635,6 +573,154 @@ public class PokemonView extends JPanel {
         });
     }
 
+    /**
+     * Advances to the next Pokémon in the list and updates the view.
+     */
+    public void showNextPokemon() {
+        if (pokedex.isEmpty()) {
+            return;
+        }
+        currentPokemonIndex = (currentPokemonIndex + 1) % pokedex.size();
+        updatePokemonLabels();
+    }
+
+    /**
+     * Goes to the previous Pokémon in the list and updates the view.
+     */
+    public void showPreviousPokemon() {
+        if (pokedex.isEmpty()) {
+            return;
+        }
+        currentPokemonIndex = (currentPokemonIndex - 1 + pokedex.size()) % pokedex.size();
+        updatePokemonLabels();
+    }
+
+    /**
+     * Updates the labels and evolution chain display for the currently selected
+     * Pokémon. Handles image, stats, and evolution chain logic.
+     */
+    private void updatePokemonLabels() {
+        if (pokedex.isEmpty()) {
+            nameLabel.setText("No Pokémon");
+            levelLabel.setText("Lv. N/A");
+            hpLabel.setText("HP.......... N/A");
+            atkLabel.setText("Atk......... N/A");
+            defLabel.setText("Def......... N/A");
+            spdLabel.setText("Spd......... N/A");
+            typeLabel1.setText("Type 1..... N/A");
+            typeLabel2.setText("Type 2..... N/A");
+            updateEvolutionBoxes(null, null, null);
+        } else {
+            Pokemon p = pokedex.get(currentPokemonIndex);
+            nameLabel.setText(p.getPokemonName());
+            levelLabel.setText("No. " + p.getPokedexNumber());
+            hpLabel.setText("HP.......... " + p.getHp());
+            atkLabel.setText("Atk......... " + p.getAttack());
+            defLabel.setText("Def......... " + p.getDefense());
+            spdLabel.setText("Spd......... " + p.getSpeed());
+            typeLabel1.setText(p.getPokemonType1());
+            if (p.getPokemonType2() == null || p.getPokemonType2().isEmpty()) {
+                typeLabel2.setText("N/A");
+            } else {
+                typeLabel2.setText(p.getPokemonType2());
+            }
+
+            int num = p.getPokedexNumber();
+            String imgPath;
+
+            if (num >= 1 && num <= 28) {
+                imgPath = "src/util/PokemonSprites/" + num + ".png";
+            } else {
+                imgPath = "src/util/PokemonSprites/noData.png";
+            }
+
+            ImageIcon icon = new ImageIcon(imgPath);
+            Image img = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
+            pokemonImageLabel.setIcon(new ImageIcon(img));
+
+            Pokemon base = null;
+            Pokemon secondEvo = null;
+            Pokemon thirdEvo = null;
+
+            /**
+             * Find the base evolution by traversing the evolution chain
+             * backwards until we reach the first Pokémon that does not evolve
+             * from another
+             */
+            Pokemon current = p;
+            while (current.getEvolvesFrom() != null && current.getEvolvesFrom() != 0) {
+                for (Pokemon poke : pokedex) {
+                    if (poke.getPokedexNumber() == current.getEvolvesFrom()) {
+                        current = poke;
+                        break;
+                    }
+                }
+            }
+            base = current;
+
+            // Now find the second and third evolutions if they exist
+            if (base != null && base.getEvolvesTo() != null && base.getEvolvesTo() != 0) {
+                for (Pokemon poke : pokedex) {
+                    if (poke.getPokedexNumber() == base.getEvolvesTo()) {
+                        secondEvo = poke;
+                        break;
+                    }
+                }
+                if (secondEvo != null && secondEvo.getEvolvesTo() != null && secondEvo.getEvolvesTo() != 0) {
+                    for (Pokemon poke : pokedex) {
+                        if (poke.getPokedexNumber() == secondEvo.getEvolvesTo()) {
+                            thirdEvo = poke;
+                            break;
+                        }
+                    }
+                }
+            }
+            updateEvolutionBoxes(base, secondEvo, thirdEvo);
+        }
+    }
+
+    /**
+     * Updates the evolution chain display with the given base, second, and
+     * third evolution Pokémon.
+     *
+     * @param base The base form Pokémon.
+     * @param secondEvo The first evolution Pokémon.
+     * @param thirdEvo The second evolution Pokémon.
+     */
+    private void updateEvolutionBoxes(Pokemon base, Pokemon secondEvo, Pokemon thirdEvo) {
+        // Clear existing components in the evolution boxes
+        boxBase.removeAll();
+        boxSecond.removeAll();
+        boxThird.removeAll();
+
+        // Create new evolution boxes for each Pokémon
+        JPanel newBase = createEvolutionBox(base);
+        JPanel newSecond = createEvolutionBox(secondEvo);
+        JPanel newThird = createEvolutionBox(thirdEvo);
+
+        // Copy components from new panels to the existing ones
+        for (Component c : newBase.getComponents()) {
+            boxBase.add(c);
+        }
+        for (Component c : newSecond.getComponents()) {
+            boxSecond.add(c);
+        }
+        for (Component c : newThird.getComponents()) {
+            boxThird.add(c);
+        }
+
+        // Revalidate and repaint the boxes to reflect changes
+        boxBase.revalidate();
+        boxBase.repaint();
+        boxSecond.revalidate();
+        boxSecond.repaint();
+        boxThird.revalidate();
+        boxThird.repaint();
+    }
+
+    /**
+     * Removes all main/welcome panels from the view.
+     */
     private void removeAllPanels() {
         if (welcomePanel != null) {
             remove(welcomePanel);
@@ -646,11 +732,18 @@ public class PokemonView extends JPanel {
         repaint();
     }
 
+    /**
+     * Creates a JPanel representing a single evolution box with image and name.
+     *
+     * @param p The Pokémon to display in the box, or null for "No Data".
+     * @return JPanel containing the evolution box.
+     */
     private JPanel createEvolutionBox(Pokemon p) {
         JPanel box = new JPanel(null);
         box.setOpaque(false);
         box.setBounds(0, 0, 220, 170);
 
+        // Create image and name labels for the Pokémon
         JLabel imgLabel = new JLabel();
         imgLabel.setBounds(10, 10, 200, 120);
         imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -663,6 +756,11 @@ public class PokemonView extends JPanel {
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nameLabel.setVerticalAlignment(SwingConstants.CENTER);
 
+        /**
+         * Sets the image and name for the evolution box. If the Pokémon is
+         * null, displays "No Data" and the default image. Otherwise, shows the
+         * Pokémon's image and name.
+         */
         if (p != null) {
             int num = p.getPokedexNumber();
             String imgPath = (num >= 1 && num <= 28)
@@ -680,33 +778,5 @@ public class PokemonView extends JPanel {
         box.add(imgLabel);
         box.add(nameLabel);
         return box;
-    }
-
-    private void updateEvolutionBoxes(Pokemon base, Pokemon secondEvo, Pokemon thirdEvo) {
-        boxBase.removeAll();
-        boxSecond.removeAll();
-        boxThird.removeAll();
-
-        JPanel newBase = createEvolutionBox(base);
-        JPanel newSecond = createEvolutionBox(secondEvo);
-        JPanel newThird = createEvolutionBox(thirdEvo);
-
-        // Copy components from new panels to the existing ones
-        for (Component c : newBase.getComponents()) {
-            boxBase.add(c);
-        }
-        for (Component c : newSecond.getComponents()) {
-            boxSecond.add(c);
-        }
-        for (Component c : newThird.getComponents()) {
-            boxThird.add(c);
-        }
-
-        boxBase.revalidate();
-        boxBase.repaint();
-        boxSecond.revalidate();
-        boxSecond.repaint();
-        boxThird.revalidate();
-        boxThird.repaint();
     }
 }

@@ -21,28 +21,31 @@ public class MainPokedexView extends JFrame {
     public static final Color POKEDEX_GREEN = new Color(202, 213, 181);
     public static final Color BUTTON_SHADOW = new Color(68, 95, 146);
     Border buttonShadowBorder = BorderFactory.createLineBorder(BUTTON_SHADOW, 1);
-    Border buttonShadowBorderThick = BorderFactory.createLineBorder(BUTTON_SHADOW, 3);
 
     private List<Pokemon> pokedex;
     private List<Move> moveList;
     private List<Item> itemList;
     private List<Trainer> trainerList;
 
-    private JLabel outputArea;
-    private final JLabel backgroundLabel1;
-    private final JLabel backgroundLabel2;
-    private JLabel titleLabel;
+    private JLabel titleLabel; // Title label for the main window
+    private JLabel outputArea; // Output area for displaying messages in main menu
+    private final JLabel backgroundLabel1; // Background label for the main window
+    private final JLabel backgroundLabel2; // Background label for the Pokémon view
 
-    private final JButton nextButton;
-    private final JButton prevButton;
-    private PokemonView pokemonView;
+    private final JButton nextButton; // Button to navigate to the next Pokémon
+    private final JButton prevButton; // Button to navigate to the previous Pokémon
+    private PokemonView pokemonView; // Instance of the Pokémon view to display Pokémon details
     private boolean pokemonViewActive = false;
-    private PokemonController pokemonController;
+    private PokemonController pokemonController; // Instance of the Pokémon controller to manage Pokémon data
 
-
-    /*
-     * Constructor for MainPokedexView
-     * Initializes the main window, sets up the background, and adds buttons.
+    /**
+     * Constructor for MainPokedexView. Initializes the main window, sets up the
+     * backgrounds, buttons, and starts the home screen and music.
+     *
+     * @param pokedex List of Pokémon to manage.
+     * @param moveList List of moves to manage.
+     * @param itemList List of items to manage.
+     * @param trainerList List of trainers to manage.
      */
     public MainPokedexView(List<Pokemon> pokedex, List<Move> moveList, List<Item> itemList, List<Trainer> trainerList) {
         super("Enhanced Pokédex");
@@ -51,16 +54,15 @@ public class MainPokedexView extends JFrame {
         this.itemList = itemList;
         this.trainerList = trainerList;
 
-        // Instantiate the controller
         pokemonController = new PokemonController((ArrayList<Pokemon>) pokedex, (ArrayList<Move>) moveList);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
 
-        backgroundLabel1 = loadBackgroundImage1();
+        backgroundLabel1 = loadDefaultBackground();
         backgroundLabel1.setLayout(null);
 
-        backgroundLabel2 = loadBackgroundImage2();
+        backgroundLabel2 = loadAltBackground();
         backgroundLabel2.setLayout(null);
 
         nextButton = nextButton();
@@ -79,7 +81,13 @@ public class MainPokedexView extends JFrame {
         setVisible(true);
     }
 
-    // method for the next button
+    /**
+     * Creates and returns the "Next" button for navigating to the next Pokémon
+     * in the view. The button is only functional when the Pokémon view is
+     * active.
+     *
+     * @return JButton configured as the "Next" navigation button.
+     */
     private JButton nextButton() {
         JButton btnNext = new JButton("Next");
         btnNext.setBounds(755, 559, 75, 75);
@@ -97,7 +105,13 @@ public class MainPokedexView extends JFrame {
         return btnNext;
     }
 
-    // method for back button
+    /**
+     * Creates and returns the "Back" button for navigating to the previous
+     * Pokémon in the view. The button is only functional when the Pokémon view
+     * is active.
+     *
+     * @return JButton configured as the "Back" navigation button.
+     */
     private JButton backButton() {
         JButton btnBack = new JButton("Back");
         btnBack.setBounds(520, 559, 75, 75);
@@ -114,8 +128,33 @@ public class MainPokedexView extends JFrame {
         return btnBack;
     }
 
-    // method for default background
-    private JLabel loadBackgroundImage1() {
+    /**
+     * Creates and returns a styled "Home" button with the provided action
+     * listener.
+     *
+     * @param action The ActionListener to attach to the Home button.
+     * @return JButton configured as the "Home" navigation button.
+     */
+    public static JButton homeButton(ActionListener action) {
+        JButton btnHome = new JButton("Home");
+        btnHome.setFont(new Font("Consolas", Font.BOLD, 14));
+        btnHome.setBounds(787, 345, 67, 35);
+        btnHome.setBorder(BorderFactory.createLineBorder(BUTTON_SHADOW, 1));
+        btnHome.setBackground(POKEDEX_BLUE);
+        btnHome.setMargin(new Insets(0, 0, 0, 0));
+        if (action != null) {
+            btnHome.addActionListener(action);
+        }
+        return btnHome;
+    }
+
+    /**
+     * Loads and returns the default background image for the main window. If
+     * the image cannot be loaded, returns a backup background panel.
+     *
+     * @return JLabel containing the main background image or backup panel.
+     */
+    private JLabel loadDefaultBackground() {
         try {
             ImageIcon pokedexIcon = new ImageIcon("src/util/MainPokedexBase.png");
             JLabel backgroundLabel = new JLabel(pokedexIcon);
@@ -133,8 +172,13 @@ public class MainPokedexView extends JFrame {
         }
     }
 
-    // method for default background
-    private JLabel loadBackgroundImage2() {
+    /**
+     * Loads and returns the alternate background image for the Pokémon view. If
+     * the image cannot be loaded, returns a backup background panel.
+     *
+     * @return JLabel containing the alternate background image or backup panel.
+     */
+    private JLabel loadAltBackground() {
         try {
             ImageIcon pokedexIcon = new ImageIcon("src/util/AltPokedexBase.png");
             JLabel backgroundLabel = new JLabel(pokedexIcon);
@@ -152,10 +196,12 @@ public class MainPokedexView extends JFrame {
         }
     }
 
-    // method for homescreen
+    /**
+     * Displays the home screen with main menu options and disables navigation
+     * buttons. Sets up the main background and menu buttons.
+     */
     private void showHomeScreen() {
         setContentPane(backgroundLabel1);
-        // Remove all components except the background from backgroundLabel1
         backgroundLabel1.removeAll();
         pokemonViewActive = false;
         nextButton.setEnabled(false);
@@ -170,6 +216,7 @@ public class MainPokedexView extends JFrame {
             outputArea.setBounds(49, 105, 334, 500);
             outputArea.setVerticalAlignment(SwingConstants.TOP);
         }
+
         backgroundLabel1.add(outputArea);
         outputArea.setText(
                 "<html><div style='text-align:justify;'> <b>Welcome to Enhanced Pokédex!</b><br><br>"
@@ -190,6 +237,7 @@ public class MainPokedexView extends JFrame {
             titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
             titleLabel.setBounds(35, 39, 353, 40);
         }
+
         backgroundLabel1.add(titleLabel);
         homeScreenButtons();
         backgroundLabel1.repaint();
@@ -197,20 +245,12 @@ public class MainPokedexView extends JFrame {
         repaint();
     }
 
-    private void showMenuOutput(int choice) {
-        switch (choice) {
-            case 1 ->
-                showPokemonView(); // Pokemon Management
-            case 5 ->
-                showHomeScreen();  // Home Screen
-            case 6 ->
-                System.exit(0);
-        }
-    }
-
+    /**
+     * Displays the Pokémon management view, enables navigation buttons, and
+     * shows the PokémonView panel.
+     */
     private void showPokemonView() {
         setContentPane(backgroundLabel2);
-        // Remove all components except the background from backgroundLabel2
         backgroundLabel2.removeAll();
         pokemonViewActive = true;
         nextButton.setEnabled(true);
@@ -228,6 +268,26 @@ public class MainPokedexView extends JFrame {
         repaint();
     }
 
+    /**
+     * Handles menu output and navigation based on the selected choice.
+     *
+     * @param choice The menu option selected by the user.
+     */
+    private void showMenuOutput(int choice) {
+        switch (choice) {
+            case 1 ->
+                showPokemonView(); // Pokemon Management
+            case 5 ->
+                showHomeScreen();  // Home Screen
+            case 6 ->
+                System.exit(0);
+        }
+    }
+
+    /**
+     * Adds the main menu buttons (Pokémon, Moves, Items, Trainers, Home, Exit)
+     * to the home screen. Sets up their event listeners for navigation.
+     */
     public void homeScreenButtons() {
         // Button for Pokemon Management
         JButton btnPokemon = new JButton("Manage Pokémons");
@@ -269,7 +329,7 @@ public class MainPokedexView extends JFrame {
         backgroundLabel1.add(btnTrainers);
         btnTrainers.addActionListener(e -> showMenuOutput(4));
 
-        JButton btnHome = MainPokedexView.createHomeButton(e -> showMenuOutput(5));
+        JButton btnHome = MainPokedexView.homeButton(e -> showMenuOutput(5));
         backgroundLabel1.add(btnHome);
 
         JButton btnExit = new JButton("Exit");
@@ -282,14 +342,10 @@ public class MainPokedexView extends JFrame {
         btnExit.addActionListener(e -> showMenuOutput(6));
     }
 
-    private void removeAllButtons(JLabel backgroundLabel) {
-        for (Component comp : backgroundLabel.getComponents()) {
-            if (comp instanceof JButton) {
-                backgroundLabel.remove(comp);
-            }
-        }
-    }
-
+    /**
+     * Plays the Pokémon theme song in a separate thread. Sets the volume to 80%
+     * and loops the song continuously.
+     */
     private void playPokemonSong() {
         new Thread(() -> {
             try {
@@ -306,7 +362,6 @@ public class MainPokedexView extends JFrame {
                     float gain = (range * 0.8f) + gainControl.getMinimum(); // 80% volume
                     gainControl.setValue(gain);
 
-                    // Keep the clip running
                     clip.loop(Clip.LOOP_CONTINUOUSLY);
                 } else {
                     System.out.println("Audio file not found: " + audioFile.getPath());
@@ -315,18 +370,5 @@ public class MainPokedexView extends JFrame {
                 System.out.println("Error playing song: " + e.getMessage());
             }
         }).start();
-    }
-
-    public static JButton createHomeButton(ActionListener action) {
-        JButton btnHome = new JButton("Home");
-        btnHome.setFont(new Font("Consolas", Font.BOLD, 14));
-        btnHome.setBounds(787, 345, 67, 35);
-        btnHome.setBorder(BorderFactory.createLineBorder(BUTTON_SHADOW, 1));
-        btnHome.setBackground(POKEDEX_BLUE);
-        btnHome.setMargin(new Insets(0, 0, 0, 0));
-        if (action != null) {
-            btnHome.addActionListener(action);
-        }
-        return btnHome;
     }
 }
