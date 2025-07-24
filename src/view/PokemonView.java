@@ -659,6 +659,7 @@ public class PokemonView extends JPanel {
         JLabel nameLabel = new JLabel();
         nameLabel.setFont(new Font("Consolas", Font.BOLD, 13));
         nameLabel.setBounds(7, 127, 200, 30);
+        nameLabel.setBorder(buttonShadowBorder);
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nameLabel.setVerticalAlignment(SwingConstants.CENTER);
 
