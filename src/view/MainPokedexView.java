@@ -303,7 +303,7 @@ public class MainPokedexView extends JFrame {
                     // Set volume to 50%
                     FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
                     float range = gainControl.getMaximum() - gainControl.getMinimum();
-                    float gain = (range * 0.8f) + gainControl.getMinimum(); // 50% volume
+                    float gain = (range * 0.15f) + gainControl.getMinimum(); // 50% volume
                     gainControl.setValue(gain);
 
                     // Keep the clip running
