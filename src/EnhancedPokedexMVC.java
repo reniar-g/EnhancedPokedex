@@ -1,3 +1,4 @@
+package src;
 
 import controller.*;
 import java.util.ArrayList;
@@ -17,6 +18,11 @@ public class EnhancedPokedexMVC {
     private static MoveController moveController;
     private static ItemController itemController;
     private static TrainerController trainerController;
+
+    public static final String[] VALID_POKEMON_TYPES = {
+        "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison",
+        "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
+    };
 
     private static void loadDefaultData() {
         loadDefaultPokemons();

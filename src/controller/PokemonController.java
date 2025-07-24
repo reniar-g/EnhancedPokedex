@@ -14,8 +14,7 @@ public class PokemonController {
         this.moveList = moveList;
     }
 
-    public ArrayList<Pokemon> getPokedex()
-    {
+    public ArrayList<Pokemon> getPokedex() {
         return pokedex;
     }
 
@@ -172,7 +171,7 @@ public class PokemonController {
     /**
      * Checks if a Pokédex number already exists. (Requirement #1)
      */
-    private boolean isPokedexNumberExists(int number) {
+    public boolean isPokedexNumberExists(int number) {
         for (Pokemon p : pokedex) {
             if (p.getPokedexNumber() == number) {
                 return true;
@@ -184,7 +183,7 @@ public class PokemonController {
     /**
      * Checks if a Pokémon name already exists in the Pokédex. (Requirement #2)
      */
-    private boolean isPokemonNameExists(String name) {
+    public boolean isPokemonNameExists(String name) {
         for (Pokemon p : pokedex) {
             if (p.getPokemonName().equalsIgnoreCase(name)) {
                 return true;
@@ -192,4 +191,17 @@ public class PokemonController {
         }
         return false;
     }
+
+    // add pokemon for gui
+    public void addPokemon(int pokedexNumber, String name, String type1, String type2, int baseLevel,
+            Integer evolvesFrom, Integer evolvesTo, Integer evolutionLevel,
+            double hp, double attack, double defense, double speed) {
+
+        Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, baseLevel, evolvesFrom, evolvesTo, evolutionLevel,
+                (int) hp, (int) attack, (int) defense, (int) speed);
+
+        p.addDefaultMoves(moveList); // Add default moves to the new Pokémon
+        pokedex.add(p);
+    }
+
 }
