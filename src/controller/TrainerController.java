@@ -579,11 +579,14 @@ public class TrainerController {
 
         Move selectedMove = allMoves.get(moveChoice - 1);
 
-        if(!canLearnMove(pokemon, selectedMove))
-        {
-            System.out.println("\u001B[31m" + pokemon.getPokemonName() +
-                    " already knows " + selectedMove.getMoveName() + ".\u001B[0m");
-            return;
+        if (pokemon.hasMove(selectedMove.getMoveName())) {
+            System.out.println(pokemon.getPokemonName() + " already knows " +
+                    selectedMove.getMoveName() + ".");
+        } else if (pokemon.learnMove(selectedMove)) {
+            System.out.println(pokemon.getPokemonName() + " learned " +
+                    selectedMove.getMoveName() + "!");
+        } else {
+            System.out.println("Failed to teach " + selectedMove.getMoveName() + ".");
         }
 
         if(pokemon.getMoveSet().size() >= 4)
@@ -620,15 +623,6 @@ public class TrainerController {
             System.out.println("\u001B[32m" + pokemon.getPokemonName() +
                     " learned " + selectedMove.getMoveName() + "!\u001B[0m");
         }
-    }
-
-    //Checks if a Pokemon can learn a move
-    private boolean canLearnMove(Pokemon p, Move m)
-    {
-        return p.getPokemonType1().equalsIgnoreCase(m.getMoveType1()) ||
-                (p.getPokemonType2() != null && p.getPokemonType2().equalsIgnoreCase(m.getMoveType1())) ||
-                (m.getMoveType2() != null && (p.getPokemonType1().equalsIgnoreCase(m.getMoveType2()) ||
-                        (p.getPokemonType2() != null && p.getPokemonType2().equalsIgnoreCase(m.getMoveType2()))));
     }
 
     //Manages Held Items
@@ -697,13 +691,14 @@ public class TrainerController {
          }
 
          System.out.println("\nAvailable Items: ");
-         Item.displayItemHeader();
+         Item.displayItemOptions();
          for (int i = 0; i < itemInventory.size(); i++)
          {
-             itemInventory.get(i).displayItem();
+             System.out.printf("%-6d ", i + 1);
+             itemInventory.get(i).displayAddedItems();
          }
 
-         int itemChoice = InputUtils.getIntInput("Select an Item(0 to Cancel): ");
+         int itemChoice = InputUtils.getIntInput("Select an Item based on Option Number(0 to Cancel): ");
          if(itemChoice == 0) { return; }
          if(itemChoice < 1 || itemChoice > itemInventory.size())
          {

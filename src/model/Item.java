@@ -60,12 +60,34 @@ public class Item {
         System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
+    /*
+        Displays Option Commands for adding Held Items.
+     */
+    public static void displayItemOptions() {
+        System.out.printf("%-6s %-16s %-17s %-45s %-26s %-15s %-15s%n",
+                "ID", "Item Name", "Category", "Description", "Effect", "Buy Price", "Sell Price");
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
     /**
      * Displays item details in a formatted table style using printf
      */
     public void displayItem() {
         System.out.printf("%-6d %-16s %-17s %-45s %-26s %-15s %-15s%n",
                 itemId,
+                itemName,
+                itemCategory,
+                itemDescription,
+                itemEffect,
+                itemPrice,
+                itemSellPrice);
+    }
+
+    /**
+     * Displays item options for adding held items in a formatted table style using printf
+     */
+    public void displayAddedItems() {
+        System.out.printf("%-16s %-17s %-45s %-26s %-15s %-15s%n",
                 itemName,
                 itemCategory,
                 itemDescription,

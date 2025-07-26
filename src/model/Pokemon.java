@@ -177,4 +177,31 @@ public class Pokemon {
                 "To:" + formatNullableInteger(evolvesTo),
                 "EvoLv:" + formatNullableInteger(evolutionLevel));
     }
+
+    public boolean hasMove(String moveName) {
+        for (Move m : moveSet) {
+            if (m.getMoveName().equalsIgnoreCase(moveName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean learnMove(Move moveToLearn)
+    {
+        if (hasMove(moveToLearn.getMoveName())) {
+            return false;
+        }
+
+        Move newMove = new Move(
+                moveToLearn.getMoveName(),
+                moveToLearn.getMoveDescription(),
+                moveToLearn.getMoveClassification(),
+                moveToLearn.getMoveType1(),
+                moveToLearn.getMoveType2()
+        );
+
+        moveSet.add(newMove);
+        return true;
+    }
 }
