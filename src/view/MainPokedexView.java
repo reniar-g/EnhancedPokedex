@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -21,11 +20,6 @@ public class MainPokedexView extends JFrame {
     public static final Color POKEDEX_GREEN = new Color(202, 213, 181);
     public static final Color BUTTON_SHADOW = new Color(68, 95, 146);
     Border buttonShadowBorder = BorderFactory.createLineBorder(BUTTON_SHADOW, 1);
-
-    private List<Pokemon> pokedex;
-    private List<Move> moveList;
-    private List<Item> itemList;
-    private List<Trainer> trainerList;
 
     private JLabel titleLabel; // Title label for the main window
     private JLabel outputArea; // Output area for displaying messages in main menu
@@ -47,14 +41,9 @@ public class MainPokedexView extends JFrame {
      * @param itemList List of items to manage.
      * @param trainerList List of trainers to manage.
      */
-    public MainPokedexView(List<Pokemon> pokedex, List<Move> moveList, List<Item> itemList, List<Trainer> trainerList) {
+    public MainPokedexView(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList, ArrayList<Item> itemList, ArrayList<Trainer> trainerList) {
         super("Enhanced Pokédex");
-        this.pokedex = pokedex;
-        this.moveList = moveList;
-        this.itemList = itemList;
-        this.trainerList = trainerList;
-
-        pokemonController = new PokemonController((ArrayList<Pokemon>) pokedex, (ArrayList<Move>) moveList);
+        pokemonController = new PokemonController(pokedex, moveList);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);

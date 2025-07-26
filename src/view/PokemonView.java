@@ -368,9 +368,7 @@ public class PokemonView extends JPanel {
                 JOptionPane.showMessageDialog(this, "Pokémon not found.");
             }
         });
-
         add(mainPanel);
-
     }
 
     /**
@@ -389,8 +387,9 @@ public class PokemonView extends JPanel {
 
         // Title label
         JLabel titleLabel = new JLabel("Add New Pokémon");
-        titleLabel.setFont(new Font("Consolas", Font.BOLD, 20));
-        titleLabel.setBounds(40, 39, 300, 40);
+        titleLabel.setFont(new Font("Consolas", Font.BOLD, 27));
+        titleLabel.setBounds(35, 39, 353, 40);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         addPanel.add(titleLabel);
 
         // Question label and answer field
@@ -638,43 +637,15 @@ public class PokemonView extends JPanel {
             Image img = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
             pokemonImageLabel.setIcon(new ImageIcon(img));
 
+            // Get the evolution chain for the current Pokémon
             Pokemon base = null;
             Pokemon secondEvo = null;
             Pokemon thirdEvo = null;
 
-            /**
-             * Find the base evolution by traversing the evolution chain
-             * backwards until we reach the first Pokémon that does not evolve
-             * from another
-             */
-            Pokemon current = p;
-            while (current.getEvolvesFrom() != null && current.getEvolvesFrom() != 0) {
-                for (Pokemon poke : pokedex) {
-                    if (poke.getPokedexNumber() == current.getEvolvesFrom()) {
-                        current = poke;
-                        break;
-                    }
-                }
-            }
-            base = current;
-
-            // Now find the second and third evolutions if they exist
-            if (base != null && base.getEvolvesTo() != null && base.getEvolvesTo() != 0) {
-                for (Pokemon poke : pokedex) {
-                    if (poke.getPokedexNumber() == base.getEvolvesTo()) {
-                        secondEvo = poke;
-                        break;
-                    }
-                }
-                if (secondEvo != null && secondEvo.getEvolvesTo() != null && secondEvo.getEvolvesTo() != 0) {
-                    for (Pokemon poke : pokedex) {
-                        if (poke.getPokedexNumber() == secondEvo.getEvolvesTo()) {
-                            thirdEvo = poke;
-                            break;
-                        }
-                    }
-                }
-            }
+            Pokemon[] chain = controller.getEvolutionChain(p);
+            base = chain[0];
+            secondEvo = chain[1];
+            thirdEvo = chain[2];
             updateEvolutionBoxes(base, secondEvo, thirdEvo);
         }
     }

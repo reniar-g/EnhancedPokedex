@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import model.*;
 import util.*;
 
@@ -204,4 +205,47 @@ public class PokemonController {
         pokedex.add(p);
     }
 
+    /**
+     * Returns the evolution chain (base, second, third) for the given Pokémon.
+     *
+     * @param p The Pokémon to find the chain for.
+     * @return An array: [base, secondEvo, thirdEvo]
+     */
+    public Pokemon[] getEvolutionChain(Pokemon p) {
+        List<Pokemon> pokedex = getPokedex();
+        Pokemon base = null;
+        Pokemon secondEvo = null;
+        Pokemon thirdEvo = null;
+
+        // Find base evolution
+        Pokemon current = p;
+        while (current.getEvolvesFrom() != null && current.getEvolvesFrom() != 0) {
+            for (Pokemon poke : pokedex) {
+                if (poke.getPokedexNumber() == current.getEvolvesFrom()) {
+                    current = poke;
+                    break;
+                }
+            }
+        }
+        base = current;
+
+        // Find second and third evolutions
+        if (base.getEvolvesTo() != null && base.getEvolvesTo() != 0) {
+            for (Pokemon poke : pokedex) {
+                if (poke.getPokedexNumber() == base.getEvolvesTo()) {
+                    secondEvo = poke;
+                    break;
+                }
+            }
+            if (secondEvo != null && secondEvo.getEvolvesTo() != null && secondEvo.getEvolvesTo() != 0) {
+                for (Pokemon poke : pokedex) {
+                    if (poke.getPokedexNumber() == secondEvo.getEvolvesTo()) {
+                        thirdEvo = poke;
+                        break;
+                    }
+                }
+            }
+        }
+        return new Pokemon[]{base, secondEvo, thirdEvo};
+    }
 }
