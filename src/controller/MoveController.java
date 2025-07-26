@@ -12,7 +12,9 @@ public class MoveController {
         this.moveList = moveList;
     }
 
-    public ArrayList<Move> getMoveList() { return moveList; }
+    public ArrayList<Move> getMoveList() {
+        return moveList;
+    }
 
     /**
      * Moves Management submenu
@@ -74,8 +76,7 @@ public class MoveController {
             return;
         }
         Move.displayMoveHeader();
-        for (int i = 0; i < moveList.size(); i++)
-        {
+        for (int i = 0; i < moveList.size(); i++) {
             System.out.printf("%-3d ", i + 1);
             moveList.get(i).displayMove();
         }

@@ -270,7 +270,10 @@ public class MainPokedexView extends JFrame {
         movesView = new MoveView(movesController, () -> showMenuOutput(5));
         movesView.setBounds(0, 0, getWidth(), getHeight());
         backgroundLabel1.add(movesView);
-        showHomeScreen();
+
+        backgroundLabel1.repaint();
+        revalidate();
+        repaint();
     }
 
     /**
