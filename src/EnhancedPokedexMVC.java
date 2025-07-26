@@ -38,6 +38,9 @@ public class EnhancedPokedexMVC {
         moveController = new MoveController(moveList);
         itemController = new ItemController(itemList);
         trainerController = new TrainerController(trainerList);
+
+        trainerController.setPokemonController(pokemonController);
+        trainerController.setMoveController(moveController);
         trainerController.setItemController(itemController);
     }
     

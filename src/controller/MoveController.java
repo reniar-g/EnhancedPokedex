@@ -74,8 +74,10 @@ public class MoveController {
             return;
         }
         Move.displayMoveHeader();
-        for (Move m : moveList) {
-            m.displayMove();
+        for (int i = 0; i < moveList.size(); i++)
+        {
+            System.out.printf("%-3d ", i + 1);
+            moveList.get(i).displayMove();
         }
         System.out.println();
     }

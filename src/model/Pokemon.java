@@ -113,8 +113,26 @@ public class Pokemon {
     /**
      * Sets the Pokémon's held item.
      */
-    public void setHeldItem(Item heldItem) {
+    public void setHeldItem(Item heldItem)
+    {
+        if(this.heldItem != null && heldItem != null)
+        {
+            System.out.println(this.pokemonName + " discarded " + this.heldItem.getItemName());
+        }
+
         this.heldItem = heldItem;
+    }
+
+    public Item removeHeldItem()
+    {
+        Item removed = this.heldItem;
+        this.heldItem = null;
+        return removed;
+    }
+
+    public boolean hasHeldItem()
+    {
+        return this.heldItem != null;
     }
 
     /**

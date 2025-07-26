@@ -2,6 +2,7 @@ package controller;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import model.*;
 import util.*;
 
@@ -309,7 +310,8 @@ public class TrainerController {
             System.out.println("2. Switch Pokémon between Lineup and Storage");
             System.out.println("3. Release Pokémon");
             System.out.println("4. Teach Moves to Pokémon");
-            System.out.println("5. Back to Trainer Menu");
+            System.out.println("5. Manage Held Items");
+            System.out.println("6. Back to Trainer Menu");
             int choice = InputUtils.getIntInput("Enter your choice: ");
 
             switch (choice) {
@@ -317,7 +319,8 @@ public class TrainerController {
                 case 2 -> switchPokemon(trainer);
                 case 3 -> releasePokemon(trainer);
                 case 4 -> teachPokemonMoves(trainer);
-                case 5 -> managing = false;
+                case 5 -> manageHeldItems(trainer);
+                case 6 -> managing = false;
                 default -> System.out.println("Invalid choice. Please try again.");
             }
         }
@@ -338,7 +341,6 @@ public class TrainerController {
         System.out.println("Available Pokémon:");
         Pokemon.displayPokemonHeader();
         for (int i = 0; i < pokedex.size(); i++) {
-            System.out.print((i + 1) + ". ");
             pokedex.get(i).displayPokemon();
         }
 
@@ -511,7 +513,7 @@ public class TrainerController {
         System.out.println(released.getPokemonName() + " has been released.");
     }
 
-    //Trainer teaches moves to a Pokemon (TO BE FINISHED TOMORROW, EXPECT BY 0300 PM).
+    //Trainer teaches moves to a Pokemon
 
     private void teachPokemonMoves(Trainer trainer)
     {
@@ -559,15 +561,15 @@ public class TrainerController {
         }
 
         ArrayList<Move> allMoves = moveController.getMoveList();
-        System.out.println("\n Available Moves: ");
+        System.out.println("\nAvailable Moves: ");
         Move.displayMoveHeader();
         for(int i = 0; i < allMoves.size(); i++)
         {
-            System.out.print((i + 1) + ". ");
+            System.out.printf("%-3d ", i + 1);
             allMoves.get(i).displayMove();
         }
 
-        int moveChoice = InputUtils.getIntInput("\nSelect a Move to Teach(Press 0 to Cancel): ");
+        int moveChoice = InputUtils.getIntInput("\nSelect a Move Number(#) to Teach(Press 0 to Cancel): ");
         if(moveChoice == 0) { return; }
         if(moveChoice < 1 || moveChoice > allMoves.size())
         {
@@ -628,4 +630,100 @@ public class TrainerController {
                 (m.getMoveType2() != null && (p.getPokemonType1().equalsIgnoreCase(m.getMoveType2()) ||
                         (p.getPokemonType2() != null && p.getPokemonType2().equalsIgnoreCase(m.getMoveType2()))));
     }
+
+    //Manages Held Items
+    private void manageHeldItems(Trainer trainer)
+    {
+        System.out.println("\n-- Manage Held Items --");
+
+        List<Pokemon> allPokemon = new ArrayList<>();
+        allPokemon.addAll(trainer.getPokemonLineup());
+        allPokemon.addAll(trainer.getPokemonStorage());
+
+        if(allPokemon.isEmpty())
+        {
+            System.out.println("No Pokémon available to Manage Items.");
+            return;
+        }
+
+        System.out.println("Select a Pokémon to Manage Held Items:");
+        for (int i = 0; i < allPokemon.size(); i++) {
+            Pokemon p = allPokemon.get(i);
+            String location = (i < trainer.getPokemonLineup().size()) ? "Lineup" : "Storage";
+            String heldItem = p.hasHeldItem() ? p.getHeldItem().getItemName() : "None";
+            System.out.printf("%d. %s (%s) - Holding: %s%n",
+                    i+1, p.getPokemonName(), location, heldItem);
+        }
+
+        int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number (0 to cancel): ");
+        if (pokemonChoice == 0) return;
+        if (pokemonChoice < 1 || pokemonChoice > allPokemon.size()) {
+            System.out.println("Invalid selection.");
+            return;
+        }
+
+        Pokemon selectedPokemon = allPokemon.get(pokemonChoice - 1);
+        managePokemonHeldItem(trainer, selectedPokemon);
+     }
+
+     private void managePokemonHeldItem(Trainer trainer, Pokemon pokemon)
+     {
+         boolean managing = true;
+         while (managing) {
+             System.out.println("\nManaging held item for " + pokemon.getPokemonName());
+             System.out.println("Currently holding: " +
+                     (pokemon.hasHeldItem() ? pokemon.getHeldItem().getItemName() : "None"));
+
+             System.out.println("\nOptions:");
+             System.out.println("1. Set Held Item");
+             System.out.println("2. Remove Held Item");
+             System.out.println("3. Back");
+
+             int choice = InputUtils.getIntInput("Enter your choice: ");
+             switch (choice) {
+                 case 1 -> setPokemonHeldItem(trainer, pokemon);
+                 case 2 -> removePokemonHeldItem(pokemon);
+                 case 3 -> managing = false;
+                 default -> System.out.println("Invalid choice. Please try again.");
+             }
+         }
+     }
+
+     private void setPokemonHeldItem(Trainer trainer, Pokemon pokemon) {
+         ArrayList<Item> itemInventory = trainer.getInventory();
+         if (itemInventory.isEmpty()) {
+             System.out.println("No Items in Inventory!");
+             return;
+         }
+
+         System.out.println("\nAvailable Items: ");
+         Item.displayItemHeader();
+         for (int i = 0; i < itemInventory.size(); i++)
+         {
+             itemInventory.get(i).displayItem();
+         }
+
+         int itemChoice = InputUtils.getIntInput("Select an Item(0 to Cancel): ");
+         if(itemChoice == 0) { return; }
+         if(itemChoice < 1 || itemChoice > itemInventory.size())
+         {
+             System.out.println("Invalid Selection!");
+             return;
+         }
+
+         Item selectedItem = itemInventory.get(itemChoice - 1);
+         pokemon.setHeldItem(selectedItem);
+         System.out.println(pokemon.getPokemonName() + " is holding " + selectedItem.getItemName());
+     }
+
+     private void removePokemonHeldItem(Pokemon pokemon)
+     {
+         if (!pokemon.hasHeldItem()) {
+             System.out.println(pokemon.getPokemonName() + " is holding nothing!");
+             return;
+         }
+
+         Item removed = pokemon.removeHeldItem();
+         System.out.println(pokemon.getPokemonName() + " no longer holds " + removed.getItemName());
+     }
 }

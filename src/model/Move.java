@@ -44,7 +44,7 @@ public class Move {
      * Displays the header for Move information table
      */
     public static void displayMoveHeader() {
-        System.out.printf("%-15s %-16s %-10s %-10s %-60s%n",
+        System.out.printf("%-3s %-15s %-16s %-10s %-10s %-60s%n", "#",
                 "Move Name", "Classification", "Type 1", "Type 2", "Description");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
     }
