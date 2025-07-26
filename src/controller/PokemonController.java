@@ -8,11 +8,11 @@ import util.*;
 public class PokemonController {
 
     private final ArrayList<Pokemon> pokedex;
-    private final ArrayList<Move> moveList;
+    private final MoveController moveController;
 
-    public PokemonController(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList) {
+    public PokemonController(ArrayList<Pokemon> pokedex, MoveController moveController) {
         this.pokedex = pokedex;
-        this.moveList = moveList;
+        this.moveController = moveController;
     }
 
     public ArrayList<Pokemon> getPokedex() {
@@ -73,7 +73,7 @@ public class PokemonController {
         int speed = InputUtils.getIntInput("Base Speed: ");
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, 1, evolvesFrom, evolvesTo, evolutionLevel, hp, attack, defense, speed);
-        p.addDefaultMoves(moveList); // Add default moves to the new Pokémon
+        p.addDefaultMoves(moveController.getMoveList()); // Add default moves to the new Pokémon
         pokedex.add(p);
         System.out.println("\n\u001B[32mPokémon added successfully!\u001B[0m");
     }
@@ -201,7 +201,7 @@ public class PokemonController {
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, baseLevel, evolvesFrom, evolvesTo, evolutionLevel,
                 (int) hp, (int) attack, (int) defense, (int) speed);
 
-        p.addDefaultMoves(moveList); // Add default moves to the new Pokémon
+        p.addDefaultMoves(moveController.getMoveList()); // Add default moves to the new Pokémon
         pokedex.add(p);
     }
 
@@ -247,5 +247,18 @@ public class PokemonController {
             }
         }
         return new Pokemon[]{base, secondEvo, thirdEvo};
+    }
+
+    public String getCanonicalType(String input, String[] validTypes) {
+        for (String t : validTypes) {
+            if (t.equalsIgnoreCase(input)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public boolean isValidStat(double value) {
+        return value > 0;
     }
 }

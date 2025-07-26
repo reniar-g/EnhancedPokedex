@@ -34,8 +34,8 @@ public class EnhancedPokedexMVC {
 
     // Initialize controllers
     private static void initializeControllers() {
-        pokemonController = new PokemonController(pokedex, moveList);
         moveController = new MoveController(moveList);
+        pokemonController = new PokemonController(pokedex, moveController);
         itemController = new ItemController(itemList);
         trainerController = new TrainerController(trainerList);
 
@@ -43,7 +43,7 @@ public class EnhancedPokedexMVC {
         trainerController.setMoveController(moveController);
         trainerController.setItemController(itemController);
     }
-    
+
     // Add default pokemons
     private static void loadDefaultPokemons() {
         pokedex.add(new Pokemon(1, "Bulbasaur", "Grass", "Poison", 1, null, 2, 16, 45, 49, 49, 45));
