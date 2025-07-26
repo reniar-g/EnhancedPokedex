@@ -29,3 +29,6 @@ bin/
 .DS_Store
 *.xml
 .idea/workspace.xml
+*.xml
+/.idea
+*.xml
