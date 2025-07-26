@@ -10,16 +10,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.swing.*;
-import javax.swing.border.Border;
 import model.*;
+import util.GUIConstants;
 
 public class MainPokedexView extends JFrame {
-
-    public static final Color POKEDEX_RED = new Color(220, 50, 50);
-    public static final Color POKEDEX_BLUE = new Color(10, 168, 255);
-    public static final Color POKEDEX_GREEN = new Color(202, 213, 181);
-    public static final Color BUTTON_SHADOW = new Color(68, 95, 146);
-    Border buttonShadowBorder = BorderFactory.createLineBorder(BUTTON_SHADOW, 1);
 
     private JLabel titleLabel; // Title label for the main window
     private JLabel outputArea; // Output area for displaying messages in main menu
@@ -29,8 +23,8 @@ public class MainPokedexView extends JFrame {
     private final JButton nextButton; // Button to navigate to the next Pokémon
     private final JButton prevButton; // Button to navigate to the previous Pokémon
     private PokemonView pokemonView; // Instance of the Pokémon view to display Pokémon details
+    private MoveView movesView; // Instance of the Moves view to display moves
     private boolean pokemonViewActive = false;
-    private PokemonController pokemonController; // Instance of the Pokémon controller to manage Pokémon data
 
     /**
      * Constructor for MainPokedexView. Initializes the main window, sets up the
@@ -41,9 +35,13 @@ public class MainPokedexView extends JFrame {
      * @param itemList List of items to manage.
      * @param trainerList List of trainers to manage.
      */
+    private PokemonController pokemonController;
+    private MoveController movesController;
+
     public MainPokedexView(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList, ArrayList<Item> itemList, ArrayList<Trainer> trainerList) {
         super("Enhanced Pokédex");
-        pokemonController = new PokemonController(pokedex, moveList);
+        movesController = new MoveController(moveList);
+        pokemonController = new PokemonController(pokedex, movesController);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -80,10 +78,10 @@ public class MainPokedexView extends JFrame {
     private JButton nextButton() {
         JButton btnNext = new JButton("Next");
         btnNext.setBounds(755, 559, 75, 75);
-        btnNext.setBackground(POKEDEX_BLUE);
+        btnNext.setBackground(GUIConstants.POKEDEX_BLUE);
         btnNext.setForeground(Color.BLACK);
         btnNext.setFont(new Font("Consolas", Font.BOLD, 14));
-        btnNext.setBorder(buttonShadowBorder);
+        btnNext.setBorder(GUIConstants.buttonShadowBorder);
         btnNext.setOpaque(true);
 
         btnNext.addActionListener(e -> {
@@ -104,11 +102,11 @@ public class MainPokedexView extends JFrame {
     private JButton backButton() {
         JButton btnBack = new JButton("Back");
         btnBack.setBounds(520, 559, 75, 75);
-        btnBack.setBackground(POKEDEX_BLUE);
+        btnBack.setBackground(GUIConstants.POKEDEX_BLUE);
         btnBack.setFont(new Font("Consolas", Font.BOLD, 14));
         btnBack.setForeground(Color.BLACK);
         btnBack.setOpaque(true);
-        btnBack.setBorder(buttonShadowBorder);
+        btnBack.setBorder(GUIConstants.buttonShadowBorder);
         btnBack.addActionListener(e -> {
             if (pokemonViewActive && pokemonView != null) {
                 pokemonView.showPreviousPokemon();
@@ -128,8 +126,8 @@ public class MainPokedexView extends JFrame {
         JButton btnHome = new JButton("Home");
         btnHome.setFont(new Font("Consolas", Font.BOLD, 14));
         btnHome.setBounds(787, 345, 67, 35);
-        btnHome.setBorder(BorderFactory.createLineBorder(BUTTON_SHADOW, 1));
-        btnHome.setBackground(POKEDEX_BLUE);
+        btnHome.setBorder(BorderFactory.createLineBorder(GUIConstants.BUTTON_SHADOW, 1));
+        btnHome.setBackground(GUIConstants.POKEDEX_BLUE);
         btnHome.setMargin(new Insets(0, 0, 0, 0));
         if (action != null) {
             btnHome.addActionListener(action);
@@ -153,7 +151,7 @@ public class MainPokedexView extends JFrame {
         } catch (Exception e) {
             System.out.println("Error loading Pokedex icon: " + e.getMessage());
             JPanel backupBackground = new JPanel();
-            backupBackground.setBackground(POKEDEX_RED);
+            backupBackground.setBackground(GUIConstants.POKEDEX_RED);
             backupBackground.setPreferredSize(new Dimension(900, 700));
             setContentPane(backupBackground);
             setSize(900, 700);
@@ -177,7 +175,7 @@ public class MainPokedexView extends JFrame {
         } catch (Exception e) {
             System.out.println("Error loading Pokedex icon: " + e.getMessage());
             JPanel backupBackground = new JPanel();
-            backupBackground.setBackground(POKEDEX_RED);
+            backupBackground.setBackground(GUIConstants.POKEDEX_RED);
             backupBackground.setPreferredSize(new Dimension(900, 700));
             setContentPane(backupBackground);
             setSize(900, 700);
@@ -258,6 +256,24 @@ public class MainPokedexView extends JFrame {
     }
 
     /**
+     * Displays the Moves management view, enables navigation buttons, and shows
+     * the MovesView panel.
+     */
+    private void showMovesView() {
+        setContentPane(backgroundLabel1);
+        backgroundLabel1.removeAll();
+        nextButton.setEnabled(true);
+        prevButton.setEnabled(true);
+        backgroundLabel1.add(nextButton);
+        backgroundLabel1.add(prevButton);
+
+        movesView = new MoveView(movesController, () -> showMenuOutput(5));
+        movesView.setBounds(0, 0, getWidth(), getHeight());
+        backgroundLabel1.add(movesView);
+        showHomeScreen();
+    }
+
+    /**
      * Handles menu output and navigation based on the selected choice.
      *
      * @param choice The menu option selected by the user.
@@ -266,6 +282,8 @@ public class MainPokedexView extends JFrame {
         switch (choice) {
             case 1 ->
                 showPokemonView(); // Pokemon Management
+            case 2 ->
+                showMovesView(); // Moves Management
             case 5 ->
                 showHomeScreen();  // Home Screen
             case 6 ->
@@ -282,8 +300,8 @@ public class MainPokedexView extends JFrame {
         JButton btnPokemon = new JButton("Manage Pokémons");
         btnPokemon.setFont(new Font("Consolas", Font.BOLD, 14));
         btnPokemon.setBounds(493, 345, 140, 35);
-        btnPokemon.setBorder(buttonShadowBorder);
-        btnPokemon.setBackground(POKEDEX_BLUE);
+        btnPokemon.setBorder(GUIConstants.buttonShadowBorder);
+        btnPokemon.setBackground(GUIConstants.POKEDEX_BLUE);
         btnPokemon.setMargin(new Insets(0, 0, 0, 0));
         backgroundLabel1.add(btnPokemon);
         btnPokemon.addActionListener(e -> showMenuOutput(1));
@@ -292,8 +310,8 @@ public class MainPokedexView extends JFrame {
         JButton btnMoves = new JButton("Manage Moves");
         btnMoves.setFont(new Font("Consolas", Font.BOLD, 14));
         btnMoves.setBounds(640, 345, 140, 35);
-        btnMoves.setBorder(buttonShadowBorder);
-        btnMoves.setBackground(POKEDEX_BLUE);
+        btnMoves.setBorder(GUIConstants.buttonShadowBorder);
+        btnMoves.setBackground(GUIConstants.POKEDEX_BLUE);
         btnMoves.setMargin(new Insets(0, 0, 0, 0));
         backgroundLabel1.add(btnMoves);
         btnMoves.addActionListener(e -> showMenuOutput(2));
@@ -302,8 +320,8 @@ public class MainPokedexView extends JFrame {
         JButton btnItems = new JButton("Manage Items");
         btnItems.setFont(new Font("Consolas", Font.BOLD, 14));
         btnItems.setBounds(493, 387, 140, 35);
-        btnItems.setBorder(buttonShadowBorder);
-        btnItems.setBackground(POKEDEX_BLUE);
+        btnItems.setBorder(GUIConstants.buttonShadowBorder);
+        btnItems.setBackground(GUIConstants.POKEDEX_BLUE);
         btnItems.setMargin(new Insets(0, 0, 0, 0));
         backgroundLabel1.add(btnItems);
         btnItems.addActionListener(e -> showMenuOutput(3));
@@ -312,8 +330,8 @@ public class MainPokedexView extends JFrame {
         JButton btnTrainers = new JButton("Manage Trainers");
         btnTrainers.setFont(new Font("Consolas", Font.BOLD, 14));
         btnTrainers.setBounds(640, 387, 140, 35);
-        btnTrainers.setBorder(buttonShadowBorder);
-        btnTrainers.setBackground(POKEDEX_BLUE);
+        btnTrainers.setBorder(GUIConstants.buttonShadowBorder);
+        btnTrainers.setBackground(GUIConstants.POKEDEX_BLUE);
         btnTrainers.setMargin(new Insets(0, 0, 0, 0));
         backgroundLabel1.add(btnTrainers);
         btnTrainers.addActionListener(e -> showMenuOutput(4));
@@ -324,8 +342,8 @@ public class MainPokedexView extends JFrame {
         JButton btnExit = new JButton("Exit");
         btnExit.setFont(new Font("Consolas", Font.BOLD, 14));
         btnExit.setBounds(787, 387, 67, 35);
-        btnExit.setBorder(buttonShadowBorder);
-        btnExit.setBackground(POKEDEX_BLUE);
+        btnExit.setBorder(GUIConstants.buttonShadowBorder);
+        btnExit.setBackground(GUIConstants.POKEDEX_BLUE);
         btnExit.setMargin(new Insets(0, 0, 0, 0));
         backgroundLabel1.add(btnExit);
         btnExit.addActionListener(e -> showMenuOutput(6));
