@@ -22,8 +22,11 @@ public class MainPokedexView extends JFrame {
 
     private final JButton nextButton; // Button to navigate to the next Pokémon
     private final JButton prevButton; // Button to navigate to the previous Pokémon
+
     private PokemonView pokemonView; // Instance of the Pokémon view to display Pokémon details
     private MoveView movesView; // Instance of the Moves view to display moves
+    private ItemView itemView; // Instance of the Item view to display items
+
     private boolean pokemonViewActive = false;
 
     /**
@@ -37,11 +40,13 @@ public class MainPokedexView extends JFrame {
      */
     private PokemonController pokemonController;
     private MoveController movesController;
+    private ItemController itemController;
 
     public MainPokedexView(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList, ArrayList<Item> itemList, ArrayList<Trainer> trainerList) {
         super("Enhanced Pokédex");
         movesController = new MoveController(moveList);
         pokemonController = new PokemonController(pokedex, movesController);
+        itemController = new ItemController(itemList);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -277,6 +282,27 @@ public class MainPokedexView extends JFrame {
     }
 
     /**
+     * Displays the Moves management view, enables navigation buttons, and shows
+     * the MovesView panel.
+     */
+    private void showItemView() {
+        setContentPane(backgroundLabel1);
+        backgroundLabel1.removeAll();
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
+        backgroundLabel1.add(nextButton);
+        backgroundLabel1.add(prevButton);
+
+        itemView = new ItemView(itemController, () -> showMenuOutput(5));
+        itemView.setBounds(0, 0, getWidth(), getHeight());
+        backgroundLabel1.add(itemView);
+
+        backgroundLabel1.repaint();
+        revalidate();
+        repaint();
+    }
+
+    /**
      * Handles menu output and navigation based on the selected choice.
      *
      * @param choice The menu option selected by the user.
@@ -287,6 +313,8 @@ public class MainPokedexView extends JFrame {
                 showPokemonView(); // Pokemon Management
             case 2 ->
                 showMovesView(); // Moves Management
+            case 3 ->
+                showItemView(); // Item Management
             case 5 ->
                 showHomeScreen();  // Home Screen
             case 6 ->

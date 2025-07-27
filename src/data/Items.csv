@@ -1,21 +1,21 @@
 ﻿id,name,type,description,effect,buy_price,sell_price
-1,HP Up,Vitamin,A nutritious drink for Pokémon.,+10 HP EVs,P10000,"P5,000"
-2,Protein,Vitamin,A nutritious drink for Pokémon.,+10 Attack EVs,"P10,000","P5,000"
-3,Iron,Vitamin,A nutritious drink for Pokémon.,+10 Defense EVs,"P10,000","P5,000"
-4,Carbos,Vitamin,A nutritious drink for Pokémon.,+10 Speed EVs,"P10,000","P5,000"
-5,Zinc,Vitamin,A nutritious drink for Pokémon.,+10 Special Defense EVs,"P10,000","P5,000"
+1,HP Up,Vitamin,A nutritious drink for Pokémon.,+10 HP EVs,P10000,P5000
+2,Protein,Vitamin,A nutritious drink for Pokémon.,+10 Attack EVs,P10000,P5000
+3,Iron,Vitamin,A nutritious drink for Pokémon.,+10 Defense EVs,P10000,P5000
+4,Carbos,Vitamin,A nutritious drink for Pokémon.,+10 Speed EVs,P10000,P5000
+5,Zinc,Vitamin,A nutritious drink for Pokémon.,+10 Special Defense EVs,P10000,P5000
 6,Health Feather,Feather,A feather that slightly increases HP.,+1 HP EV,P300,P150
 7,Muscle Feather,Feather,A feather that slightly increases Attack.,+1 Attack EV,P300,P150
 8,Resist Feather,Feather,A feather that slightly increases Defense.,+1 Defense EV,P300,P150
 9,Swift Feather,Feather,A feather that slightly increases Speed.,+1 Speed EV,P300,P150
-10,Rare Candy,Leveling Item,A candy that is packed with energy.,Increases level by 1,Not sold,"P2,400"
-11,Fire Stone,Evolution Stone,A stone that radiates heat.,Evolves certain Pokémon.,"P3,000","P1,500"
-12,Water Stone,Evolution Stone,A stone with a blue and watery appearance.,Evolves certain Pokémon.,"P3,000","P1,500"
-13,Thunder Stone,Evolution Stone,A stone that sparkles with electricity.,Evolves certain Pokémon.,"P3,000","P1,500"
-14,Leaf Stone,Evolution Stone,A stone with a leaf pattern.,Evolves certain Pokémon.,"P3,000","P1,500"
-15,Moon Stone,Evolution Stone,A stone that glows faintly in the moonlight.,Evolves certain Pokémon.,Not sold,"P1,500"
-16,Sun Stone,Evolution Stone,A stone that glows like the sun.,Evolves certain Pokémon.,"P3,000","P1,500"
-17,Shiny Stone,Evolution Stone,A stone that sparkles brightly.,Evolves certain Pokémon.,"P3,000","P1,500"
-18,Dusk Stone,Evolution Stone,A dark and ominous stone.,Evolves certain Pokémon.,"P3,000","P1,500"
-19,Dawn Stone,Evolution Stone,A stone that sparkles like the morning sky.,Evolves certain Pokémon.,"P3,000","P1,500"
-20,Ice Stone,Evolution Stone,A stone that is cold to the touch.,Evolves certain Pokémon.,"P3,000","P1,500"
+10,Rare Candy,Leveling Item,A candy that is packed with energy.,Increases level by 1,Not sold,P2400
+11,Fire Stone,Evolution Stone,A stone that radiates heat.,Evolves certain Pokémon.,P3000,P1500
+12,Water Stone,Evolution Stone,A stone with a blue and watery appearance.,Evolves certain Pokémon.,P3000,P1500
+13,Thunder Stone,Evolution Stone,A stone that sparkles with electricity.,Evolves certain Pokémon.,P3000,P1500
+14,Leaf Stone,Evolution Stone,A stone with a leaf pattern.,Evolves certain Pokémon.,P3000,P1500
+15,Moon Stone,Evolution Stone,A stone that glows faintly in the moonlight.,Evolves certain Pokémon.,Not sold,P1500
+16,Sun Stone,Evolution Stone,A stone that glows like the sun.,Evolves certain Pokémon.,P3000,P1500
+17,Shiny Stone,Evolution Stone,A stone that sparkles brightly.,Evolves certain Pokémon.,P3000,P1500
+18,Dusk Stone,Evolution Stone,A dark and ominous stone.,Evolves certain Pokémon.,P3000,P1500
+19,Dawn Stone,Evolution Stone,A stone that sparkles like the morning sky.,Evolves certain Pokémon.,P3000,P1500
+20,Ice Stone,Evolution Stone,A stone that is cold to the touch.,Evolves certain Pokémon.,P3000,P1500
