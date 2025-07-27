@@ -8,8 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CCPROG3 MP Specifications - Enhanced Pokedex.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Specifications - Enhanced Pokedex.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/Items.csv" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/Items.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/MainPokedexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainPokedexView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ItemView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

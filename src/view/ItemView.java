@@ -1,13 +1,11 @@
 package view;
 
 import controller.ItemController;
-import model.Item;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
-
+import model.Item;
 import util.*;
-import src.EnhancedPokedexMVC;
 
 public class ItemView extends JPanel {
 
@@ -52,7 +50,7 @@ public class ItemView extends JPanel {
                 itemsMainPanel,
                 "<html><span style='font-size:18px;'><b>List of Items</b></span></html>",
                 34, 90, 356, 30, // Label at top left
-                45, 125, 310, 320, // Scroll panel fills most of left side
+                45, 125, 330, 320, // Scroll panel fills most of left side
                 listPanel
         );
 
@@ -118,15 +116,15 @@ public class ItemView extends JPanel {
 
     private static JLabel getJLabel(Item i, int itemNum) {
         String itemText = "<html>"
-                + "<span style='font-size:14px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
-                + "Description: " + i.getItemDescription() + "<br>"
-                + "Effect: " + i.getItemEffect() + "<br>"
-                + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
-                + "<br><br>" // Space between items
-                + "</html>";
+            + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
+            + "<div style='width:250px; text-align:justify;'>Description: " + i.getItemDescription() + "</div><br>"
+            + "Effect: " + i.getItemEffect() + "<br>"
+            + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
+            + "<br><br>"
+            + "</html>";
 
         JLabel itemLabel = new JLabel(itemText);
-        itemLabel.setFont(new Font("Consolas", Font.PLAIN, 13));
+        itemLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
         return itemLabel;
     }
 
