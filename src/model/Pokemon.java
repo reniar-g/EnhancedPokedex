@@ -204,4 +204,13 @@ public class Pokemon {
         moveSet.add(newMove);
         return true;
     }
+
+    public boolean canLearnMove(Move move)
+    {
+        return (move.getMoveType1().equalsIgnoreCase(pokemonType1) ||
+                (pokemonType2 != null && move.getMoveType1().equalsIgnoreCase(pokemonType2)) ||
+                (move.getMoveType2() != null && move.getMoveType2().equalsIgnoreCase(pokemonType1)) ||
+                (pokemonType2 != null && move.getMoveType2() != null &&
+                        move.getMoveType2().equalsIgnoreCase(pokemonType2)));
+    }
 }

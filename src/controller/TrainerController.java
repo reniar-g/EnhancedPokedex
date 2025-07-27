@@ -344,14 +344,20 @@ public class TrainerController {
             pokedex.get(i).displayPokemon();
         }
 
-        int choice = InputUtils.getIntInput("Select Pokémon to Add (0 to cancel): ");
-        if (choice == 0) return;
-        if (choice < 1 || choice > pokedex.size()) {
-            System.out.println("Invalid selection.");
-            return;
-        }
+        int addChoice;
 
-        Pokemon originalPokemon = pokedex.get(choice - 1);
+        do {
+            addChoice = InputUtils.getIntInput("Select Pokémon to Add (0 to cancel): ");
+
+            if (addChoice == 0) { return; }
+
+            if (addChoice < 1 || addChoice > pokedex.size()) {
+                System.out.println("Invalid selection. Please try again!");
+            }
+
+        } while(addChoice == 0 || addChoice < 1 || addChoice > pokedex.size());
+
+        Pokemon originalPokemon = pokedex.get(addChoice - 1);
         Pokemon copyPokemon = new Pokemon(
                 originalPokemon.getPokedexNumber(),
                 originalPokemon.getPokemonName(),
@@ -379,8 +385,14 @@ public class TrainerController {
         }
         else
         {
-            trainer.getPokemonStorage().add(copyPokemon);
-            System.out.println(copyPokemon.getPokemonName() + " is added to storage(Pokémon Lineup is full).");
+            if(trainer.getPokemonStorage().size() < 20) {
+                trainer.getPokemonStorage().add(copyPokemon);
+                System.out.println(copyPokemon.getPokemonName() + " is added to storage(Pokémon Lineup is full).");
+            }
+            else
+            {
+                System.out.println("Pokémon Lineup and Storage are full! Release a Pokémon First.");
+            }
         }
     }
 
@@ -551,77 +563,89 @@ public class TrainerController {
         {
             System.out.println("No Current Moves Being Taught!");
         }
-        else
-        {
-            for(int i = 0; i < pokemon.getMoveSet().size(); i++)
-            {
+        else {
+            for (int i = 0; i < pokemon.getMoveSet().size(); i++) {
                 Move move = pokemon.getMoveSet().get(i);
                 System.out.printf("%d. %s (%s)%n", i + 1, move.getMoveName(), move.getMoveClassification());
             }
-        }
 
-        ArrayList<Move> allMoves = moveController.getMoveList();
-        System.out.println("\nAvailable Moves: ");
-        Move.displayMoveHeader();
-        for(int i = 0; i < allMoves.size(); i++)
-        {
-            System.out.printf("%-3d ", i + 1);
-            allMoves.get(i).displayMove();
-        }
-
-        int moveChoice = InputUtils.getIntInput("\nSelect a Move Number(#) to Teach(Press 0 to Cancel): ");
-        if(moveChoice == 0) { return; }
-        if(moveChoice < 1 || moveChoice > allMoves.size())
-        {
-            System.out.println("Invalid Option. Please Try Again!");
-            return;
-        }
-
-        Move selectedMove = allMoves.get(moveChoice - 1);
-
-        if (pokemon.hasMove(selectedMove.getMoveName())) {
-            System.out.println(pokemon.getPokemonName() + " already knows " +
-                    selectedMove.getMoveName() + ".");
-        } else if (pokemon.learnMove(selectedMove)) {
-            System.out.println(pokemon.getPokemonName() + " learned " +
-                    selectedMove.getMoveName() + "!");
-        } else {
-            System.out.println("Failed to teach " + selectedMove.getMoveName() + ".");
-        }
-
-        if(pokemon.getMoveSet().size() >= 4)
-        {
-            System.out.println("\n" + pokemon.getPokemonName() + " already knows 4 moves!");
-            System.out.println("Select a Move to Delete: ");
-
-            for(int i = 0; i < pokemon.getMoveSet().size(); i++)
-            {
-                Move m = pokemon.getMoveSet().get(i);
-                System.out.printf("%d. %s (%s)%n", i + 1, m.getMoveName(), m.getMoveClassification());
+            ArrayList<Move> allMoves = moveController.getMoveList();
+            System.out.println("\nAvailable Moves: ");
+            Move.displayMoveHeader();
+            for (int i = 0; i < allMoves.size(); i++) {
+                System.out.printf("%-3d ", i + 1);
+                allMoves.get(i).displayMove();
             }
 
-            int deleteChoice  = InputUtils.getIntInput("Enter a Move Number to Delete(Press 0 to Cancel): ");
-            if(deleteChoice == 0) { return; }
+            int moveChoice;
 
-            Move deleteMove = pokemon.getMoveSet().get(deleteChoice - 1);
+            do {
+                moveChoice = InputUtils.getIntInput("\nSelect a Move Number(#) to Teach(Press 0 to Cancel): ");
 
-            if(deleteMove.getMoveClassification().equalsIgnoreCase("HM"))
-            {
-                System.out.println("\u001B[31mCannot forget HM moves.\u001B[0m");
+                if (moveChoice == 0) {
+                    return;
+                }
+
+                if (moveChoice < 1 || moveChoice > allMoves.size()) {
+                    System.out.println("Invalid Option. Please Try Again!");
+                }
+
+            } while (moveChoice == 0 || moveChoice < 1 || moveChoice > allMoves.size());
+
+
+            Move selectedMove = allMoves.get(moveChoice - 1);
+
+            if (!pokemon.canLearnMove(selectedMove)) {
+                System.out.println("\u001B[31m" + pokemon.getPokemonName() +
+                        " can't learn " + selectedMove.getMoveName() +
+                        " (type mismatch)!\u001B[0m");
                 return;
             }
 
-            pokemon.getMoveSet().remove(deleteChoice - 1);
-            pokemon.getMoveSet().add(selectedMove);
-            System.out.println("\u001B[32m" + pokemon.getPokemonName() +
-                    " removed " + deleteMove.getMoveName() +
-                    " and learned " + selectedMove.getMoveName() + "!\u001B[0m");
-        }
-        else
-        {
-            pokemon.getMoveSet().add(selectedMove);
-            System.out.println("\u001B[32m" + pokemon.getPokemonName() +
-                    " learned " + selectedMove.getMoveName() + "!\u001B[0m");
+            if (pokemon.getMoveSet().size() >= 4) {
+                System.out.println("\n" + pokemon.getPokemonName() + " already knows 4 moves!");
+
+                System.out.println("Select a Move to Delete: ");
+                for (int i = 0; i < pokemon.getMoveSet().size(); i++) {
+                    Move m = pokemon.getMoveSet().get(i);
+                    System.out.printf("%d. %s (%s)%n", i + 1, m.getMoveName(), m.getMoveClassification());
+                }
+
+                int deleteChoice;
+                Move deleteMove;
+
+                do {
+
+                    deleteChoice = InputUtils.getIntInput("Enter a Move Number to Delete: ");
+                    deleteMove = pokemon.getMoveSet().get(deleteChoice - 1);
+
+                    if (deleteChoice < 1) {
+                        System.out.println("Invalid option. Please try again");
+                    }
+
+                    if (deleteMove.getMoveClassification().equalsIgnoreCase("HM")) {
+                        System.out.println("\u001B[31mCannot forget HM moves.\u001B[0m");
+                    }
+
+                } while (deleteChoice < 1 || deleteMove.getMoveClassification().equalsIgnoreCase("HM"));
+
+                pokemon.getMoveSet().remove(deleteChoice - 1);
+                pokemon.getMoveSet().add(selectedMove);
+                System.out.println("\u001B[32m" + pokemon.getPokemonName() +
+                        " removed " + deleteMove.getMoveName() +
+                        " and learned " + selectedMove.getMoveName() + "!\u001B[0m");
+
+            } else {
+                if (pokemon.hasMove(selectedMove.getMoveName())) {
+                    System.out.println(pokemon.getPokemonName() + " already knows " +
+                            selectedMove.getMoveName() + ".");
+                } else if (pokemon.learnMove(selectedMove)) {
+                    System.out.println(pokemon.getPokemonName() + " learned " +
+                            selectedMove.getMoveName() + "!");
+                } else {
+                    System.out.println("Failed to teach " + selectedMove.getMoveName() + ".");
+                }
+            }
         }
     }
 
@@ -683,7 +707,8 @@ public class TrainerController {
          }
      }
 
-     private void setPokemonHeldItem(Trainer trainer, Pokemon pokemon) {
+     private void setPokemonHeldItem(Trainer trainer, Pokemon pokemon)
+     {
          ArrayList<Item> itemInventory = trainer.getInventory();
          if (itemInventory.isEmpty()) {
              System.out.println("No Items in Inventory!");
