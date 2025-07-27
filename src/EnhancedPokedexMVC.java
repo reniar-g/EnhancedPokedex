@@ -74,17 +74,68 @@ public class EnhancedPokedexMVC {
         pokedex.add(new Pokemon(26, "Raichu", "Electric", null, 1, 25, null, null, 60, 90, 55, 110));
         pokedex.add(new Pokemon(27, "Sandshrew", "Ground", null, 1, null, 28, 22, 50, 75, 85, 40));
         pokedex.add(new Pokemon(28, "Sandslash", "Ground", null, 1, 27, null, null, 75, 100, 110, 65));
+        pokedex.add(new Pokemon(29, "Nidoran ♀", "Poison", null, 1, null, 30, 16, 55, 47, 52, 41));
+        pokedex.add(new Pokemon(30, "Nidorina", "Poison", null, 1, 29, 31, 32, 70, 62, 67, 56));
+        pokedex.add(new Pokemon(31, "Nidoqueen", "Poison", "Ground", 1, 30, null, null, 90, 82, 87, 76));
+        pokedex.add(new Pokemon(32, "Nidoran ♂", "Poison", null, 1, null, 33, 16, 46, 57, 40, 50));
+        pokedex.add(new Pokemon(33, "Nidorino", "Poison", null, 1, 32, 34, 36, 61, 72, 57, 65));
+        pokedex.add(new Pokemon(34, "Nidoking", "Poison", "Ground", 1, 33, null, null, 81, 102, 77, 85));
+        pokedex.add(new Pokemon(35, "Clefairy", "Fairy", null, 1, null, 36, 35, 70, 45, 48, 35));
+        pokedex.add(new Pokemon(36, "Clefable", "Fairy", null, 1, 35, null, null, 95, 70, 73, 60));
+        pokedex.add(new Pokemon(37, "Vulpix", "Fire", null, 1, null, 38, 29, 38, 41, 40, 65));
+        pokedex.add(new Pokemon(38, "Ninetales", "Fire", null, 1, 37, null, null, 73, 76, 75, 100));
+        pokedex.add(new Pokemon(39, "Jigglypuff", "Normal", "Fairy", 1, null, 40, 20, 115, 45, 20, 25));
+        pokedex.add(new Pokemon(40, "Wigglytuff", "Normal", "Fairy", 1, 39, null, null, 140, 70, 45, 45));
+        pokedex.add(new Pokemon(41, "Zubat", "Poison", "Flying", 1, null, 42, 22, 40, 45, 35, 55));
+        pokedex.add(new Pokemon(42, "Golbat", "Poison", "Flying", 1, 41, null, null, 75, 80, 70, 90));
+        pokedex.add(new Pokemon(43, "Oddish", "Grass", "Poison", 1, null, 44, 21, 45, 50, 55, 30));
+        pokedex.add(new Pokemon(44, "Gloom", "Grass", "Poison", 1, 43, 45, 32, 60, 65, 70, 40));
+        pokedex.add(new Pokemon(45, "Vileplume", "Grass", "Poison", 1, 44, null, null, 75, 80, 85, 50));
+        pokedex.add(new Pokemon(46, "Paras", "Bug", "Grass", 1, null, 47, 24, 35, 70, 55, 25));
+        pokedex.add(new Pokemon(47, "Parasect", "Bug", "Grass", 1, 46, null, null, 60, 95, 80, 30));
+        pokedex.add(new Pokemon(48, "Venonat", "Bug", "Poison", 1, null, 49, 31, 60, 55, 50, 45));
+        pokedex.add(new Pokemon(49, "Venomoth", "Bug", "Poison", 1, 48, null, null, 70, 65, 60, 90));
+        pokedex.add(new Pokemon(50, "Diglett", "Ground", null, 1, null, 51, 26, 10, 55, 25, 95));
+        pokedex.add(new Pokemon(51, "Dugtrio", "Ground", null, 1, 50, null, null, 35, 80, 50, 120));
+        pokedex.add(new Pokemon(52, "Meowth", "Normal", null, 1, null, 53, 28, 40, 45, 35, 90));
+        pokedex.add(new Pokemon(53, "Persian", "Normal", null, 1, 52, null, null, 65, 70, 60, 115));
+        pokedex.add(new Pokemon(54, "Psyduck", "Water", null, 1, null, 55, 33, 50, 52, 48, 55));
+        pokedex.add(new Pokemon(55, "Golduck", "Water", null, 1, 54, null, null, 80, 82, 78, 85));
     }
 
     // Load default trainers into the trainer list.
     private static void loadDefaultTrainers() {
         trainerList.add(new Trainer(1, "Ash Ketchum", "1987-05-22", "M", "Pallet Town, Kanto", "The Show's Protagonist"));
+        trainerList.add(new Trainer(2, "Rainer Gonzaga", "2005-12-23", "M", "Enhanced Pokedex Team", "The Creator of Enhanced Pokedex"));
+        trainerList.add(new Trainer(3, "Joshua Del Mundo", "2001-01-01", "M", "Enhanced Pokedex Team", "The Co-Creator of Enhanced Pokedex"));
+        trainerList.add(new Trainer(4, "Misty Mizuyawa", "1985-04-01", "F", "Cerulean City, Kanto", "Water-type Pokémon Trainer"));
+        trainerList.add(new Trainer(5, "Brock Harrison", "1983-06-14", "M", "Pewter City, Kanto", "Rock-type Pokémon Trainer"));
     }
 
     // Add default moves to each Pokemon's moveSet (Requirement #3)
     private static void loadDefaultMoves() {
+        // Default Moves (Requirement #3)
         moveList.add(new Move("Tackle", "A physical attack in which the user charges and slams into the target with its whole body.", "TM", "Normal", null));
         moveList.add(new Move("Defend", "The user hardens its body's surface like iron, sharply raising its Defense stat.", "TM", "Normal", null));
+
+        // 5 Default HMs
+        moveList.add(new Move("Cut", "Cuts down small trees.", "HM", "Normal", null));
+        moveList.add(new Move("Fly", "Flies to a previously visited town.", "HM", "Flying", null));
+        moveList.add(new Move("Surf", "Rides waves across water.", "HM", "Water", null));
+        moveList.add(new Move("Strength", "Moves heavy boulders.", "HM", "Normal", null));
+        moveList.add(new Move("Flash", "Lights up dark caves.", "HM", "Electric", null));
+
+        // 10 Default TMs
+        moveList.add(new Move("Thunderbolt", "A strong electric attack. May paralyze the target.", "TM", "Electric", null));
+        moveList.add(new Move("Ice Beam", "A beam of ice is shot at the foe. May freeze the target.", "TM", "Ice", null));
+        moveList.add(new Move("Flamethrower", "A powerful fire attack. May burn the target.", "TM", "Fire", null));
+        moveList.add(new Move("Psychic", "A strong psychic attack.", "TM", "Psychic", null));
+        moveList.add(new Move("Earthquake", "A ground-shaking attack.", "TM", "Ground", null));
+        moveList.add(new Move("Hyper Beam", "A very powerful attack.", "TM", "Normal", null));
+        moveList.add(new Move("Rock Slide", "Large rocks are thrown at the foe. May cause flinching.", "TM", "Rock", null));
+        moveList.add(new Move("Quick Attack", "An extremely fast attack that always strikes first.", "TM", "Normal", null));
+        moveList.add(new Move("Shadow Ball", "Hurls a shadowy blob at the foe. May lower the target's Special Defense.", "TM", "Ghost", null));
+        moveList.add(new Move("Toxic", "Badly poisons the foe.", "TM", "Poison", null));
 
         for (Pokemon pokemon : pokedex) {
             pokemon.getMoveSet().add(moveList.get(0)); // Add Tackle

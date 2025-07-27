@@ -509,7 +509,7 @@ public class PokemonView extends JPanel {
             int num = p.getPokedexNumber();
             String imgPath;
 
-            if (num >= 1 && num <= 28) {
+            if (num >= 1 && num <= 55) {
                 imgPath = "src/util/PokemonSprites/" + num + ".png";
             } else {
                 imgPath = "src/util/PokemonSprites/noData.png";
@@ -601,7 +601,7 @@ public class PokemonView extends JPanel {
          */
         if (p != null) {
             int num = p.getPokedexNumber();
-            String imgPath = (num >= 1 && num <= 28)
+            String imgPath = (num >= 1 && num <= 55)
                     ? "src/util/PokemonSprites/" + num + ".png"
                     : "src/util/PokemonSprites/noData.png";
             ImageIcon icon = new ImageIcon(imgPath);
