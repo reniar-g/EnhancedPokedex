@@ -262,8 +262,8 @@ public class MainPokedexView extends JFrame {
     private void showMovesView() {
         setContentPane(backgroundLabel1);
         backgroundLabel1.removeAll();
-        nextButton.setEnabled(true);
-        prevButton.setEnabled(true);
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
         backgroundLabel1.add(nextButton);
         backgroundLabel1.add(prevButton);
 

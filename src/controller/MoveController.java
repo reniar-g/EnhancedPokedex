@@ -27,7 +27,7 @@ public class MoveController {
             int choice = InputUtils.getIntInput("Enter your choice: ");
             switch (choice) {
                 case 1 ->
-                    addMove();
+                    addMoveTerminal();
                 case 2 ->
                     viewAllMoves();
                 case 3 ->
@@ -41,9 +41,9 @@ public class MoveController {
     }
 
     /**
-     * Adds a new move to the move list.
+     * Adds a new move to the move list in the terminal.
      */
-    private void addMove() {
+    public void addMoveTerminal() {
         System.out.println("\n-- Add New Move --");
         String name = InputUtils.getStringInput("Move Name: ");
         if (isMoveNameExists(name)) {
@@ -61,9 +61,34 @@ public class MoveController {
         }
         String type1 = InputUtils.getValidTypeInput("Type 1: ", false);
         String type2 = InputUtils.getValidTypeInput("Type 2 (press Enter if none): ", true);
-        Move m = new Move(name, description, classification, type1, type2);
+        Move m = new Move(name.trim(), description.trim(), classification.trim(), type1.trim(), type2 == null ? "" : type2.trim());
         moveList.add(m);
         System.out.println("\n\u001B[32mMove added successfully!\u001B[0m");
+    }
+
+    /**
+     * Adds a new move to the move list via GUI. Returns true if added, false if
+     * not (e.g., duplicate name or invalid input).
+     */
+    public boolean addMove(String name, String type1, String type2, String classification, String description) {
+        if (name == null || name.trim().isEmpty()
+                || type1 == null || type1.trim().isEmpty()
+                || classification == null || classification.trim().isEmpty()
+                || description == null || description.trim().isEmpty()) {
+            return false;
+        }
+        if (isMoveNameExists(name)) {
+            return false;
+        }
+        // Only allow HM or TM for classification
+        String classUpper = classification.trim().toUpperCase();
+        if (!classUpper.equals("HM") && !classUpper.equals("TM")) {
+            return false;
+        }
+        String type2Value = (type2 == null) ? "" : type2.trim();
+        Move m = new Move(name.trim(), description.trim(), classUpper, type1.trim(), type2Value);
+        moveList.add(m);
+        return true;
     }
 
     /**
