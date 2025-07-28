@@ -15,6 +15,19 @@ public class TrainerController {
         this.trainerList = trainerList;
     }
 
+    /**
+     * Gets the active Pokemon lineup for a trainer
+     *
+     * @param trainer The trainer whose lineup to get
+     * @return List of Pokemon in the trainer's active lineup
+     */
+    public List<Pokemon> getActiveLineup(Trainer trainer) {
+        if (trainer == null) {
+            return new ArrayList<>();
+        }
+        return trainer.getPokemonLineup();
+    }
+
     public void setItemController(ItemController itemController) {
         this.itemController = itemController;
     }

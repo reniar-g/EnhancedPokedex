@@ -5,6 +5,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import model.Move;
+import model.Pokemon;
 import model.Trainer;
 import util.*;
 
@@ -887,7 +889,7 @@ public class TrainerView extends JPanel {
         repaint();
     }
 
-    // Manage Pokémons: Teach Move, View Lineup, View Storage
+    // Manage Pokémons: Display both lineups and allow actions
     private void showManagePokemons(Trainer trainer, Runnable onHome) {
         removeAll();
 
@@ -897,22 +899,68 @@ public class TrainerView extends JPanel {
 
         GUIUtils.addWelcomeLabel(pokePanel, "Manage Pokémon", 35, 39, 353, 40);
 
-        JLabel greetLabel = new JLabel("Pokémon Management for " + trainer.getTrainerName());
-        greetLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
-        greetLabel.setBounds(49, 105, 334, 500);
-        greetLabel.setHorizontalAlignment(SwingConstants.LEFT);
-        greetLabel.setVerticalAlignment(SwingConstants.TOP);
-        pokePanel.add(greetLabel);
+        // Create lineup panel
+        JPanel lineupListPanel = new JPanel();
+        lineupListPanel.setLayout(new BoxLayout(lineupListPanel, BoxLayout.Y_AXIS));
+        lineupListPanel.setOpaque(false);
 
-        JButton teachMoveBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
-        JButton viewLineupBtn = GUIUtils.createButton2("Switch to Storage", 640, 345, 140, 35);
-        JButton viewStorageBtn = GUIUtils.createButton2("Release Pokémon", 493, 387, 140, 35);
-        JButton addPokemonBtn = GUIUtils.createButton2("Teach Moves", 640, 387, 140, 35);
+        // Add lineup Pokemon
+        List<Pokemon> lineup = trainer.getPokemonLineup();
+        if (lineup.isEmpty()) {
+            JLabel emptyLabel = new JLabel("No Pokémon in active lineup");
+            emptyLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+            lineupListPanel.add(emptyLabel);
+        } else {
+            for (Pokemon p : lineup) {
+                lineupListPanel.add(createPokemonDetailsLabel(p, true));
+            }
+        }
 
-        pokePanel.add(teachMoveBtn);
-        pokePanel.add(viewLineupBtn);
-        pokePanel.add(viewStorageBtn);
+        // Create storage panel
+        JPanel storageListPanel = new JPanel();
+        storageListPanel.setLayout(new BoxLayout(storageListPanel, BoxLayout.Y_AXIS));
+        storageListPanel.setOpaque(false);
+
+        // Add storage Pokemon
+        List<Pokemon> storage = trainer.getPokemonStorage();
+        if (storage.isEmpty()) {
+            JLabel emptyLabel = new JLabel("No Pokémon in storage");
+            emptyLabel.setFont(new Font("Consolas", Font.PLAIN, 14));
+            storageListPanel.add(emptyLabel);
+        } else {
+            for (Pokemon p : storage) {
+                storageListPanel.add(createPokemonDetailsLabel(p, false));
+            }
+        }
+
+        // Add lineup scroll panel
+        GUIUtils.createLabeledScrollPanel(
+                pokePanel,
+                "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 220,
+                lineupListPanel
+        );
+
+        // Add storage scroll panel
+        GUIUtils.createLabeledScrollPanel(
+                pokePanel,
+                "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
+                34, 365, 356, 30,
+                45, 400, 330, 220,
+                storageListPanel
+        );
+
+        // Action buttons
+        JButton addPokemonBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
+        JButton switchBtn = GUIUtils.createButton2("Switch Lineup/Storage", 640, 345, 140, 35);
+        JButton releaseBtn = GUIUtils.createButton2("Release Pokémon", 493, 387, 140, 35);
+        JButton teachMoveBtn = GUIUtils.createButton2("Teach Moves", 640, 387, 140, 35);
+
         pokePanel.add(addPokemonBtn);
+        pokePanel.add(switchBtn);
+        pokePanel.add(releaseBtn);
+        pokePanel.add(teachMoveBtn);
 
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainerActionMenu(trainer, onHome);
@@ -931,60 +979,164 @@ public class TrainerView extends JPanel {
         repaint();
 
         // Action handlers for Pokemon management
+        addPokemonBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Add Pokémon: Not yet implemented."));
+        switchBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Switch Pokémon: Not yet implemented."));
+        releaseBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Release Pokémon: Not yet implemented."));
         teachMoveBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Teach Move: Not yet implemented."));
-        viewLineupBtn.addActionListener(evt -> showPokemonLineupDialog(trainer));
-        viewStorageBtn.addActionListener(evt -> showPokemonStorageDialog(trainer));
     }
 
     // Show Pokemon lineup dialog
     private void showPokemonLineupDialog(Trainer trainer) {
-        StringBuilder sb = new StringBuilder();
-        java.util.List<model.Pokemon> lineup = trainer.getPokemonLineup();
-        if (lineup.isEmpty()) {
-            sb.append("No Pokémon in lineup.");
-        } else {
-            sb.append("Active Lineup (").append(lineup.size()).append("/6):\n\n");
-            int num = 1;
-            for (model.Pokemon p : lineup) {
-                sb.append(num).append(". ").append(p.getPokemonName())
-                        .append(" (Level ").append(p.getBaseLevel()).append(")\n")
-                        .append("   Type: ").append(p.getPokemonType1());
-                if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
-                    sb.append("/").append(p.getPokemonType2());
-                }
-                sb.append("\n   HP: ").append((int) p.getHp())
-                        .append(" | ATK: ").append((int) p.getAttack())
-                        .append(" | DEF: ").append((int) p.getDefense())
-                        .append(" | SPD: ").append((int) p.getSpeed()).append("\n\n");
-                num++;
-            }
-        }
-        JOptionPane.showMessageDialog(this, sb.toString(), "Pokémon Lineup", JOptionPane.INFORMATION_MESSAGE);
+        showManagePokemons(trainer);
     }
 
-    // Show Pokemon storage dialog
-    private void showPokemonStorageDialog(Trainer trainer) {
-        StringBuilder sb = new StringBuilder();
+    private void showManagePokemons(Trainer trainer) {
+        java.util.List<model.Pokemon> lineup = controller.getActiveLineup(trainer);
         java.util.List<model.Pokemon> storage = trainer.getPokemonStorage();
-        if (storage.isEmpty()) {
-            sb.append("No Pokémon in storage.");
+
+        // Create main panel with BoxLayout vertically
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        // Create lineup panel
+        JPanel lineupPanel = new JPanel();
+        lineupPanel.setBorder(BorderFactory.createTitledBorder("Active Lineup (" + lineup.size() + "/6)"));
+        lineupPanel.setLayout(new BoxLayout(lineupPanel, BoxLayout.Y_AXIS));
+
+        // Add lineup Pokemon
+        for (Pokemon pokemon : lineup) {
+            JLabel pokemonLabel = createPokemonDetailsLabel(pokemon, true);
+            JPanel pokemonPanel = new JPanel(new BorderLayout());
+            pokemonPanel.add(pokemonLabel, BorderLayout.CENTER);
+            lineupPanel.add(pokemonPanel);
+            lineupPanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        }
+
+        // Create lineup scroll pane
+        JScrollPane lineupScroll = new JScrollPane(lineupPanel);
+        lineupScroll.setPreferredSize(new Dimension(400, 200));
+
+        // Create storage panel
+        JPanel storagePanel = new JPanel();
+        storagePanel.setBorder(BorderFactory.createTitledBorder("Storage (" + storage.size() + "/20)"));
+        storagePanel.setLayout(new BoxLayout(storagePanel, BoxLayout.Y_AXIS));
+
+        // Add storage Pokemon
+        for (Pokemon pokemon : storage) {
+            JLabel pokemonLabel = createPokemonDetailsLabel(pokemon, false);
+            JPanel pokemonPanel = new JPanel(new BorderLayout());
+            pokemonPanel.add(pokemonLabel, BorderLayout.CENTER);
+            storagePanel.add(pokemonPanel);
+            storagePanel.add(Box.createRigidArea(new Dimension(0, 5)));
+        }
+
+        // Create storage scroll pane
+        JScrollPane storageScroll = new JScrollPane(storagePanel);
+        storageScroll.setPreferredSize(new Dimension(400, 200));
+
+        // Add buttons panel
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JButton switchButton = new JButton("Switch Pokemon");
+        JButton moveButton = new JButton("Manage Moves");
+        JButton closeButton = new JButton("Close");
+
+        switchButton.addActionListener(e -> {
+            // Will be implemented in the next update
+            JOptionPane.showMessageDialog(mainPanel,
+                    "Select Pokemon from lineup and storage to switch positions.",
+                    "Switch Pokemon",
+                    JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        moveButton.addActionListener(e -> {
+            // Will be implemented in the next update
+            JOptionPane.showMessageDialog(mainPanel,
+                    "Select a Pokemon to manage its moves.",
+                    "Manage Moves",
+                    JOptionPane.INFORMATION_MESSAGE);
+        });
+
+        closeButton.addActionListener(e -> {
+            Window win = SwingUtilities.getWindowAncestor(mainPanel);
+            win.dispose();
+        });
+
+        buttonsPanel.add(switchButton);
+        buttonsPanel.add(moveButton);
+        buttonsPanel.add(closeButton);
+
+        // Add components to main panel
+        mainPanel.add(lineupScroll);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing
+        mainPanel.add(storageScroll);
+        mainPanel.add(Box.createRigidArea(new Dimension(0, 10))); // Add spacing
+        mainPanel.add(buttonsPanel);
+
+        // Show dialog
+        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Manage Pokemon", true);
+        dialog.setContentPane(mainPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
+
+    /**
+     * Creates a formatted label with Pokemon details including moves
+     */
+    private JLabel createPokemonDetailsLabel(Pokemon p, boolean isLineup) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><div style='width:250px;'>");
+
+        // Pokemon basic info
+        sb.append("<span style='font-size:13px;'><b>")
+                .append(p.getPokemonName())
+                .append(" (Level ").append(p.getBaseLevel()).append(")</b></span><br>");
+
+        // Type
+        sb.append("Type: ").append(p.getPokemonType1());
+        if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
+            sb.append("/").append(p.getPokemonType2());
+        }
+        sb.append("<br>");
+
+        // Stats
+        sb.append("HP: ").append((int) p.getHp())
+                .append(" | ATK: ").append((int) p.getAttack())
+                .append(" | DEF: ").append((int) p.getDefense())
+                .append(" | SPD: ").append((int) p.getSpeed())
+                .append("<br>");
+
+        // Location
+        sb.append("<b>Location: ").append(isLineup ? "Active Lineup" : "Storage").append("</b><br>");
+
+        // Moves
+        sb.append("<b>Moves:</b><br>");
+        List<Move> moves = p.getMoveSet();
+        if (moves.isEmpty()) {
+            sb.append("No moves learned<br>");
         } else {
-            sb.append("Storage (").append(storage.size()).append("/20):\n\n");
-            int num = 1;
-            for (model.Pokemon p : storage) {
-                sb.append(num).append(". ").append(p.getPokemonName())
-                        .append(" (Level ").append(p.getBaseLevel()).append(")\n")
-                        .append("   Type: ").append(p.getPokemonType1());
-                if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
-                    sb.append("/").append(p.getPokemonType2());
-                }
-                sb.append("\n   HP: ").append((int) p.getHp())
-                        .append(" | ATK: ").append((int) p.getAttack())
-                        .append(" | DEF: ").append((int) p.getDefense())
-                        .append(" | SPD: ").append((int) p.getSpeed()).append("\n\n");
-                num++;
+            for (Move m : moves) {
+                sb.append("• ").append(m.getMoveName())
+                        .append(" - ")
+                        .append(m.getMoveClassification())
+                        .append("<br>");
             }
         }
-        JOptionPane.showMessageDialog(this, sb.toString(), "Pokémon Storage", JOptionPane.INFORMATION_MESSAGE);
+
+        // Evolution info if available
+        if (p.getEvolvesTo() != null && !p.getEvolvesTo().toString().isEmpty()) {
+            sb.append("<br>Evolves to: ").append(p.getEvolvesTo());
+            if (p.getEvolutionLevel() > 0) {
+                sb.append(" at level ").append(p.getEvolutionLevel());
+            }
+            sb.append("<br>");
+        }
+
+        sb.append("<br></div></html>");
+
+        JLabel label = new JLabel(sb.toString());
+        label.setFont(new Font("Consolas", Font.PLAIN, 12));
+        label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        return label;
     }
 }
