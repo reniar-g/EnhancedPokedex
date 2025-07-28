@@ -904,7 +904,7 @@ public class TrainerView extends JPanel {
         lineupListPanel.setLayout(new BoxLayout(lineupListPanel, BoxLayout.Y_AXIS));
         lineupListPanel.setOpaque(false);
 
-        // Add lineup Pokemon
+        // Add lineup Pokémon
         List<Pokemon> lineup = trainer.getPokemonLineup();
         if (lineup.isEmpty()) {
             JLabel emptyLabel = new JLabel("No Pokémon in active lineup");
@@ -921,7 +921,7 @@ public class TrainerView extends JPanel {
         storageListPanel.setLayout(new BoxLayout(storageListPanel, BoxLayout.Y_AXIS));
         storageListPanel.setOpaque(false);
 
-        // Add storage Pokemon
+        // Add storage Pokémon
         List<Pokemon> storage = trainer.getPokemonStorage();
         if (storage.isEmpty()) {
             JLabel emptyLabel = new JLabel("No Pokémon in storage");
@@ -978,10 +978,10 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        // Action handlers for Pokemon management
-        addPokemonBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Add Pokémon: Not yet implemented."));
-        switchBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Switch Pokémon: Not yet implemented."));
-        releaseBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Release Pokémon: Not yet implemented."));
+        // Action handlers for Pokémon management
+        addPokemonBtn.addActionListener(evt -> showAddPokemonDialog(trainer, onHome));
+        switchBtn.addActionListener(evt -> showSwitchPokemonDialog(trainer, onHome));
+        releaseBtn.addActionListener(evt -> showReleasePokemonDialog(trainer, onHome));
         teachMoveBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Teach Move: Not yet implemented."));
     }
 
@@ -1080,6 +1080,104 @@ public class TrainerView extends JPanel {
         dialog.setVisible(true);
     }
 
+    private void showAddPokemonDialog(Trainer trainer, Runnable onHome) {
+        removeAll();
+
+        JPanel addPanel = new JPanel(null);
+        addPanel.setOpaque(false);
+        addPanel.setBounds(0, 0, 901, 706);
+
+        GUIUtils.addWelcomeLabel(addPanel, "Add Pokémon to Trainer", 35, 39, 353, 40);
+
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+        listPanel.setOpaque(false);
+
+        // Get all Pokémon from the Pokédex
+        List<Pokemon> allPokemon = controller.getPokemonController().getPokedex();
+
+        ButtonGroup group = new ButtonGroup();
+        for (Pokemon pokemon : allPokemon) {
+            JRadioButton radio = new JRadioButton(
+                    "#" + pokemon.getPokedexNumber() + " - " + pokemon.getPokemonName() +
+                            " (" + pokemon.getPokemonType1() +
+                            (pokemon.getPokemonType2() != null && !pokemon.getPokemonType2().isEmpty() ?
+                                    "/" + pokemon.getPokemonType2() : "") + ")"
+            );
+            radio.setFont(new Font("Consolas", Font.PLAIN, 14));
+            radio.setOpaque(false);
+            radio.setActionCommand(String.valueOf(pokemon.getPokedexNumber()));
+            group.add(radio);
+            listPanel.add(radio);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listPanel);
+        scrollPane.setBounds(45, 105, 330, 320);
+        scrollPane.setOpaque(false);
+        scrollPane.setBorder(null);
+        scrollPane.getViewport().setOpaque(false);
+        addPanel.add(scrollPane);
+
+        JButton selectBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
+        addPanel.add(selectBtn);
+
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) {
+                onHome.run();
+            }
+        });
+        addPanel.add(btnHome);
+
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            showManagePokemons(trainer, onHome);
+        });
+        addPanel.add(backBtn);
+
+        add(addPanel);
+        revalidate();
+        repaint();
+
+        selectBtn.addActionListener(evt -> {
+            ButtonModel selected = group.getSelection();
+            if (selected == null) {
+                JOptionPane.showMessageDialog(this, "Please select a Pokémon.");
+                return;
+            }
+
+            int pokedexNumber = Integer.parseInt(selected.getActionCommand());
+            Pokemon selectedPokemon = null;
+            for (Pokemon p : allPokemon) {
+                if (p.getPokedexNumber() == pokedexNumber) {
+                    selectedPokemon = p;
+                    break;
+                }
+            }
+
+            if (selectedPokemon != null) {
+                TrainerController.AddPokemonResult result = controller.addPokemonToTrainer(trainer, selectedPokemon);
+                if (result.success) {
+                    JOptionPane.showMessageDialog(this,
+                            "Pokémon added to " + result.location + "!",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            result.errorMessage,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                showManagePokemons(trainer, onHome);
+            }
+        });
+    }
+
+    private String extractTextFromLabel(JLabel label) {
+        // Extract the HTML content from the label and convert it to plain text
+        String htmlText = label.getText();
+        // Remove HTML tags and convert to plain text
+        return htmlText.replaceAll("<[^>]*>", "").replace("&nbsp;", " ").trim();
+    }
+
     /**
      * Creates a formatted label with Pokemon details including moves
      */
@@ -1138,5 +1236,280 @@ public class TrainerView extends JPanel {
         label.setFont(new Font("Consolas", Font.PLAIN, 12));
         label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
         return label;
+    }
+
+    private void showSwitchPokemonDialog(Trainer trainer, Runnable onHome) {
+        removeAll();
+
+        JPanel switchPanel = new JPanel(null);
+        switchPanel.setOpaque(false);
+        switchPanel.setBounds(0, 0, 901, 706);
+
+        GUIUtils.addWelcomeLabel(switchPanel, "Switch Pokémon", 35, 39, 353, 40);
+
+        // Create lineup panel
+        JPanel lineupPanel = new JPanel();
+        lineupPanel.setLayout(new BoxLayout(lineupPanel, BoxLayout.Y_AXIS));
+        lineupPanel.setOpaque(false);
+
+        List<Pokemon> lineup = trainer.getPokemonLineup();
+        ButtonGroup lineupGroup = new ButtonGroup();
+        for (Pokemon p : lineup) {
+            String pokemonDetails = extractTextFromLabel(createPokemonDetailsLabel(p, true));
+            JRadioButton radio = new JRadioButton(pokemonDetails);
+            radio.setOpaque(false);
+            radio.setActionCommand("lineup:" + lineup.indexOf(p));
+            lineupGroup.add(radio);
+            lineupPanel.add(radio);
+        }
+
+        // Create storage panel
+        JPanel storagePanel = new JPanel();
+        storagePanel.setLayout(new BoxLayout(storagePanel, BoxLayout.Y_AXIS));
+        storagePanel.setOpaque(false);
+
+        List<Pokemon> storage = trainer.getPokemonStorage();
+        ButtonGroup storageGroup = new ButtonGroup();
+        for (Pokemon p : storage) {
+            String pokemonDetails = extractTextFromLabel(createPokemonDetailsLabel(p, false));
+            JRadioButton radio = new JRadioButton(pokemonDetails);
+            radio.setOpaque(false);
+            radio.setActionCommand("storage:" + storage.indexOf(p));
+            storageGroup.add(radio);
+            storagePanel.add(radio);
+        }
+
+        // Add scroll panes
+        GUIUtils.createLabeledScrollPanel(
+                switchPanel,
+                "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 220,
+                lineupPanel
+        );
+
+        GUIUtils.createLabeledScrollPanel(
+                switchPanel,
+                "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
+                34, 365, 356, 30,
+                45, 400, 330, 220,
+                storagePanel
+        );
+
+        // Add switch button
+        JButton switchBtn = GUIUtils.createButton1("Switch", 493, 345, 140, 35);
+        switchPanel.add(switchBtn);
+
+        // Add home button
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) onHome.run();
+        });
+        switchPanel.add(btnHome);
+
+        // Add back button
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            showManagePokemons(trainer, onHome);
+        });
+        switchPanel.add(backBtn);
+
+        add(switchPanel);
+        revalidate();
+        repaint();
+
+        switchBtn.addActionListener(evt -> {
+            // Get selected Pokémon from lineup or storage
+            ButtonModel lineupSelected = lineupGroup.getSelection();
+            ButtonModel storageSelected = storageGroup.getSelection();
+
+            if (lineupSelected != null && storageSelected == null) {
+                // Moving from lineup to storage
+                int index = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
+                Pokemon pokemon = lineup.get(index);
+                TrainerController.SwitchResult result = controller.switchPokemon(trainer, pokemon, false);
+                if (result.success) {
+                    JOptionPane.showMessageDialog(this, result.message);
+                    showManagePokemons(trainer, onHome);
+                } else {
+                    JOptionPane.showMessageDialog(this, result.message, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (storageSelected != null && lineupSelected == null) {
+                // Moving from storage to lineup
+                int index = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
+                Pokemon pokemon = storage.get(index);
+                TrainerController.SwitchResult result = controller.switchPokemon(trainer, pokemon, true);
+                if (result.success) {
+                    JOptionPane.showMessageDialog(this, result.message);
+                    showManagePokemons(trainer, onHome);
+                } else {
+                    JOptionPane.showMessageDialog(this, result.message, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (lineupSelected != null && storageSelected != null) {
+                // Swap between lineup and storage
+                int lineupIndex = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
+                int storageIndex = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
+                Pokemon lineupPokemon = lineup.get(lineupIndex);
+                Pokemon storagePokemon = storage.get(storageIndex);
+
+                // First move lineup pokemon to storage
+                TrainerController.SwitchResult result1 = controller.switchPokemon(trainer, lineupPokemon, false);
+                if (!result1.success) {
+                    JOptionPane.showMessageDialog(this, result1.message, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Then move storage pokemon to lineup
+                TrainerController.SwitchResult result2 = controller.switchPokemon(trainer, storagePokemon, true);
+                if (!result2.success) {
+                    // If failed, try to move the first pokemon back
+                    controller.switchPokemon(trainer, lineupPokemon, true);
+                    JOptionPane.showMessageDialog(this, result2.message, "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                JOptionPane.showMessageDialog(this, "Pokémon swapped successfully!");
+                showManagePokemons(trainer, onHome);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Select Pokémon from lineup or storage to switch",
+                        "Selection Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
+    }
+
+    private void showReleasePokemonDialog(Trainer trainer, Runnable onHome) {
+        removeAll();
+
+        JPanel releasePanel = new JPanel(null);
+        releasePanel.setOpaque(false);
+        releasePanel.setBounds(0, 0, 901, 706);
+
+        GUIUtils.addWelcomeLabel(releasePanel, "Release Pokémon", 35, 39, 353, 40);
+
+        // Create lineup panel
+        JPanel lineupPanel = new JPanel();
+        lineupPanel.setLayout(new BoxLayout(lineupPanel, BoxLayout.Y_AXIS));
+        lineupPanel.setOpaque(false);
+
+        List<Pokemon> lineup = trainer.getPokemonLineup();
+        ButtonGroup lineupGroup = new ButtonGroup();
+        for (Pokemon p : lineup) {
+            String pokemonDetails = extractTextFromLabel(createPokemonDetailsLabel(p, true));
+            JRadioButton radio = new JRadioButton(pokemonDetails);
+            radio.setOpaque(false);
+            radio.setActionCommand("lineup:" + lineup.indexOf(p));
+            lineupGroup.add(radio);
+            lineupPanel.add(radio);
+        }
+
+        // Create storage panel
+        JPanel storagePanel = new JPanel();
+        storagePanel.setLayout(new BoxLayout(storagePanel, BoxLayout.Y_AXIS));
+        storagePanel.setOpaque(false);
+
+        List<Pokemon> storage = trainer.getPokemonStorage();
+        ButtonGroup storageGroup = new ButtonGroup();
+        for (Pokemon p : storage) {
+            String pokemonDetails = extractTextFromLabel(createPokemonDetailsLabel(p, false));
+            JRadioButton radio = new JRadioButton(pokemonDetails);
+            radio.setOpaque(false);
+            radio.setActionCommand("storage:" + storage.indexOf(p));
+            storageGroup.add(radio);
+            storagePanel.add(radio);
+        }
+
+        // Add scroll panes
+        GUIUtils.createLabeledScrollPanel(
+                releasePanel,
+                "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 220,
+                lineupPanel
+        );
+
+        GUIUtils.createLabeledScrollPanel(
+                releasePanel,
+                "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
+                34, 365, 356, 30,
+                45, 400, 330, 220,
+                storagePanel
+        );
+
+        // Add release button
+        JButton releaseBtn = GUIUtils.createButton1("Release", 493, 345, 140, 35);
+        releasePanel.add(releaseBtn);
+
+        // Add home button
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) onHome.run();
+        });
+        releasePanel.add(btnHome);
+
+        // Add back button
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            showManagePokemons(trainer, onHome);
+        });
+        releasePanel.add(backBtn);
+
+        add(releasePanel);
+        revalidate();
+        repaint();
+
+        releaseBtn.addActionListener(evt -> {
+            // Get selected Pokémon from lineup or storage
+            ButtonModel lineupSelected = lineupGroup.getSelection();
+            ButtonModel storageSelected = storageGroup.getSelection();
+
+            if (lineupSelected == null && storageSelected == null) {
+                JOptionPane.showMessageDialog(this, "Please select a Pokémon to release.");
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Are you sure you want to release this Pokémon?\nThis action cannot be undone.",
+                    "Confirm Release",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE
+            );
+
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+
+            if (lineupSelected != null) {
+                int index = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
+                Pokemon pokemon = lineup.get(index);
+                Pokemon released = controller.releasePokemon(trainer, pokemon, true);
+                if (released != null) {
+                    JOptionPane.showMessageDialog(this,
+                            "Released " + released.getPokemonName() + " from lineup.",
+                            "Pokémon Released",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    showManagePokemons(trainer, onHome);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Failed to release Pokémon.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else if (storageSelected != null) {
+                int index = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
+                Pokemon pokemon = storage.get(index);
+                Pokemon released = controller.releasePokemon(trainer, pokemon, false);
+                if (released != null) {
+                    JOptionPane.showMessageDialog(this,
+                            "Released " + released.getPokemonName() + " from storage.",
+                            "Pokémon Released",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    showManagePokemons(trainer, onHome);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "Failed to release Pokémon.",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
     }
 }

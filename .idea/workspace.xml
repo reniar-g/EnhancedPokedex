@@ -6,16 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="fb025de9-3485-450c-885a-f338ef9e86b8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/ItemController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/MoveController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/MoveController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/PokemonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/PokemonController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Move.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Pokemon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/InputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/InputUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/MainPokedexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainPokedexView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/TrainerView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/TrainerView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

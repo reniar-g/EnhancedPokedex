@@ -51,7 +51,9 @@ public class MainPokedexView extends JFrame {
         itemController = new ItemController(itemList);
         trainerController = new TrainerController(trainerList);
         // Ensure TrainerController always has a reference to ItemController
+        trainerController.setPokemonController(pokemonController);
         trainerController.setItemController(itemController);
+        trainerController.setMoveController(movesController);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
