@@ -953,7 +953,7 @@ public class TrainerView extends JPanel {
 
         // Action buttons
         JButton addPokemonBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
-        JButton switchBtn = GUIUtils.createButton2("Switch Lineup/Storage", 640, 345, 140, 35);
+        JButton switchBtn = GUIUtils.createButton2("Switch to Storage", 640, 345, 140, 35);
         JButton releaseBtn = GUIUtils.createButton2("Release Pokémon", 493, 387, 140, 35);
         JButton teachMoveBtn = GUIUtils.createButton2("Teach Moves", 640, 387, 140, 35);
 
