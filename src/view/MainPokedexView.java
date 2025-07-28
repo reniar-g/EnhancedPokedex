@@ -26,6 +26,7 @@ public class MainPokedexView extends JFrame {
     private PokemonView pokemonView; // Instance of the Pokémon view to display Pokémon details
     private MoveView movesView; // Instance of the Moves view to display moves
     private ItemView itemView; // Instance of the Item view to display items
+    private TrainerView trainerView; // Instance of the Trainer view to display trainers
 
     private boolean pokemonViewActive = false;
 
@@ -41,12 +42,16 @@ public class MainPokedexView extends JFrame {
     private PokemonController pokemonController;
     private MoveController movesController;
     private ItemController itemController;
+    private TrainerController trainerController;
 
     public MainPokedexView(ArrayList<Pokemon> pokedex, ArrayList<Move> moveList, ArrayList<Item> itemList, ArrayList<Trainer> trainerList) {
         super("Enhanced Pokédex");
         movesController = new MoveController(moveList);
         pokemonController = new PokemonController(pokedex, movesController);
         itemController = new ItemController(itemList);
+        trainerController = new TrainerController(trainerList);
+        // Ensure TrainerController always has a reference to ItemController
+        trainerController.setItemController(itemController);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -282,8 +287,8 @@ public class MainPokedexView extends JFrame {
     }
 
     /**
-     * Displays the Moves management view, enables navigation buttons, and shows
-     * the MovesView panel.
+     * Displays the Item management view, disables navigation buttons, and shows
+     * the ItemView panel.
      */
     private void showItemView() {
         setContentPane(backgroundLabel1);
@@ -303,6 +308,27 @@ public class MainPokedexView extends JFrame {
     }
 
     /**
+     * Displays the trainer management view, enables navigation buttons, and
+     * shows the TrainerView panel.
+     */
+    private void showTrainerView() {
+        setContentPane(backgroundLabel1);
+        backgroundLabel1.removeAll();
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
+        backgroundLabel1.add(nextButton);
+        backgroundLabel1.add(prevButton);
+
+        trainerView = new TrainerView(trainerController, () -> showMenuOutput(5));
+        trainerView.setBounds(0, 0, getWidth(), getHeight());
+        backgroundLabel1.add(trainerView);
+
+        backgroundLabel1.repaint();
+        revalidate();
+        repaint();
+    }
+
+    /**
      * Handles menu output and navigation based on the selected choice.
      *
      * @param choice The menu option selected by the user.
@@ -315,6 +341,8 @@ public class MainPokedexView extends JFrame {
                 showMovesView(); // Moves Management
             case 3 ->
                 showItemView(); // Item Management
+            case 4 ->
+                showTrainerView(); // Trainer Management
             case 5 ->
                 showHomeScreen();  // Home Screen
             case 6 ->

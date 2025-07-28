@@ -116,12 +116,12 @@ public class ItemView extends JPanel {
 
     private static JLabel getJLabel(Item i, int itemNum) {
         String itemText = "<html>"
-            + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
-            + "<div style='width:250px; text-align:justify;'>Description: " + i.getItemDescription() + "</div><br>"
-            + "Effect: " + i.getItemEffect() + "<br>"
-            + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
-            + "<br><br>"
-            + "</html>";
+                + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
+                + "<div style='width:250px; text-align:justify;'>Description: " + i.getItemDescription() + "</div><br>"
+                + "Effect: " + i.getItemEffect() + "<br>"
+                + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
+                + "<br><br>"
+                + "</html>";
 
         JLabel itemLabel = new JLabel(itemText);
         itemLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
@@ -154,7 +154,7 @@ public class ItemView extends JPanel {
         itemsWelcomeDesc.setOpaque(false);
         itemsWelcomePanel.add(itemsWelcomeDesc);
 
-        JButton itemsViewBtn = GUIUtils.createButton2("View All Items", 640, 345, 140, 35);
+        JButton itemsViewBtn = GUIUtils.createButton2("View All Items", 493, 345, 140, 35);
         itemsWelcomePanel.add(itemsViewBtn);
 
         JButton btnHome = MainPokedexView.homeButton(e -> {

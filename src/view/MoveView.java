@@ -1,13 +1,12 @@
 package view;
 
 import controller.MoveController;
-import model.Move;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
-
-import util.*;
+import model.Move;
 import src.EnhancedPokedexMVC;
+import util.*;
 
 public class MoveView extends JPanel {
 
@@ -26,7 +25,9 @@ public class MoveView extends JPanel {
     }
 
     private void showViewAllMoves(Runnable onHome) {
-        GUIUtils.removeAllPanels(movesMainPanel);
+        if (movesMainPanel != null) {
+            GUIUtils.removeAllPanels(movesMainPanel);
+        }
 
         movesMainPanel = new JPanel(null);
         movesMainPanel.setOpaque(false);
@@ -121,9 +122,8 @@ public class MoveView extends JPanel {
         String moveText = "<html>"
                 + "<span style='font-size:14px;'><b>#" + moveNum + "  " + m.getMoveName() + "</b> | " + m.getMoveClassification() + "</span><br>"
                 + "Type 1: " + m.getMoveType1() + " | Type 2: " + type2 + "<br>"
-                + "<div style='text-align:justify; width:250px;'>" + m.getMoveDescription() + "</div>"
-                + "<br><br>" // Space between moves
-                + "</div>"
+                + "<div style='width:250px; text-align:justify;'>" + m.getMoveDescription() + "</div>"
+                + "<br><br>"
                 + "</html>";
 
         JLabel moveLabel = new JLabel(moveText);

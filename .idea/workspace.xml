@@ -5,14 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e23e5c72-f8f9-4153-af29-f6c448152509" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/view/TrainerView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Feather.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Feather.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Levelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Levelling.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Pokemon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Vitamin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Vitamin.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/util/MenuArtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MenuArtUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ItemView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/MainPokedexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainPokedexView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/MoveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MoveView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +52,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Rainer Gonzaga/Documents/GitHub/DuncanCode/Enhanced-Pokedex&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -85,6 +86,7 @@
       <workItem from="1753532082453" duration="4000" />
       <workItem from="1753539367403" duration="16039000" />
       <workItem from="1753580623789" duration="17625000" />
+      <workItem from="1753699418424" duration="11989000" />
     </task>
     <servers />
   </component>

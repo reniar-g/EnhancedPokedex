@@ -1,6 +1,5 @@
 package controller;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import model.*;
@@ -8,7 +7,7 @@ import util.*;
 
 public class TrainerController {
 
-    private final ArrayList<Trainer> trainerList;
+    private List<Trainer> trainerList;
     private ItemController itemController;
     private PokemonController pokemonController;
     private MoveController moveController;
@@ -21,9 +20,25 @@ public class TrainerController {
         this.itemController = itemController;
     }
 
-    public void setPokemonController(PokemonController pokemonController) { this.pokemonController = pokemonController; }
+    public void setPokemonController(PokemonController pokemonController) {
+        this.pokemonController = pokemonController;
+    }
 
-    public void setMoveController(MoveController moveController) { this.moveController = moveController; }
+    public void setMoveController(MoveController moveController) {
+        this.moveController = moveController;
+    }
+
+    public ItemController getItemController() {
+        return itemController;
+    }
+
+    public PokemonController getPokemonController() {
+        return pokemonController;
+    }
+
+    public MoveController getMoveController() {
+        return moveController;
+    }
 
     /**
      * Trainer Management submenu
@@ -48,14 +63,17 @@ public class TrainerController {
                 case 6 ->
                     handleItemTransaction(false); // Sell Item
                 case 7 ->
-                    useItem();
-                case 8 -> manageTrainerPokemons();
+                    manageTrainerPokemons();
                 case 0 ->
                     running = false;
                 default ->
                     System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
             }
         }
+    }
+
+    public List<Trainer> getTrainerList() {
+        return trainerList;
     }
 
     /**
@@ -280,8 +298,7 @@ public class TrainerController {
         }
     }
 
-    public void useItem()
-    {
+    public void useItem() {
         Trainer t = selectTrainer();
         if (t == null) {
             System.out.println("\u001B[31mNo trainer selected.\u001B[0m");
@@ -302,18 +319,18 @@ public class TrainerController {
 
         int itemChoice;
 
-        do
-        {
+        do {
             itemChoice = InputUtils.getIntInput("\nSelect item to use (0 to cancel): ");
 
-            if(itemChoice == 0) { return; }
+            if (itemChoice == 0) {
+                return;
+            }
 
-            if (itemChoice < 1 || itemChoice > t.getInventory().size())
-            {
+            if (itemChoice < 1 || itemChoice > t.getInventory().size()) {
                 System.out.println("Invalid Option. Please try again!");
             }
 
-        } while(itemChoice == 0 || itemChoice < 1 || itemChoice > t.getInventory().size());
+        } while (itemChoice == 0 || itemChoice < 1 || itemChoice > t.getInventory().size());
 
         Item selectedItem = t.getInventory().get(itemChoice - 1);
 
@@ -322,17 +339,17 @@ public class TrainerController {
 
         int pokemonChoice;
 
-        do
-        {
+        do {
             pokemonChoice = InputUtils.getIntInput("Select Pokémon to use item on (0 to cancel): ");
 
-            if(pokemonChoice == 0) { return; }
+            if (pokemonChoice == 0) {
+                return;
+            }
 
-            if (pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size())
-            {
+            if (pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size()) {
                 System.out.println("Invalid Option. Please try again!");
             }
-        } while(pokemonChoice == 0 || pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size());
+        } while (pokemonChoice == 0 || pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size());
 
         Pokemon targetPokemon = t.getPokemonLineup().get(pokemonChoice - 1);
 
@@ -386,8 +403,6 @@ public class TrainerController {
                 return;
             }
 
-
-
             // Handle Levelling items
             if (item instanceof Levelling) {
                 Levelling levelling = (Levelling) item;
@@ -405,21 +420,20 @@ public class TrainerController {
     }
 
     //Manages Trainer's pokemons
-    private void manageTrainerPokemons()
-    {
+    private void manageTrainerPokemons() {
         System.out.println("\n-- Manage Trainer's Pokémon --");
-        if(trainerList.isEmpty())
-        {
+        if (trainerList.isEmpty()) {
             System.out.println("No trainers available to manage.");
             return;
         }
 
         Trainer trainer = selectTrainer();
-        if(trainer == null) { return; }
+        if (trainer == null) {
+            return;
+        }
 
         boolean managing = true;
-        while(managing)
-        {
+        while (managing) {
             System.out.println("\n=== Managing Trainer: " + trainer.getTrainerName() + " ===");
             System.out.println("Money: P" + trainer.getTrainerMoney());
 
@@ -439,21 +453,26 @@ public class TrainerController {
             int choice = InputUtils.getIntInput("Enter your choice: ");
 
             switch (choice) {
-                case 1 -> addPokemonToTrainer(trainer);
-                case 2 -> switchPokemon(trainer);
-                case 3 -> releasePokemon(trainer);
-                case 4 -> teachPokemonMoves(trainer);
-                case 5 -> manageHeldItems(trainer);
-                case 6 -> managing = false;
-                default -> System.out.println("Invalid choice. Please try again.");
+                case 1 ->
+                    addPokemonToTrainer(trainer);
+                case 2 ->
+                    switchPokemon(trainer);
+                case 3 ->
+                    releasePokemon(trainer);
+                case 4 ->
+                    teachPokemonMoves(trainer);
+                case 5 ->
+                    manageHeldItems(trainer);
+                case 6 ->
+                    managing = false;
+                default ->
+                    System.out.println("Invalid choice. Please try again.");
             }
         }
     }
 
     //Adds a Pokemon to Lineup
-
-    private void addPokemonToTrainer(Trainer trainer)
-    {
+    private void addPokemonToTrainer(Trainer trainer) {
         System.out.println("\n-- Add Pokémon --");
 
         ArrayList<Pokemon> pokedex = pokemonController.getPokedex();
@@ -473,13 +492,15 @@ public class TrainerController {
         do {
             addChoice = InputUtils.getIntInput("Select Pokémon to Add (0 to cancel): ");
 
-            if (addChoice == 0) { return; }
+            if (addChoice == 0) {
+                return;
+            }
 
             if (addChoice < 1 || addChoice > pokedex.size()) {
                 System.out.println("Invalid selection. Please try again!");
             }
 
-        } while(addChoice == 0 || addChoice < 1 || addChoice > pokedex.size());
+        } while (addChoice == 0 || addChoice < 1 || addChoice > pokedex.size());
 
         Pokemon originalPokemon = pokedex.get(addChoice - 1);
         Pokemon copyPokemon = new Pokemon(
@@ -491,37 +512,30 @@ public class TrainerController {
                 originalPokemon.getEvolvesFrom(),
                 originalPokemon.getEvolvesTo(),
                 originalPokemon.getEvolutionLevel(),
-                (int)originalPokemon.getHp(),
-                (int)originalPokemon.getAttack(),
-                (int)originalPokemon.getDefense(),
-                (int)originalPokemon.getSpeed()
+                (int) originalPokemon.getHp(),
+                (int) originalPokemon.getAttack(),
+                (int) originalPokemon.getDefense(),
+                (int) originalPokemon.getSpeed()
         );
 
-        for(Move move : originalPokemon.getMoveSet())
-        {
+        for (Move move : originalPokemon.getMoveSet()) {
             copyPokemon.getMoveSet().add(move);
         }
 
-        if(trainer.getPokemonLineup().size() < 6)
-        {
+        if (trainer.getPokemonLineup().size() < 6) {
             trainer.getPokemonLineup().add(copyPokemon);
             System.out.println(copyPokemon.getPokemonName() + " is added to your lineup.");
-        }
-        else
-        {
-            if(trainer.getPokemonStorage().size() < 20) {
+        } else {
+            if (trainer.getPokemonStorage().size() < 20) {
                 trainer.getPokemonStorage().add(copyPokemon);
                 System.out.println(copyPokemon.getPokemonName() + " is added to storage(Pokémon Lineup is full).");
-            }
-            else
-            {
+            } else {
                 System.out.println("Pokémon Lineup and Storage are full! Release a Pokémon First.");
             }
         }
     }
 
     //displays Pokemon's basic info
-
     private void displayPokemonList(ArrayList<Pokemon> pokemonList, String listType) {
         if (pokemonList.isEmpty()) {
             System.out.println("(" + listType + " is empty)");
@@ -549,26 +563,24 @@ public class TrainerController {
     }
 
     //Switches pokemon
-    private void switchPokemon(Trainer trainer)
-    {
+    private void switchPokemon(Trainer trainer) {
         System.out.println("\n-- Switch Pokémon --");
         System.out.println("1. Move from Storage to Lineup");
         System.out.println("2. Move from Lineup to Storage");
         System.out.println("3. Exit");
 
         int choice = InputUtils.getIntInput("Enter your Choice: ");
-        if (choice == 3) { return; }
+        if (choice == 3) {
+            return;
+        }
 
-        if(choice == 1)
-        {
-            if(trainer.getPokemonStorage().isEmpty())
-            {
+        if (choice == 1) {
+            if (trainer.getPokemonStorage().isEmpty()) {
                 System.out.println("No Pokémon in storage.");
                 return;
             }
 
-            if(trainer.getPokemonLineup().size() >= 6)
-            {
+            if (trainer.getPokemonLineup().size() >= 6) {
                 System.out.println("Lineup is full. Release a Pokémon first.");
                 return;
             }
@@ -577,9 +589,10 @@ public class TrainerController {
             displayPokemonList(trainer.getPokemonStorage(), "Storage");
 
             int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number(Press 0 to Cancel): ");
-            if(pokemonChoice == 0) { return; }
-            if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonStorage().size())
-            {
+            if (pokemonChoice == 0) {
+                return;
+            }
+            if (pokemonChoice < 1 || pokemonChoice > trainer.getPokemonStorage().size()) {
                 System.out.println("Invalid Option. Please Try Again!");
                 return;
             }
@@ -587,11 +600,8 @@ public class TrainerController {
             Pokemon p = trainer.getPokemonStorage().remove(pokemonChoice - 1);
             trainer.getPokemonLineup().add(p);
             System.out.println(p.getPokemonName() + " is moved to Lineup!");
-        }
-        else if(choice == 2)
-        {
-            if(trainer.getPokemonLineup().isEmpty())
-            {
+        } else if (choice == 2) {
+            if (trainer.getPokemonLineup().isEmpty()) {
                 System.out.println("No Pokemon in lineup.");
                 return;
             }
@@ -600,9 +610,10 @@ public class TrainerController {
             displayPokemonList(trainer.getPokemonLineup(), "Lineup");
 
             int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number(Press 0 to Cancel): ");
-            if(pokemonChoice == 0) { return; }
-            if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size())
-            {
+            if (pokemonChoice == 0) {
+                return;
+            }
+            if (pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size()) {
                 System.out.println("Invalid selection.");
                 return;
             }
@@ -610,9 +621,7 @@ public class TrainerController {
             Pokemon p = trainer.getPokemonLineup().remove(pokemonChoice - 1);
             trainer.getPokemonStorage().add(p);
             System.out.println(p.getPokemonName() + " is moved to Storage!");
-        }
-        else
-        {
+        } else {
             System.out.println("Invalid Option. Please Try Again!");
         }
     }
@@ -625,7 +634,9 @@ public class TrainerController {
         System.out.println("3. Exit");
 
         int choice = InputUtils.getIntInput("Select source: ");
-        if (choice == 3) return;
+        if (choice == 3) {
+            return;
+        }
 
         ArrayList<Pokemon> sourceList = (choice == 1) ? trainer.getPokemonLineup() : trainer.getPokemonStorage();
         String sourceName = (choice == 1) ? "Lineup" : "Storage";
@@ -639,7 +650,9 @@ public class TrainerController {
         displayPokemonList(sourceList, sourceName);
 
         int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number (Press 0 to Cancel): ");
-        if (pokemonChoice == 0) return;
+        if (pokemonChoice == 0) {
+            return;
+        }
         if (pokemonChoice < 1 || pokemonChoice > sourceList.size()) {
             System.out.println("Invalid Option. Please Try Again!");
             return;
@@ -650,13 +663,10 @@ public class TrainerController {
     }
 
     //Trainer teaches moves to a Pokemon
-
-    private void teachPokemonMoves(Trainer trainer)
-    {
+    private void teachPokemonMoves(Trainer trainer) {
         System.out.println("\n-- Teach Move to Pokémon --");
 
-        if(trainer.getPokemonLineup().isEmpty())
-        {
+        if (trainer.getPokemonLineup().isEmpty()) {
             System.out.println("No Pokémon in your lineup.");
             return;
         }
@@ -665,10 +675,11 @@ public class TrainerController {
         displayPokemonList(trainer.getPokemonLineup(), "Lineup");
 
         int pokemonChoice = InputUtils.getIntInput("Enter a Pokémon Number(Press 0 to Cancel): ");
-        if(pokemonChoice == 0) { return; }
+        if (pokemonChoice == 0) {
+            return;
+        }
 
-        if(pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size())
-        {
+        if (pokemonChoice < 1 || pokemonChoice > trainer.getPokemonLineup().size()) {
             System.out.println("Invalid Option. Please Try Again!");
             return;
         }
@@ -677,17 +688,14 @@ public class TrainerController {
         moveTutorial(pokemon);
     }
 
-    private void moveTutorial(Pokemon pokemon)
-    {
+    private void moveTutorial(Pokemon pokemon) {
         System.out.println("\n=== Teaching Move to " + pokemon.getPokemonName() + " ===");
 
         System.out.println("Current Moves: ");
 
-        if(pokemon.getMoveSet().isEmpty())
-        {
+        if (pokemon.getMoveSet().isEmpty()) {
             System.out.println("No Current Moves Being Taught!");
-        }
-        else {
+        } else {
             for (int i = 0; i < pokemon.getMoveSet().size(); i++) {
                 Move move = pokemon.getMoveSet().get(i);
                 System.out.printf("%d. %s (%s)%n", i + 1, move.getMoveName(), move.getMoveClassification());
@@ -716,13 +724,12 @@ public class TrainerController {
 
             } while (moveChoice == 0 || moveChoice < 1 || moveChoice > allMoves.size());
 
-
             Move selectedMove = allMoves.get(moveChoice - 1);
 
             if (!pokemon.canLearnMove(selectedMove)) {
-                System.out.println("\u001B[31m" + pokemon.getPokemonName() +
-                        " can't learn " + selectedMove.getMoveName() +
-                        " (type mismatch)!\u001B[0m");
+                System.out.println("\u001B[31m" + pokemon.getPokemonName()
+                        + " can't learn " + selectedMove.getMoveName()
+                        + " (type mismatch)!\u001B[0m");
                 return;
             }
 
@@ -755,17 +762,17 @@ public class TrainerController {
 
                 pokemon.getMoveSet().remove(deleteChoice - 1);
                 pokemon.getMoveSet().add(selectedMove);
-                System.out.println("\u001B[32m" + pokemon.getPokemonName() +
-                        " removed " + deleteMove.getMoveName() +
-                        " and learned " + selectedMove.getMoveName() + "!\u001B[0m");
+                System.out.println("\u001B[32m" + pokemon.getPokemonName()
+                        + " removed " + deleteMove.getMoveName()
+                        + " and learned " + selectedMove.getMoveName() + "!\u001B[0m");
 
             } else {
                 if (pokemon.hasMove(selectedMove.getMoveName())) {
-                    System.out.println(pokemon.getPokemonName() + " already knows " +
-                            selectedMove.getMoveName() + ".");
+                    System.out.println(pokemon.getPokemonName() + " already knows "
+                            + selectedMove.getMoveName() + ".");
                 } else if (pokemon.learnMove(selectedMove)) {
-                    System.out.println(pokemon.getPokemonName() + " learned " +
-                            selectedMove.getMoveName() + "!");
+                    System.out.println(pokemon.getPokemonName() + " learned "
+                            + selectedMove.getMoveName() + "!");
                 } else {
                     System.out.println("Failed to teach " + selectedMove.getMoveName() + ".");
                 }
@@ -774,16 +781,14 @@ public class TrainerController {
     }
 
     //Manages Held Items
-    private void manageHeldItems(Trainer trainer)
-    {
+    private void manageHeldItems(Trainer trainer) {
         System.out.println("\n-- Manage Held Items --");
 
         List<Pokemon> allPokemon = new ArrayList<>();
         allPokemon.addAll(trainer.getPokemonLineup());
         allPokemon.addAll(trainer.getPokemonStorage());
 
-        if(allPokemon.isEmpty())
-        {
+        if (allPokemon.isEmpty()) {
             System.out.println("No Pokémon available to Manage Items.");
             return;
         }
@@ -794,11 +799,13 @@ public class TrainerController {
             String location = (i < trainer.getPokemonLineup().size()) ? "Lineup" : "Storage";
             String heldItem = p.hasHeldItem() ? p.getHeldItem().getItemName() : "None";
             System.out.printf("%d. %s (%s) - Holding: %s%n",
-                    i+1, p.getPokemonName(), location, heldItem);
+                    i + 1, p.getPokemonName(), location, heldItem);
         }
 
         int pokemonChoice = InputUtils.getIntInput("Enter Pokémon Number (0 to cancel): ");
-        if (pokemonChoice == 0) return;
+        if (pokemonChoice == 0) {
+            return;
+        }
         if (pokemonChoice < 1 || pokemonChoice > allPokemon.size()) {
             System.out.println("Invalid selection.");
             return;
@@ -806,68 +813,93 @@ public class TrainerController {
 
         Pokemon selectedPokemon = allPokemon.get(pokemonChoice - 1);
         managePokemonHeldItem(trainer, selectedPokemon);
-     }
+    }
 
-     private void managePokemonHeldItem(Trainer trainer, Pokemon pokemon)
-     {
-         boolean managing = true;
-         while (managing) {
-             System.out.println("\nManaging held item for " + pokemon.getPokemonName());
-             System.out.println("Currently holding: " +
-                     (pokemon.hasHeldItem() ? pokemon.getHeldItem().getItemName() : "None"));
+    private void managePokemonHeldItem(Trainer trainer, Pokemon pokemon) {
+        boolean managing = true;
+        while (managing) {
+            System.out.println("\nManaging held item for " + pokemon.getPokemonName());
+            System.out.println("Currently holding: "
+                    + (pokemon.hasHeldItem() ? pokemon.getHeldItem().getItemName() : "None"));
 
-             System.out.println("\nOptions:");
-             System.out.println("1. Set Held Item");
-             System.out.println("2. Remove Held Item");
-             System.out.println("3. Back");
+            System.out.println("\nOptions:");
+            System.out.println("1. Set Held Item");
+            System.out.println("2. Remove Held Item");
+            System.out.println("3. Back");
 
-             int choice = InputUtils.getIntInput("Enter your choice: ");
-             switch (choice) {
-                 case 1 -> setPokemonHeldItem(trainer, pokemon);
-                 case 2 -> removePokemonHeldItem(pokemon);
-                 case 3 -> managing = false;
-                 default -> System.out.println("Invalid choice. Please try again.");
-             }
-         }
-     }
+            int choice = InputUtils.getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1 ->
+                    setPokemonHeldItem(trainer, pokemon);
+                case 2 ->
+                    removePokemonHeldItem(pokemon);
+                case 3 ->
+                    managing = false;
+                default ->
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
 
-     private void setPokemonHeldItem(Trainer trainer, Pokemon pokemon)
-     {
-         ArrayList<Item> itemInventory = trainer.getInventory();
-         if (itemInventory.isEmpty()) {
-             System.out.println("No Items in Inventory!");
-             return;
-         }
+    private void setPokemonHeldItem(Trainer trainer, Pokemon pokemon) {
+        ArrayList<Item> itemInventory = trainer.getInventory();
+        if (itemInventory.isEmpty()) {
+            System.out.println("No Items in Inventory!");
+            return;
+        }
 
-         System.out.println("\nAvailable Items: ");
-         Item.displayItemOptions();
-         for (int i = 0; i < itemInventory.size(); i++)
-         {
-             System.out.printf("%-6d ", i + 1);
-             itemInventory.get(i).displayAddedItems();
-         }
+        System.out.println("\nAvailable Items: ");
+        Item.displayItemOptions();
+        for (int i = 0; i < itemInventory.size(); i++) {
+            System.out.printf("%-6d ", i + 1);
+            itemInventory.get(i).displayAddedItems();
+        }
 
-         int itemChoice = InputUtils.getIntInput("Select an Item based on Option Number(0 to Cancel): ");
-         if(itemChoice == 0) { return; }
-         if(itemChoice < 1 || itemChoice > itemInventory.size())
-         {
-             System.out.println("Invalid Selection!");
-             return;
-         }
+        int itemChoice = InputUtils.getIntInput("Select an Item based on Option Number(0 to Cancel): ");
+        if (itemChoice == 0) {
+            return;
+        }
+        if (itemChoice < 1 || itemChoice > itemInventory.size()) {
+            System.out.println("Invalid Selection!");
+            return;
+        }
 
-         Item selectedItem = itemInventory.get(itemChoice - 1);
-         pokemon.setHeldItem(selectedItem);
-         System.out.println(pokemon.getPokemonName() + " is holding " + selectedItem.getItemName());
-     }
+        Item selectedItem = itemInventory.get(itemChoice - 1);
+        pokemon.setHeldItem(selectedItem);
+        System.out.println(pokemon.getPokemonName() + " is holding " + selectedItem.getItemName());
+    }
 
-     private void removePokemonHeldItem(Pokemon pokemon)
-     {
-         if (!pokemon.hasHeldItem()) {
-             System.out.println(pokemon.getPokemonName() + " is holding nothing!");
-             return;
-         }
+    private void removePokemonHeldItem(Pokemon pokemon) {
+        if (!pokemon.hasHeldItem()) {
+            System.out.println(pokemon.getPokemonName() + " is holding nothing!");
+            return;
+        }
 
-         Item removed = pokemon.removeHeldItem();
-         System.out.println(pokemon.getPokemonName() + " no longer holds " + removed.getItemName());
-     }
+        Item removed = pokemon.removeHeldItem();
+        System.out.println(pokemon.getPokemonName() + " no longer holds " + removed.getItemName());
+    }
+
+    // For GUI: add a Pokemon to the trainer's lineup or storage
+    public static boolean addPokemonToTrainerGUI(Trainer trainer, Pokemon pokemon) {
+        if (trainer != null && pokemon != null) {
+            return trainer.addPokemonToLineup(pokemon);
+        }
+        return false;
+    }
+
+    // For Terminal: add a Pokemon to the trainer's lineup or storage (can add CLI-specific logic if needed)
+    public static boolean addPokemonToTrainerTerminal(Trainer trainer, Pokemon pokemon) {
+        if (trainer != null && pokemon != null) {
+            return trainer.addPokemonToLineup(pokemon);
+        }
+        return false;
+    }
+
+    // For GUI: add a new trainer to a list (static helper)
+    public static void addTrainerToList(java.util.List<Trainer> trainerList, Trainer trainer) {
+        if (trainerList != null && trainer != null) {
+            trainerList.add(trainer);
+        }
+    }
+
 }
