@@ -48,7 +48,8 @@ public class TrainerController {
                 case 6 ->
                     handleItemTransaction(false); // Sell Item
                 case 7 ->
-                        manageTrainerPokemons();
+                    useItem();
+                case 8 -> manageTrainerPokemons();
                 case 0 ->
                     running = false;
                 default ->
@@ -279,8 +280,131 @@ public class TrainerController {
         }
     }
 
-    //Manages Trainer's pokemons
+    public void useItem()
+    {
+        Trainer t = selectTrainer();
+        if (t == null) {
+            System.out.println("\u001B[31mNo trainer selected.\u001B[0m");
+            return;
+        }
 
+        if (t.getInventory().isEmpty()) {
+            System.out.println("\u001B[31mInventory is empty.\u001B[0m");
+            return;
+        }
+
+        System.out.println("\n-- Trainer Inventory --");
+        Item.displayItemHeader();
+        for (int i = 0; i < t.getInventory().size(); i++) {
+            System.out.printf("%-3d ", i + 1);
+            t.getInventory().get(i).displayItem();
+        }
+
+        int itemChoice;
+
+        do
+        {
+            itemChoice = InputUtils.getIntInput("\nSelect item to use (0 to cancel): ");
+
+            if(itemChoice == 0) { return; }
+
+            if (itemChoice < 1 || itemChoice > t.getInventory().size())
+            {
+                System.out.println("Invalid Option. Please try again!");
+            }
+
+        } while(itemChoice == 0 || itemChoice < 1 || itemChoice > t.getInventory().size());
+
+        Item selectedItem = t.getInventory().get(itemChoice - 1);
+
+        System.out.println("\n-- Active Pokémon --");
+        displayPokemonList(t.getPokemonLineup(), "Lineup");
+
+        int pokemonChoice;
+
+        do
+        {
+            pokemonChoice = InputUtils.getIntInput("Select Pokémon to use item on (0 to cancel): ");
+
+            if(pokemonChoice == 0) { return; }
+
+            if (pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size())
+            {
+                System.out.println("Invalid Option. Please try again!");
+            }
+        } while(pokemonChoice == 0 || pokemonChoice < 1 || pokemonChoice > t.getPokemonLineup().size());
+
+        Pokemon targetPokemon = t.getPokemonLineup().get(pokemonChoice - 1);
+
+        applyItemEffect(selectedItem, targetPokemon);
+
+        if (!selectedItem.getItemCategory().equalsIgnoreCase("Held")) {
+            t.getInventory().remove(selectedItem);
+        }
+
+        System.out.printf("\u001B[32mUsed %s on %s!\u001B[0m%n",
+                selectedItem.getItemName(), targetPokemon.getPokemonName());
+
+    }
+
+    private void applyItemEffect(Item item, Pokemon pokemon) {
+        try {
+
+            if (item instanceof Vitamin) {
+                Vitamin vitamin = (Vitamin) item;
+                switch (item.getItemName()) {
+                    case "HP Up":
+                        vitamin.useHPUp(pokemon);
+                        break;
+                    case "Protein":
+                        vitamin.useProtein(pokemon);
+                        break;
+                    case "Iron":
+                        vitamin.useIron(pokemon);
+                        break;
+                    case "Carbos":
+                        vitamin.useCarbos(pokemon);
+                        break;
+                    case "Zinc":
+                        vitamin.useZinc(pokemon);
+                        break;
+                }
+                return;
+            }
+
+            if (item instanceof Feather) {
+                Feather feather = (Feather) item;
+                if (item.getItemName().contains("Health")) {
+                    feather.useHealthFeather(pokemon);
+                } else if (item.getItemName().contains("Muscle")) {
+                    feather.useMuscleFeather(pokemon);
+                } else if (item.getItemName().contains("Resist")) {
+                    feather.useResistFeather(pokemon);
+                } else if (item.getItemName().contains("Swift")) {
+                    feather.useSwiftFeather(pokemon);
+                }
+                return;
+            }
+
+
+
+            // Handle Levelling items
+            if (item instanceof Levelling) {
+                Levelling levelling = (Levelling) item;
+                if (item.getItemName().equals("Rare Candy")) {
+                    levelling.useRareCandy(pokemon);
+                    System.out.printf("%s grew to level %d!%n",
+                            pokemon.getPokemonName(), pokemon.getBaseLevel());
+                }
+                return;
+            }
+
+        } catch (Exception e) {
+            System.out.println("\u001B[31mFailed to use item: " + e.getMessage() + "\u001B[0m");
+        }
+    }
+
+    //Manages Trainer's pokemons
     private void manageTrainerPokemons()
     {
         System.out.println("\n-- Manage Trainer's Pokémon --");

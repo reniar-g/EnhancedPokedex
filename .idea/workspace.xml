@@ -6,9 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e23e5c72-f8f9-4153-af29-f6c448152509" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCPROG3 MP Specifications - Enhanced Pokedex.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Specifications - Enhanced Pokedex.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ItemView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Feather.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Feather.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Levelling.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Levelling.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Pokemon.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Vitamin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Vitamin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/util/MenuArtUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/MenuArtUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

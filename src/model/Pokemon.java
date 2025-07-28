@@ -110,6 +110,72 @@ public class Pokemon {
         return heldItem;
     }
 
+    //Setters for Pokemon Attributes
+    public void setPokedexNumber(int pokedexNumber)
+    {
+        this.pokedexNumber = pokedexNumber;
+    }
+
+    public void setPokemonName(String pokemonName)
+    {
+        this.pokemonName = pokemonName;
+    }
+
+    public void setPokemonType1(String pokemonType1)
+    {
+        this.pokemonType1 = pokemonType1;
+    }
+
+    public void setPokemonType2(String pokemonType2)
+    {
+        this.pokemonType2 = pokemonType2;
+    }
+
+    public void setBaseLevel(int baseLevel)
+    {
+        this.baseLevel = baseLevel;
+    }
+
+    public void setEvolvesFrom(Integer evolvesFrom)
+    {
+        this.evolvesFrom = evolvesFrom;
+    }
+
+    public void setEvolvesTo(Integer evolvesTo)
+    {
+        this.evolvesTo = evolvesTo;
+    }
+
+    public void setEvolutionLevel(Integer evolutionLevel)
+    {
+        this.evolutionLevel = evolutionLevel;
+    }
+
+    public void setHP(double hp)
+    {
+        this.hp = hp;
+    }
+
+    public void setAttack(double attack)
+    {
+        this.attack = attack;
+    }
+
+    public void setDefense(double defense)
+    {
+        this.defense = defense;
+    }
+
+    public void setSpeed(double speed)
+    {
+        this.speed = speed;
+    }
+
+    public void setMoveSet(List<Move> moveSet)
+    {
+        this.moveSet = moveSet;
+    }
+
     /**
      * Sets the Pokémon's held item.
      */
@@ -135,6 +201,35 @@ public class Pokemon {
         return this.heldItem != null;
     }
 
+    public void addHealth(int healAmount)
+    {
+        hp += healAmount;
+        System.out.println(pokemonName + " adds " + healAmount + " to Health Stats. Health: " + hp);
+    }
+
+    public void addAttack(int attackAmount)
+    {
+        attack += attackAmount;
+        System.out.println(pokemonName + " adds " + attackAmount + " to Attack Stats. Attack: " + attack);
+    }
+
+    public void addDefense(int defenseAmount)
+    {
+        defense += defenseAmount;
+        System.out.println(pokemonName + " adds " + defenseAmount + " to Defense Stats. Defense: " + defense);
+    }
+
+    public void addSpeed(int speedAmount)
+    {
+        speed += speedAmount;
+        System.out.println(pokemonName + " adds " + speedAmount + " to Speed Stats. Speed: " + speed);
+    }
+
+    public void levelUp(int levelAmount)
+    {
+        baseLevel += levelAmount;
+        System.out.println(pokemonName + " levelled up! New Level: " + baseLevel);
+    }
     /**
      * Simulates the Pokémon's cry.
      */

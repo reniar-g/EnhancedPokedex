@@ -66,83 +66,6 @@ public class Trainer {
 
     public ArrayList<Pokemon> getPokemonStorage() { return pokemonStorage; }
 
-    public void addItem(Item item) {
-        inventory.add(item);
-    }
-
-    // Removes an item from the trainer's inventory
-    // Returns true if the item was successfully removed, false if it was not found
-    public boolean removeItem(Item item) {
-        return inventory.remove(item);
-    }
-
-    // Checks if the trainer has a specific item in their inventory
-    public boolean hasItem(Item item) {
-        return inventory.contains(item);
-    }
-
-    // Displays the trainer's inventory
-    public void displayInventory() {
-        if (inventory.isEmpty()) {
-            System.out.println("Inventory is empty.");
-            return;
-        }
-        Item.displayItemHeader();
-        for (Item item : inventory) {
-            item.displayItem();
-        }
-    }
-
-    public boolean addPokemonToLineup(Pokemon pokemon)
-    {
-        if(pokemonLineup.size() < 6)
-        {
-            pokemonLineup.add(pokemon);
-            return true;
-        }
-        else
-        {
-            pokemonStorage.add(pokemon);
-            return false;
-        }
-    }
-
-    public boolean switchPokemonToLineup(int storageIndex)
-    {
-        if(pokemonLineup.size() > 6)
-        {
-            return false;
-        }
-
-        if(storageIndex >= 0 && storageIndex < pokemonStorage.size())
-        {
-            pokemonLineup.add(pokemonStorage.remove(storageIndex));
-            return true;
-        }
-
-        return false;
-    }
-
-    public Pokemon releasePokemon(boolean isLineup, int index)
-    {
-        if(isLineup)
-        {
-            if(index >= 0 && index < pokemonLineup.size())
-            {
-                return pokemonLineup.remove(index);
-            }
-        }
-        else
-        {
-            if(index >= 0 && index < pokemonStorage.size())
-            {
-                return pokemonStorage.remove(index);
-            }
-        }
-
-        return null;
-    }
-
     //SETTERS
     public void setTrainerMoney(double money) {
         this.trainerMoney = money;
@@ -169,5 +92,14 @@ public class Trainer {
                 trainerHometown,
                 trainerDescription,
                 trainerMoney);
+    }
+
+    public Item getItemByName(String itemName) {
+        for (Item i : inventory) {
+            if (i.getItemName().equalsIgnoreCase(itemName)) {
+                return i;
+            }
+        }
+        return null;
     }
 }
