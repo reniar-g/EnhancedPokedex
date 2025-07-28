@@ -902,7 +902,7 @@ public class TrainerController {
         return false;
     }
 
-    // For Terminal: add a Pokemon to the trainer's lineup or storage (can add CLI-specific logic if needed)
+    // For Terminal: add a Pokemon to the trainer's lineup or storage 
     public static boolean addPokemonToTrainerTerminal(Trainer trainer, Pokemon pokemon) {
         if (trainer != null && pokemon != null) {
             return trainer.addPokemonToLineup(pokemon);

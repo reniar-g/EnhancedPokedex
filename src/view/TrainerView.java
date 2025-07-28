@@ -1,8 +1,8 @@
 package view;
-import java.util.ArrayList;
 
 import controller.TrainerController;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import model.Trainer;
@@ -29,7 +29,7 @@ public class TrainerView extends JPanel {
     private void showTrainersWelcomePanel(Runnable onHome) {
         // Remove existing panels first
         removeAll();
-        
+
         trainersWelcomePanel = new JPanel(null);
         trainersWelcomePanel.setOpaque(false);
         trainersWelcomePanel.setBounds(0, 0, 901, 706);
@@ -70,15 +70,15 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        addBtn.addActionListener(e -> showAddTrainer(onHome));
-        viewBtn.addActionListener(e -> showViewAllTrainers(onHome));
-        selectBtn.addActionListener(e -> showManageTrainers(onHome));
+        addBtn.addActionListener(evt -> showAddTrainer(onHome));
+        viewBtn.addActionListener(evt -> showViewAllTrainers(onHome));
+        selectBtn.addActionListener(evt -> showManageTrainers(onHome));
     }
 
     // View all trainers (list + search)
     private void showViewAllTrainers(Runnable onHome) {
         removeAll();
-        
+
         trainersMainPanel = new JPanel(null);
         trainersMainPanel.setOpaque(false);
         trainersMainPanel.setBounds(0, 0, 901, 706);
@@ -114,57 +114,31 @@ public class TrainerView extends JPanel {
                 "Search"
         );
 
-        search.button.addActionListener(e -> {
+        search.button.addActionListener(evt -> {
             String query = search.field.getText().trim();
             if (query.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Enter a trainer name.");
                 return;
             }
             Trainer found = null;
+            int foundNum = 1;
             for (Trainer t : trainerList) {
                 if (t.getTrainerName().equalsIgnoreCase(query)) {
                     found = t;
                     break;
                 }
+                foundNum++;
             }
             if (found != null) {
-                // Get active lineup and inventory
-                StringBuilder lineup = new StringBuilder();
-                if (found.getPokemonLineup() != null && !found.getPokemonLineup().isEmpty()) {
-                    for (model.Pokemon p : found.getPokemonLineup()) {
-                        lineup.append(p.getPokemonName()).append(", ");
-                    }
-                    if (lineup.length() > 2) lineup.setLength(lineup.length() - 2);
-                } else {
-                    lineup.append("None");
-                }
-                StringBuilder inventory = new StringBuilder();
-                if (found.getInventory() != null && !found.getInventory().isEmpty()) {
-                    for (model.Item item : found.getInventory()) {
-                        inventory.append(item.getItemName()).append("<br>");
-                    }
-                } else {
-                    inventory.append("None");
-                }
-                JOptionPane.showMessageDialog(this,
-                        "<html><b>Trainer Searched</b><br><br>"
-                        + "ID: <b>" + found.getTrainerId() + "</b><br>"
-                        + "Name: " + found.getTrainerName() + "<br>"
-                        + "Birthdate: " + found.getTrainerBirthdate() + "<br>"
-                        + "Sex: " + found.getTrainerSex() + "<br>"
-                        + "Hometown: " + found.getTrainerHometown() + "<br>"
-                        + "Description: " + found.getTrainerDescription() + "<br>"
-                        + "Money: " + found.getTrainerMoney() + "<br>"
-                        + "<b>Active Lineup:</b> " + lineup + "<br>"
-                        + "<b>Inventory:</b><br>" + inventory + "</html>"
-                );
+                JLabel trainerLabel = getJLabelWithPokemonAndInventory(found, foundNum);
+                JOptionPane.showMessageDialog(this, trainerLabel, "Trainer Searched", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(this, "Trainer not found.");
             }
         });
 
         // Home button
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -172,7 +146,7 @@ public class TrainerView extends JPanel {
         trainersMainPanel.add(btnHome);
 
         // Back button
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> showTrainersWelcomePanel(onHome));
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> showTrainersWelcomePanel(onHome));
         trainersMainPanel.add(backBtn);
 
         add(trainersMainPanel);
@@ -187,7 +161,9 @@ public class TrainerView extends JPanel {
             for (model.Pokemon p : t.getPokemonLineup()) {
                 lineup.append(p.getPokemonName()).append(", ");
             }
-            if (lineup.length() > 2) lineup.setLength(lineup.length() - 2);
+            if (lineup.length() > 2) {
+                lineup.setLength(lineup.length() - 2);
+            }
         } else {
             lineup.append("None");
         }
@@ -215,8 +191,8 @@ public class TrainerView extends JPanel {
                 + "Hometown: " + t.getTrainerHometown() + "<br>"
                 + "<div style='width:250px; text-align:justify;'>Description: " + t.getTrainerDescription() + "</div><br>"
                 + "Money: " + t.getTrainerMoney() + "<br>"
-                + "<b>Active Lineup:</b> " + lineup + "<br>"
-                + "<b>Inventory:</b> " + inventory
+                + "<b>Active Lineup:</b> <div style='width:250px; text-align:justify; display:inline;'>" + lineup + "</div><br>"
+                + "<b>Inventory:</b> <div style='width:250px; text-align:justify; display:inline;'>" + inventory + "</div>"
                 + "<br><br>"
                 + "</html>";
 
@@ -302,7 +278,7 @@ public class TrainerView extends JPanel {
         JButton submitBtn = GUIUtils.createNavButton("Submit", 787, 345, 67, 35, null);
         addPanel.add(submitBtn);
 
-        submitBtn.addActionListener(e -> {
+        submitBtn.addActionListener(evt -> {
             // Validate all fields
             String idText = idField.getText().trim();
             String nameText = nameField.getText().trim();
@@ -352,7 +328,7 @@ public class TrainerView extends JPanel {
         });
 
         // Home button
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -360,7 +336,7 @@ public class TrainerView extends JPanel {
         addPanel.add(btnHome);
 
         // Back button
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainersWelcomePanel(onHome);
         });
         addPanel.add(backBtn);
@@ -407,7 +383,7 @@ public class TrainerView extends JPanel {
         trainersMainPanel.add(selectBtn);
 
         // Home button
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -415,7 +391,7 @@ public class TrainerView extends JPanel {
         trainersMainPanel.add(btnHome);
 
         // Back button
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainersWelcomePanel(onHome);
         });
         trainersMainPanel.add(backBtn);
@@ -424,7 +400,7 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        selectBtn.addActionListener(e -> {
+        selectBtn.addActionListener(evt -> {
             ButtonModel selected = group.getSelection();
             if (selected == null) {
                 JOptionPane.showMessageDialog(this, "Please select a trainer.");
@@ -446,8 +422,8 @@ public class TrainerView extends JPanel {
 
         GUIUtils.addWelcomeLabel(actionPanel, "Trainer Action Menu", 35, 39, 353, 40);
 
-        JLabel greetLabel = new JLabel("<html><div style='text-align:justify;'>How do you want to manage <b>Trainer " 
-         + trainer.getTrainerName() + "?</b></div></html>");
+        JLabel greetLabel = new JLabel("<html><div style='text-align:justify;'>How do you want to manage <b>Trainer "
+                + trainer.getTrainerName() + "?</b></div></html>");
         greetLabel.setFont(new Font("Consolas", Font.PLAIN, 20));
         greetLabel.setBounds(49, 105, 334, 500);
         greetLabel.setHorizontalAlignment(SwingConstants.LEFT);
@@ -460,12 +436,12 @@ public class TrainerView extends JPanel {
         JButton managePokeBtn = GUIUtils.createButton2("Manage Pokémon", 640, 345, 140, 35);
         actionPanel.add(managePokeBtn);
 
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showManageTrainers(onHome);
         });
         actionPanel.add(backBtn);
 
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -476,8 +452,8 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        manageItemsBtn.addActionListener(e -> showManageItems(trainer, onHome));
-        managePokeBtn.addActionListener(e -> showManagePokemons(trainer, onHome));
+        manageItemsBtn.addActionListener(evt -> showManageItems(trainer, onHome));
+        managePokeBtn.addActionListener(evt -> showManagePokemons(trainer, onHome));
     }
 
     // Manage Items: Buy, Sell, Use, View Inventory
@@ -489,6 +465,16 @@ public class TrainerView extends JPanel {
         mainPanel.setBounds(0, 0, 901, 706);
 
         GUIUtils.addWelcomeLabel(mainPanel, "Manage Items", 35, 39, 353, 40);
+        // Description label
+        JLabel descLabel = new JLabel("<html><div style='width:320px; text-align:justify;'>"
+                + "<b>Welcome to the Item Management Panel!</b><br><br>"
+                + "Here you can buy, sell, use, or view your trainer's items."
+                + "<br><br>Select an action below to manage your inventory." + "</div></html>");
+        descLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        descLabel.setBounds(45, 100, 330, 100);
+        descLabel.setVerticalAlignment(SwingConstants.TOP);
+        descLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        mainPanel.add(descLabel);
 
         // Buttons for actions
         JButton buyBtn = GUIUtils.createButton1("Buy Item", 493, 345, 140, 35);
@@ -501,7 +487,7 @@ public class TrainerView extends JPanel {
         mainPanel.add(viewInvBtn);
 
         // Home button
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -509,7 +495,7 @@ public class TrainerView extends JPanel {
         mainPanel.add(btnHome);
 
         // Back button
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainerActionMenu(trainer, onHome);
         });
         mainPanel.add(backBtn);
@@ -519,10 +505,10 @@ public class TrainerView extends JPanel {
         repaint();
 
         // --- Action handlers ---
-        buyBtn.addActionListener(e -> showBuyItemPanel(trainer, onHome));
-        sellBtn.addActionListener(e -> showSellItemPanel(trainer, onHome));
-        useBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Use Item: Not yet implemented."));
-        viewInvBtn.addActionListener(e -> showTrainerInventoryDialog(trainer));
+        buyBtn.addActionListener(evt -> showBuyItemPanel(trainer, onHome));
+        sellBtn.addActionListener(evt -> showSellItemPanel(trainer, onHome));
+        useBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Use Item: Not yet implemented."));
+        viewInvBtn.addActionListener(evt -> showTrainerInventoryDialog(trainer, onHome));
     }
 
     // Buy Item panel (modern layout)
@@ -539,41 +525,88 @@ public class TrainerView extends JPanel {
         int itemNum = 1;
         for (model.Item i : itemList) {
             JLabel itemLabel = new JLabel(
-                "<html>"
-                + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
-                + "<div style='width:250px; text-align:justify;'>Description: " + i.getItemDescription() + "</div><br>"
-                + "Effect: " + i.getItemEffect() + "<br>"
-                + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
-                + "<br><br>"
-                + "</html>");
+                    "<html>"
+                    + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
+                    + "<div style='width:250px; text-align:justify;'>Description: " + i.getItemDescription() + "</div><br>"
+                    + "Effect: " + i.getItemEffect() + "<br>"
+                    + "Buy Price: " + i.getItemPrice() + " | Sell Price: " + i.getItemSellPrice()
+                    + "<br><br>"
+                    + "</html>");
             itemLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
             listPanel.add(itemLabel);
             itemNum++;
         }
         GUIUtils.createLabeledScrollPanel(
-            buyPanel,
-            "<html><span style='font-size:18px;'><b>List of Items</b></span></html>",
-            34, 90, 356, 30,
-            45, 125, 330, 320,
-            listPanel
+                buyPanel,
+                "<html><span style='font-size:18px;'><b>List of Items</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 320,
+                listPanel
         );
-        GUIUtils.SearchFieldComponents buy = GUIUtils.createSearchField(
-            buyPanel,
-            "Buy Item:",
-            490, 442, 307, 50,
-            560, 500, 180, 30,
-            645, 565, 62, 43,
-            "Buy"
-        );
-        buy.button.addActionListener(e -> {
-            String query = buy.field.getText().trim();
-            if (query.isEmpty()) {
+        // Item name input
+        JLabel nameLabel = new JLabel("Item Name:");
+        nameLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        nameLabel.setBounds(510, 475, 100, 30);
+        nameLabel.setForeground(Color.BLACK);
+        buyPanel.add(nameLabel);
+
+        JTextField nameField = new JTextField();
+        nameField.setBounds(510, 500, 180, 30);
+        buyPanel.add(nameField);
+
+        // Quantity input
+        JLabel qtyLabel = new JLabel("Quantity:");
+        qtyLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        qtyLabel.setBounds(710, 475, 100, 30);
+        qtyLabel.setForeground(Color.BLACK);
+        buyPanel.add(qtyLabel);
+
+        JTextField qtyField = new JTextField("1");
+        qtyField.setBounds(710, 500, 60, 30);
+        buyPanel.add(qtyField);
+
+        // Buy button
+        JButton buyButton = new JButton("Buy");
+        buyButton.setFont(new Font("Consolas", Font.BOLD, 14));
+        buyButton.setMargin(new Insets(0, 0, 0, 0));
+        buyButton.setBounds(645, 565, 62, 43);
+        buyButton.setBackground(GUIUtils.POKEDEX_GREEN);
+        buyButton.setBackground(GUIUtils.POKEDEX_GREEN);
+        buyPanel.add(buyButton);
+
+        JLabel detailsLabel = new JLabel("Enter Details:");
+        detailsLabel.setFont(new Font("Consolas", Font.BOLD, 20));
+        detailsLabel.setBounds(490, 442, 307, 30);
+        detailsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        detailsLabel.setVerticalAlignment(SwingConstants.CENTER);
+        detailsLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        detailsLabel.setBackground(GUIUtils.POKEDEX_GREEN);
+        detailsLabel.setOpaque(true);
+        buyPanel.add(detailsLabel);
+
+        buyButton.addActionListener(e -> {
+            String itemName = nameField.getText().trim();
+            String qtyStr = qtyField.getText().trim();
+
+            if (itemName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Enter an item name to buy.");
                 return;
             }
+
+            int quantity;
+            try {
+                quantity = Integer.parseInt(qtyStr);
+                if (quantity <= 0) {
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid quantity (greater than 0).");
+                return;
+            }
+
             model.Item found = null;
             for (model.Item i : itemList) {
-                if (i.getItemName().equalsIgnoreCase(query)) {
+                if (i.getItemName().equalsIgnoreCase(itemName)) {
                     found = i;
                     break;
                 }
@@ -582,35 +615,43 @@ public class TrainerView extends JPanel {
                 JOptionPane.showMessageDialog(this, "Item not found.");
                 return;
             }
-            double price = 0;
+            double unitPrice = 0;
             try {
                 // Remove all non-digit characters (except dot for decimals)
                 String priceStr = found.getItemPrice().replaceAll("[^0-9.]", "");
-                price = Double.parseDouble(priceStr);
+                unitPrice = Double.parseDouble(priceStr);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Invalid item price.");
                 return;
             }
-            if (trainer.getTrainerMoney() < price) {
-                JOptionPane.showMessageDialog(this, "Not enough money.");
+
+            double totalPrice = unitPrice * quantity;
+            if (trainer.getTrainerMoney() < totalPrice) {
+                JOptionPane.showMessageDialog(this, "Not enough money to buy " + quantity + " " + found.getItemName() + "(s).");
                 return;
             }
-            boolean added = trainer.addItem(found);
-            if (!added) {
-                JOptionPane.showMessageDialog(this, "Cannot add item: inventory full or unique item limit reached.");
-                return;
+
+            for (int i = 0; i < quantity; i++) {
+                boolean added = trainer.addItem(found);
+                if (!added) {
+                    JOptionPane.showMessageDialog(this, "Could only add " + i + " item(s): inventory full or unique item limit reached.");
+                    // Refund any partially added items
+                    trainer.setTrainerMoney(trainer.getTrainerMoney() - (unitPrice * i));
+                    return;
+                }
             }
-            trainer.setTrainerMoney(trainer.getTrainerMoney() - price);
-            JOptionPane.showMessageDialog(this, "Bought " + found.getItemName() + " for ₱" + price + ".");
-            buy.field.setText("");
+
+            trainer.setTrainerMoney(trainer.getTrainerMoney() - totalPrice);
+            JOptionPane.showMessageDialog(this, "Bought " + quantity + " " + found.getItemName() + "(s) for ₱" + totalPrice + ".");
+            nameField.setText("");
         });
-        JButton btnHome = MainPokedexView.homeButton(ev -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
         });
         buyPanel.add(btnHome);
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, ev -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showManageItems(trainer, onHome);
         });
         buyPanel.add(backBtn);
@@ -636,13 +677,13 @@ public class TrainerView extends JPanel {
             if (!shownIds.contains(item.getItemId())) {
                 int qty = trainer.getItemQuantity(item);
                 JLabel itemLabel = new JLabel(
-                    "<html>"
-                    + "<span style='font-size:13px;'><b>#" + itemNum + "  " + item.getItemName() + "</b> | " + item.getItemCategory() + " (x" + qty + ")</span><br>"
-                    + "<div style='width:250px; text-align:justify;'>Description: " + item.getItemDescription() + "</div><br>"
-                    + "Effect: " + item.getItemEffect() + "<br>"
-                    + "Sell Price: " + item.getItemSellPrice()
-                    + "<br><br>"
-                    + "</html>");
+                        "<html>"
+                        + "<span style='font-size:13px;'><b>#" + itemNum + "  " + item.getItemName() + "</b> | " + item.getItemCategory() + " (x" + qty + ")</span><br>"
+                        + "<div style='width:250px; text-align:justify;'>Description: " + item.getItemDescription() + "</div><br>"
+                        + "Effect: " + item.getItemEffect() + "<br>"
+                        + "Sell Price: " + item.getItemSellPrice()
+                        + "<br><br>"
+                        + "</html>");
                 itemLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
                 listPanel.add(itemLabel);
                 shownIds.add(item.getItemId());
@@ -650,29 +691,76 @@ public class TrainerView extends JPanel {
             }
         }
         GUIUtils.createLabeledScrollPanel(
-            sellPanel,
-            "<html><span style='font-size:18px;'><b>Trainer Inventory</b></span></html>",
-            34, 90, 356, 30,
-            45, 125, 330, 320,
-            listPanel
+                sellPanel,
+                "<html><span style='font-size:18px;'><b>Trainer Inventory</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 320,
+                listPanel
         );
-        GUIUtils.SearchFieldComponents sell = GUIUtils.createSearchField(
-            sellPanel,
-            "Sell Item:",
-            490, 442, 307, 50,
-            560, 500, 180, 30,
-            645, 565, 62, 43,
-            "Sell"
-        );
-        sell.button.addActionListener(e -> {
-            String query = sell.field.getText().trim();
-            if (query.isEmpty()) {
+
+        JLabel detailsLabel = new JLabel("Enter Details:");
+        detailsLabel.setFont(new Font("Consolas", Font.BOLD, 20));
+        detailsLabel.setBounds(490, 442, 307, 30);
+        detailsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        detailsLabel.setVerticalAlignment(SwingConstants.CENTER);
+        detailsLabel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        detailsLabel.setBackground(GUIUtils.POKEDEX_GREEN);
+        detailsLabel.setOpaque(true);
+        sellPanel.add(detailsLabel);
+
+        // Item name input
+        JLabel nameLabel = new JLabel("Item Name:");
+        nameLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        nameLabel.setBounds(510, 475, 100, 30);
+        nameLabel.setForeground(Color.BLACK);
+        sellPanel.add(nameLabel);
+
+        JTextField nameField = new JTextField();
+        nameField.setBounds(510, 500, 180, 30);
+        sellPanel.add(nameField);
+
+        // Quantity input
+        JLabel qtyLabel = new JLabel("Quantity:");
+        qtyLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
+        qtyLabel.setBounds(710, 475, 100, 30);
+        qtyLabel.setForeground(Color.BLACK);
+        sellPanel.add(qtyLabel);
+
+        JTextField qtyField = new JTextField("1");
+        qtyField.setBounds(710, 500, 60, 30);
+        sellPanel.add(qtyField);
+
+        // Sell button
+        JButton sellButton = new JButton("Sell");
+        sellButton.setFont(new Font("Consolas", Font.BOLD, 14));
+        sellButton.setMargin(new Insets(0, 0, 0, 0));
+        sellButton.setBounds(645, 565, 62, 43);
+        sellButton.setBackground(GUIUtils.POKEDEX_GREEN);
+        sellPanel.add(sellButton);
+
+        sellButton.addActionListener(e -> {
+            String itemName = nameField.getText().trim();
+            String qtyStr = qtyField.getText().trim();
+
+            if (itemName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Enter an item name to sell.");
                 return;
             }
+
+            int quantity;
+            try {
+                quantity = Integer.parseInt(qtyStr);
+                if (quantity <= 0) {
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid quantity (greater than 0).");
+                return;
+            }
+
             model.Item found = null;
             for (model.Item item : inv) {
-                if (item.getItemName().equalsIgnoreCase(query)) {
+                if (item.getItemName().equalsIgnoreCase(itemName)) {
                     found = item;
                     break;
                 }
@@ -681,32 +769,52 @@ public class TrainerView extends JPanel {
                 JOptionPane.showMessageDialog(this, "Item not found in inventory.");
                 return;
             }
-            double price = 0;
+
+            // Check if trainer has enough of the item
+            int available = trainer.getItemQuantity(found);
+            if (available < quantity) {
+                JOptionPane.showMessageDialog(this, "You only have " + available + " " + found.getItemName() + "(s).");
+                return;
+            }
+
+            double unitPrice = 0;
             try {
                 // Remove all non-digit characters (except dot for decimals)
-                String priceStr = found.getItemPrice().replaceAll("[^0-9.]", "");
-                price = Double.parseDouble(priceStr);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Invalid item price.");
+                String priceStr = found.getItemSellPrice().replaceAll("[^0-9.]", "");
+                unitPrice = Double.parseDouble(priceStr);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid item sell price format.");
                 return;
             }
-            boolean removed = trainer.removeItem(found);
-            if (!removed) {
-                JOptionPane.showMessageDialog(this, "Could not remove item.");
-                return;
+
+            // Try to sell all items
+            for (int i = 0; i < quantity; i++) {
+                boolean removed = trainer.removeItem(found);
+                if (!removed) {
+                    if (i > 0) {
+                        JOptionPane.showMessageDialog(this, "Could only sell " + i + " item(s).");
+                        // Add money for partial sale
+                        trainer.setTrainerMoney(trainer.getTrainerMoney() + (unitPrice * i));
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Could not sell item.");
+                    }
+                    return;
+                }
             }
-            double gain = price * 0.5;
-            trainer.setTrainerMoney(trainer.getTrainerMoney() + gain);
-            JOptionPane.showMessageDialog(this, "Sold " + found.getItemName() + " for ₱" + gain + ".");
-            sell.field.setText("");
+
+            double totalGain = unitPrice * quantity;
+            trainer.setTrainerMoney(trainer.getTrainerMoney() + totalGain);
+            JOptionPane.showMessageDialog(this, "Sold " + quantity + " " + found.getItemName() + "(s) for ₱" + totalGain + ".");
+            nameField.setText("");
+            qtyField.setText("1");
         });
-        JButton btnHome = MainPokedexView.homeButton(ev -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
         });
         sellPanel.add(btnHome);
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, ev -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showManageItems(trainer, onHome);
         });
         sellPanel.add(backBtn);
@@ -716,7 +824,7 @@ public class TrainerView extends JPanel {
     }
 
     // View Inventory dialog
-    private void showTrainerInventoryDialog(Trainer trainer) {
+    private void showTrainerInventoryDialog(Trainer trainer, Runnable onHome) {
         // Show inventory in a full panel, similar to buy/sell
         removeAll();
         JPanel invPanel = new JPanel(null);
@@ -733,13 +841,13 @@ public class TrainerView extends JPanel {
             if (!shownIds.contains(item.getItemId())) {
                 int qty = trainer.getItemQuantity(item);
                 JLabel itemLabel = new JLabel(
-                    "<html>"
-                    + "<span style='font-size:13px;'><b>#" + itemNum + "  " + item.getItemName() + "</b> (x" + qty + ") | " + item.getItemCategory() + "</span><br>"
-                    + "<div style='width:250px; text-align:justify;'>Description: " + item.getItemDescription() + "</div><br>"
-                    + "Effect: " + item.getItemEffect() + "<br>"
-                    + "Buy Price: " + item.getItemPrice() + " | Sell Price: " + item.getItemSellPrice()
-                    + "<br><br>"
-                    + "</html>");
+                        "<html>"
+                        + "<span style='font-size:13px;'><b>#" + itemNum + "  " + item.getItemName() + "</b> (x" + qty + ") | " + item.getItemCategory() + "</span><br>"
+                        + "<div style='width:250px; text-align:justify;'>Description: " + item.getItemDescription() + "</div><br>"
+                        + "Effect: " + item.getItemEffect() + "<br>"
+                        + "Buy Price: " + item.getItemPrice() + " | Sell Price: " + item.getItemSellPrice()
+                        + "<br><br>"
+                        + "</html>");
                 itemLabel.setFont(new Font("Consolas", Font.PLAIN, 12));
                 listPanel.add(itemLabel);
                 shownIds.add(item.getItemId());
@@ -752,18 +860,26 @@ public class TrainerView extends JPanel {
             listPanel.add(emptyLabel);
         }
         GUIUtils.createLabeledScrollPanel(
-            invPanel,
-            "<html><span style='font-size:18px;'><b>Trainer Inventory</b></span></html>",
-            34, 90, 356, 30,
-            45, 125, 330, 320,
-            listPanel
+                invPanel,
+                "<html><span style='font-size:18px;'><b>Trainer Inventory</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 320,
+                listPanel
         );
-        JButton btnHome = MainPokedexView.homeButton(ev -> {
-            if (trainer != null) showTrainersWelcomePanel(null);
+        // Use onHome callback for Home button, matching ItemView
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) {
+                onHome.run();
+            } else {
+                // fallback: just remove panel
+                removeAll();
+                revalidate();
+                repaint();
+            }
         });
         invPanel.add(btnHome);
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, ev -> {
-            showManageItems(trainer, null);
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            showManageItems(trainer, onHome);
         });
         invPanel.add(backBtn);
         add(invPanel);
@@ -796,12 +912,12 @@ public class TrainerView extends JPanel {
         pokePanel.add(viewLineupBtn);
         pokePanel.add(viewStorageBtn);
 
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainerActionMenu(trainer, onHome);
         });
         pokePanel.add(backBtn);
 
-        JButton btnHome = MainPokedexView.homeButton(e -> {
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -813,9 +929,9 @@ public class TrainerView extends JPanel {
         repaint();
 
         // Action handlers for Pokemon management
-        teachMoveBtn.addActionListener(e -> JOptionPane.showMessageDialog(this, "Teach Move: Not yet implemented."));
-        viewLineupBtn.addActionListener(e -> showPokemonLineupDialog(trainer));
-        viewStorageBtn.addActionListener(e -> showPokemonStorageDialog(trainer));
+        teachMoveBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Teach Move: Not yet implemented."));
+        viewLineupBtn.addActionListener(evt -> showPokemonLineupDialog(trainer));
+        viewStorageBtn.addActionListener(evt -> showPokemonStorageDialog(trainer));
     }
 
     // Show Pokemon lineup dialog
@@ -829,15 +945,15 @@ public class TrainerView extends JPanel {
             int num = 1;
             for (model.Pokemon p : lineup) {
                 sb.append(num).append(". ").append(p.getPokemonName())
-                  .append(" (Level ").append(p.getBaseLevel()).append(")\n")
-                  .append("   Type: ").append(p.getPokemonType1());
+                        .append(" (Level ").append(p.getBaseLevel()).append(")\n")
+                        .append("   Type: ").append(p.getPokemonType1());
                 if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
                     sb.append("/").append(p.getPokemonType2());
                 }
-                sb.append("\n   HP: ").append((int)p.getHp())
-                  .append(" | ATK: ").append((int)p.getAttack())
-                  .append(" | DEF: ").append((int)p.getDefense())
-                  .append(" | SPD: ").append((int)p.getSpeed()).append("\n\n");
+                sb.append("\n   HP: ").append((int) p.getHp())
+                        .append(" | ATK: ").append((int) p.getAttack())
+                        .append(" | DEF: ").append((int) p.getDefense())
+                        .append(" | SPD: ").append((int) p.getSpeed()).append("\n\n");
                 num++;
             }
         }
@@ -855,15 +971,15 @@ public class TrainerView extends JPanel {
             int num = 1;
             for (model.Pokemon p : storage) {
                 sb.append(num).append(". ").append(p.getPokemonName())
-                  .append(" (Level ").append(p.getBaseLevel()).append(")\n")
-                  .append("   Type: ").append(p.getPokemonType1());
+                        .append(" (Level ").append(p.getBaseLevel()).append(")\n")
+                        .append("   Type: ").append(p.getPokemonType1());
                 if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
                     sb.append("/").append(p.getPokemonType2());
                 }
-                sb.append("\n   HP: ").append((int)p.getHp())
-                  .append(" | ATK: ").append((int)p.getAttack())
-                  .append(" | DEF: ").append((int)p.getDefense())
-                  .append(" | SPD: ").append((int)p.getSpeed()).append("\n\n");
+                sb.append("\n   HP: ").append((int) p.getHp())
+                        .append(" | ATK: ").append((int) p.getAttack())
+                        .append(" | DEF: ").append((int) p.getDefense())
+                        .append(" | SPD: ").append((int) p.getSpeed()).append("\n\n");
                 num++;
             }
         }
