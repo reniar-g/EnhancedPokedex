@@ -167,22 +167,27 @@ public class Trainer {
         return inventory.size();
     }
 
-    // Displays the trainer's inventory with quantities
-    public void displayInventory() {
-        if (inventory.isEmpty()) {
-            System.out.println("Inventory is empty.");
-            return;
-        }
-        System.out.printf("%-6s %-16s %-17s %-8s\n", "ID", "Item Name", "Category", "Qty");
-        System.out.println("----------------------------------------------------------");
-        ArrayList<Integer> shownIds = new ArrayList<>();
-        for (Item item : inventory) {
-            if (!shownIds.contains(item.getItemId())) {
-                int qty = getItemQuantity(item);
-                System.out.printf("%-6d %-16s %-17s %-8d\n", item.getItemId(), item.getItemName(), item.getItemCategory(), qty);
-                shownIds.add(item.getItemId());
+    /**
+     * Gets a formatted inventory summary for display
+     *
+     * @return List of item summaries with quantities
+     */
+    public ArrayList<String> getInventorySummary() {
+        ArrayList<String> summary = new ArrayList<>();
+        if (!inventory.isEmpty()) {
+            ArrayList<Integer> shownIds = new ArrayList<>();
+            for (Item item : inventory) {
+                if (!shownIds.contains(item.getItemId())) {
+                    int qty = getItemQuantity(item);
+                    summary.add(String.format("%s (x%d) - %s",
+                            item.getItemName(),
+                            qty,
+                            item.getItemCategory()));
+                    shownIds.add(item.getItemId());
+                }
             }
         }
+        return summary;
     }
 
     public boolean addPokemonToLineup(Pokemon pokemon) {
@@ -228,19 +233,25 @@ public class Trainer {
     }
 
     /**
-     * Displays the header for Trainer information table
+     * Gets a formatted summary of trainer information
+     *
+     * @return Formatted trainer information for display
      */
-    public static void displayTrainerHeader() {
-        System.out.printf("%-10s %-20s %-12s %-6s %-21s %-30s %-12s%n",
-                "ID", "Name", "Birthdate", "Sex", "Hometown", "Description", "Money");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+    public String getTrainerSummary() {
+        return String.format("%s from %s\nBirthdate: %s\nMoney: P%.2f",
+                trainerName,
+                trainerHometown,
+                trainerBirthdate,
+                trainerMoney);
     }
 
     /**
-     * Displays trainer details in a formatted table style using printf
+     * Gets a detailed trainer information map for display
+     *
+     * @return Detailed trainer information
      */
-    public void displayTrainer() {
-        System.out.printf("%-10d %-20s %-12s %-6s %-21s %-30s P%-12.2f%n",
+    public String getTrainerDetails() {
+        return String.format("ID: %d\nName: %s\nBirthdate: %s\nSex: %s\nHometown: %s\nDescription: %s\nMoney: P%.2f",
                 trainerId,
                 trainerName,
                 trainerBirthdate,

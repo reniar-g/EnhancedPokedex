@@ -2,7 +2,6 @@ package controller;
 
 import java.util.ArrayList;
 import model.*;
-import util.*;
 
 public class ItemController {
 
@@ -18,66 +17,40 @@ public class ItemController {
     }
 
     /**
-     * Item Management submenu
+     * Searches items by keyword and returns matching items
+     *
+     * @param keyword The search term to look for in name/category/effect
+     * @return List of matching items
      */
-    public void itemManagement() {
-        boolean running = true;
-        while (running) {
-            MenuArtUtils.itemsArt();
-            MenuArtUtils.printItemMenu();
-            int choice = InputUtils.getIntInput("Enter your choice: ");
-            switch (choice) {
-                case 1 ->
-                    viewAllItems();
-                case 2 ->
-                    searchItems();
-                case 0 ->
-                    running = false;
-                default ->
-                    System.out.println("\u001B[31mInvalid choice. Please try again.\u001B[0m");
-            }
+    public ArrayList<Item> searchItems(String keyword) {
+        ArrayList<Item> results = new ArrayList<>();
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return results;
         }
-    }
 
-    /**
-     * Displays all items in the database. Public so that it can be accessed by
-     * TrainerController for buying/selling items.
-     */
-    public void viewAllItems() {
-        MenuArtUtils.allItems();
-        if (itemList.isEmpty()) {
-            System.out.println("\u001B[31mNo items in the database.\u001B[0m");
-            return;
-        }
-        Item.displayItemHeader();
+        keyword = keyword.toLowerCase();
         for (Item item : itemList) {
-            item.displayItem();
+            if (item.getItemName().toLowerCase().contains(keyword)
+                    || item.getItemCategory().toLowerCase().contains(keyword)
+                    || item.getItemEffect().toLowerCase().contains(keyword)) {
+                results.add(item);
+            }
         }
-        System.out.println();
+        return results;
     }
 
     /**
-     * Searches items by keyword.
+     * Gets an item by its ID
+     *
+     * @param id The item ID to look for
+     * @return The item if found, null otherwise
      */
-    private void searchItems() {
-        System.out.println("\n-- Search Items --");
-        String keyword = InputUtils.getStringInput("Enter keyword (name/category/effect): ").toLowerCase();
-        boolean found = false;
-        boolean headerDisplayed = false;
-        for (Item i : itemList) {
-            if (i.getItemName().toLowerCase().contains(keyword)
-                    || i.getItemCategory().toLowerCase().contains(keyword)
-                    || i.getItemEffect().toLowerCase().contains(keyword)) {
-                if (!headerDisplayed) {
-                    Item.displayItemHeader();
-                    headerDisplayed = true;
-                }
-                i.displayItem();
-                found = true;
+    public Item getItemById(int id) {
+        for (Item item : itemList) {
+            if (item.getItemId() == id) {
+                return item;
             }
         }
-        if (!found) {
-            System.out.println("\u001B[31mNo items found matching the search criteria.\u001B[0m");
-        }
+        return null;
     }
 }

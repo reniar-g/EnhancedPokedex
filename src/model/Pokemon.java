@@ -111,166 +111,119 @@ public class Pokemon {
     }
 
     //Setters for Pokemon Attributes
-    public void setPokedexNumber(int pokedexNumber)
-    {
+    public void setPokedexNumber(int pokedexNumber) {
         this.pokedexNumber = pokedexNumber;
     }
 
-    public void setPokemonName(String pokemonName)
-    {
+    public void setPokemonName(String pokemonName) {
         this.pokemonName = pokemonName;
     }
 
-    public void setPokemonType1(String pokemonType1)
-    {
+    public void setPokemonType1(String pokemonType1) {
         this.pokemonType1 = pokemonType1;
     }
 
-    public void setPokemonType2(String pokemonType2)
-    {
+    public void setPokemonType2(String pokemonType2) {
         this.pokemonType2 = pokemonType2;
     }
 
-    public void setBaseLevel(int baseLevel)
-    {
+    public void setBaseLevel(int baseLevel) {
         this.baseLevel = baseLevel;
     }
 
-    public void setEvolvesFrom(Integer evolvesFrom)
-    {
+    public void setEvolvesFrom(Integer evolvesFrom) {
         this.evolvesFrom = evolvesFrom;
     }
 
-    public void setEvolvesTo(Integer evolvesTo)
-    {
+    public void setEvolvesTo(Integer evolvesTo) {
         this.evolvesTo = evolvesTo;
     }
 
-    public void setEvolutionLevel(Integer evolutionLevel)
-    {
+    public void setEvolutionLevel(Integer evolutionLevel) {
         this.evolutionLevel = evolutionLevel;
     }
 
-    public void setHP(double hp)
-    {
+    public void setHP(double hp) {
         this.hp = hp;
     }
 
-    public void setAttack(double attack)
-    {
+    public void setAttack(double attack) {
         this.attack = attack;
     }
 
-    public void setDefense(double defense)
-    {
+    public void setDefense(double defense) {
         this.defense = defense;
     }
 
-    public void setSpeed(double speed)
-    {
+    public void setSpeed(double speed) {
         this.speed = speed;
     }
 
-    public void setMoveSet(List<Move> moveSet)
-    {
+    public void setMoveSet(List<Move> moveSet) {
         this.moveSet = moveSet;
     }
 
     /**
      * Sets the Pokémon's held item.
      */
-    public void setHeldItem(Item heldItem)
-    {
-        if(this.heldItem != null && heldItem != null)
-        {
-            System.out.println(this.pokemonName + " discarded " + this.heldItem.getItemName());
-        }
-
+    public void setHeldItem(Item heldItem) {
         this.heldItem = heldItem;
     }
 
-    public Item removeHeldItem()
-    {
+    public Item removeHeldItem() {
         Item removed = this.heldItem;
         this.heldItem = null;
         return removed;
     }
 
-    public boolean hasHeldItem()
-    {
+    public boolean hasHeldItem() {
         return this.heldItem != null;
     }
 
-    public void addHealth(int healAmount)
-    {
+    public void addHealth(int healAmount) {
         hp += healAmount;
-        System.out.println(pokemonName + " adds " + healAmount + " to Health Stats. Health: " + hp);
     }
 
-    public void addAttack(int attackAmount)
-    {
+    public void addAttack(int attackAmount) {
         attack += attackAmount;
-        System.out.println(pokemonName + " adds " + attackAmount + " to Attack Stats. Attack: " + attack);
     }
 
-    public void addDefense(int defenseAmount)
-    {
+    public void addDefense(int defenseAmount) {
         defense += defenseAmount;
-        System.out.println(pokemonName + " adds " + defenseAmount + " to Defense Stats. Defense: " + defense);
     }
 
-    public void addSpeed(int speedAmount)
-    {
+    public void addSpeed(int speedAmount) {
         speed += speedAmount;
-        System.out.println(pokemonName + " adds " + speedAmount + " to Speed Stats. Speed: " + speed);
     }
 
-    public void levelUp(int levelAmount)
-    {
+    public void levelUp(int levelAmount) {
         baseLevel += levelAmount;
-        System.out.println(pokemonName + " levelled up! New Level: " + baseLevel);
-    }
-    /**
-     * Simulates the Pokémon's cry.
-     */
-    public void cry() {
-        System.out.println(pokemonName + " cries: " + pokemonName.toUpperCase() + "!");
     }
 
     /**
-     * Helper method to convert null Integer to "N/A" string
+     * Helper method to get formatted string representation of null Integer
+     * values
      */
     private String formatNullableInteger(Integer value) {
         return value == null ? "N/A" : value.toString();
     }
 
     /**
-     * Displays the header for Pokemon information table
+     * Gets the type string in format "Type1/Type2" or just "Type1" if Type2 is
+     * null
      */
-    public static void displayPokemonHeader() {
-        System.out.printf("%-4s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
-                "ID", "Name", "Type", "Level", "HP", "Atk", "Def", "Spd", "Evolves From", "Evolves To", "Evo Level");
-        System.out.println("---------------------------------------------------------------------------------------------------------------------");
+    public String getTypeString() {
+        return pokemonType2 != null && !pokemonType2.isEmpty()
+                ? pokemonType1 + "/" + pokemonType2 : pokemonType1;
     }
 
     /**
-     * Displays Pokemon information with N/A for null values in a formatted
-     * table style with labels using printf
+     * Gets the evolution info string
      */
-    public void displayPokemon() {
-        String type = pokemonType1 + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : "");
-        System.out.printf("%-4s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
-                "#" + pokedexNumber,
-                pokemonName,
-                "(" + type + ")",
-                "Lv." + baseLevel,
-                "HP:" + hp,
-                "Atk:" + attack,
-                "Def:" + defense,
-                "Spd:" + speed,
-                "From:" + formatNullableInteger(evolvesFrom),
-                "To:" + formatNullableInteger(evolvesTo),
-                "EvoLv:" + formatNullableInteger(evolutionLevel));
+    public String getEvolutionString() {
+        return "From:" + formatNullableInteger(evolvesFrom)
+                + " To:" + formatNullableInteger(evolvesTo)
+                + " EvoLv:" + formatNullableInteger(evolutionLevel);
     }
 
     public boolean hasMove(String moveName) {
@@ -282,8 +235,7 @@ public class Pokemon {
         return false;
     }
 
-    public boolean learnMove(Move moveToLearn)
-    {
+    public boolean learnMove(Move moveToLearn) {
         if (hasMove(moveToLearn.getMoveName())) {
             return false;
         }
@@ -300,12 +252,11 @@ public class Pokemon {
         return true;
     }
 
-    public boolean canLearnMove(Move move)
-    {
-        return (move.getMoveType1().equalsIgnoreCase(pokemonType1) ||
-                (pokemonType2 != null && move.getMoveType1().equalsIgnoreCase(pokemonType2)) ||
-                (move.getMoveType2() != null && move.getMoveType2().equalsIgnoreCase(pokemonType1)) ||
-                (pokemonType2 != null && move.getMoveType2() != null &&
-                        move.getMoveType2().equalsIgnoreCase(pokemonType2)));
+    public boolean canLearnMove(Move move) {
+        return (move.getMoveType1().equalsIgnoreCase(pokemonType1)
+                || (pokemonType2 != null && move.getMoveType1().equalsIgnoreCase(pokemonType2))
+                || (move.getMoveType2() != null && move.getMoveType2().equalsIgnoreCase(pokemonType1))
+                || (pokemonType2 != null && move.getMoveType2() != null
+                && move.getMoveType2().equalsIgnoreCase(pokemonType2)));
     }
 }

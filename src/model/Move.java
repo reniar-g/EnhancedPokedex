@@ -41,26 +41,9 @@ public class Move {
     }
 
     /**
-     * Displays the header for Move information table
+     * Gets a formatted string representation of the move's type2
      */
-    public static void displayMoveHeader() {
-        System.out.printf("%-3s %-15s %-16s %-10s %-10s %-60s%n", "#",
-                "Move Name", "Classification", "Type 1", "Type 2", "Description");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
-    }
-
-    /**
-     * Displays move details in a formatted table style using printf
-     */
-    public void displayMove() {
-        // Format type2 to display "None" instead of null
-        String type2Display = (moveType2 == null || moveType2.isEmpty()) ? "N/A" : moveType2;
-
-        System.out.printf("%-15s %-16s %-10s %-10s %-60s%n",
-                moveName,
-                moveClassification,
-                moveType1,
-                type2Display,
-                moveDescription);
+    public String getType2Display() {
+        return (moveType2 == null || moveType2.isEmpty()) ? "N/A" : moveType2;
     }
 }

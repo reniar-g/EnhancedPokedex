@@ -4,68 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e23e5c72-f8f9-4153-af29-f6c448152509" name="Changes" comment="">
-<<<<<<< Updated upstream
-      <change afterPath="$PROJECT_DIR$/src/view/TrainerView.java" afterDir="false" />
+    <list default="true" id="fb025de9-3485-450c-885a-f338ef9e86b8" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/EnhancedPokedexMVC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/ItemController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/ItemController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/MoveController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/MoveController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/PokemonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/PokemonController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Pokemon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Pokemon.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ItemView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/MainPokedexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainPokedexView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/view/MoveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MoveView.java" afterDir="false" />
-=======
-      <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
->>>>>>> Stashed changes
+      <change beforePath="$PROJECT_DIR$/src/util/InputUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/util/InputUtils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;reniar-g&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/reniar-g/EnhancedPokedex.git&quot;,
-    &quot;accountId&quot;: &quot;7db47876-2285-4b24-bbee-c8bbc7b1cbea&quot;
-  }
-}</component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 6
-}</component>
-  <component name="ProjectId" id="30GLsVixJS7QHhvOKzt345leQDl" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.EnhancedPokedexMVC.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Rainer Gonzaga/Documents/GitHub/DuncanCode/Enhanced-Pokedex&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-  }
-}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -77,21 +37,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e23e5c72-f8f9-4153-af29-f6c448152509" name="Changes" comment="" />
-      <created>1753249171112</created>
+      <changelist id="fb025de9-3485-450c-885a-f338ef9e86b8" name="Changes" comment="" />
+      <created>1753719336202</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1753249171112</updated>
-      <workItem from="1753249173439" duration="3601000" />
-      <workItem from="1753321865867" duration="11657000" />
-      <workItem from="1753343154283" duration="1513000" />
-      <workItem from="1753350009417" duration="51000" />
-      <workItem from="1753357041364" duration="14639000" />
-      <workItem from="1753494027888" duration="2060000" />
-      <workItem from="1753532082453" duration="4000" />
-      <workItem from="1753539367403" duration="16039000" />
-      <workItem from="1753580623789" duration="17625000" />
-      <workItem from="1753699418424" duration="11989000" />
+      <updated>1753719336202</updated>
+      <workItem from="1753719337384" duration="2402000" />
     </task>
     <servers />
   </component>
