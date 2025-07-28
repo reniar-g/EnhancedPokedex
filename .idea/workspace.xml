@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e23e5c72-f8f9-4153-af29-f6c448152509" name="Changes" comment="">
+<<<<<<< Updated upstream
       <change afterPath="$PROJECT_DIR$/src/view/TrainerView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CCPROG3 MP Demo.pdf" afterDir="false" />
@@ -13,6 +14,10 @@
       <change beforePath="$PROJECT_DIR$/src/view/ItemView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/ItemView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/MainPokedexView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MainPokedexView.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/view/MoveView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/MoveView.java" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/src/controller/TrainerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TrainerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/model/Trainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Trainer.java" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

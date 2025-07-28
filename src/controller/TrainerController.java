@@ -94,6 +94,15 @@ public class TrainerController {
         String description = InputUtils.getStringInput("Description: ");
 
         Trainer trainer = new Trainer(trainerId, name, birthdate, sex, hometown, description);
+
+        Item rareCandy = itemController.getItemByName("Rare Candy");
+
+        if (rareCandy != null) {
+            for (int i = 0; i < 5; i++) {
+                trainer.getInventory().add(rareCandy);
+            }
+        }
+
         trainerList.add(trainer);
         System.out.println("Trainer " + name + " added successfully!");
     }
@@ -490,7 +499,7 @@ public class TrainerController {
         int addChoice;
 
         do {
-            addChoice = InputUtils.getIntInput("Select Pokémon to Add (0 to cancel): ");
+            addChoice = InputUtils.getIntInput("Select Pokémon based on Option Number to Add (0 to cancel): ");
 
             if (addChoice == 0) {
                 return;
@@ -542,9 +551,9 @@ public class TrainerController {
             return;
         }
 
-        System.out.printf("%-4s %-15s %-10s %-15s %-10s%n",
-                "No.", "Name", "Level", "Type", "HP");
-        System.out.println("--------------------------------------------------");
+        System.out.printf("%-9s %-13s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
+                "Option", "Pokédex #", "Name", "Type", "Level", "HP", "Atk", "Def", "Spd", "Evolves From", "Evolves To", "Evo Level");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------");
 
         for (int i = 0; i < pokemonList.size(); i++) {
             Pokemon p = pokemonList.get(i);
@@ -553,12 +562,18 @@ public class TrainerController {
                 type += "/" + p.getPokemonType2();
             }
 
-            System.out.printf("%-4d %-15s %-10d %-15s %-10.0f%n",
-                    i + 1,
+            System.out.printf("%-9s %-13s %-14s %-15s %-6s %-7s %-8s %-8s %-8s %-15s %-13s %-15s%n",
+                    "#" + p.getPokedexNumber(),
                     p.getPokemonName(),
-                    p.getBaseLevel(),
-                    type,
-                    p.getHp());
+                    "(" + type + ")",
+                    "Lv." + p.getBaseLevel(),
+                    "HP:" + p.getHp(),
+                    "Atk:" + p.getAttack(),
+                    "Def:" + p.getDefense(),
+                    "Spd:" + p.getSpeed(),
+                    "From:" + p.getEvolvesFrom(),
+                    "To:" + p.getEvolvesTo(),
+                    "EvoLv:" + p.getEvolutionLevel());
         }
     }
 

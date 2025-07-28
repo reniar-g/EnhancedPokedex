@@ -26,6 +26,25 @@ public class Trainer {
         this.trainerHometown = trainerHometown;
         this.trainerDescription = trainerDescription;
         this.trainerMoney = 1000000.00; // Initial money for the trainer (Requirement #4)
+
+        addDefaultItems();
+    }
+
+    private void addDefaultItems() {
+        // Add 5 Rare Candies (adjust quantity as needed)
+        Levelling rareCandy = new Levelling(
+                101, // itemId
+                "Rare Candy",
+                "Leveling",
+                "A candy that raises the level of a Pokémon by one.",
+                "Levels up Pokémon",
+                "P5000",
+                "P2500"
+        );
+
+        for (int i = 0; i < 5; i++) {
+            this.inventory.add(rareCandy);
+        }
     }
 
     // Getters for trainer attributes
