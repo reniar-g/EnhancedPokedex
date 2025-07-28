@@ -904,13 +904,15 @@ public class TrainerView extends JPanel {
         greetLabel.setVerticalAlignment(SwingConstants.TOP);
         pokePanel.add(greetLabel);
 
-        JButton teachMoveBtn = GUIUtils.createButton1("Teach Move", 493, 345, 140, 35);
-        JButton viewLineupBtn = GUIUtils.createButton2("View Lineup", 640, 345, 140, 35);
-        JButton viewStorageBtn = GUIUtils.createButton2("View Storage", 493, 387, 140, 35);
+        JButton teachMoveBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
+        JButton viewLineupBtn = GUIUtils.createButton2("Switch to Storage", 640, 345, 140, 35);
+        JButton viewStorageBtn = GUIUtils.createButton2("Release Pokémon", 493, 387, 140, 35);
+        JButton addPokemonBtn = GUIUtils.createButton2("Teach Moves", 640, 387, 140, 35);
 
         pokePanel.add(teachMoveBtn);
         pokePanel.add(viewLineupBtn);
         pokePanel.add(viewStorageBtn);
+        pokePanel.add(addPokemonBtn);
 
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainerActionMenu(trainer, onHome);
