@@ -3,6 +3,7 @@ package view;
 import controller.TrainerController;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import javax.swing.*;
 import model.Move;
@@ -982,7 +983,7 @@ public class TrainerView extends JPanel {
         addPokemonBtn.addActionListener(evt -> showAddPokemonDialog(trainer, onHome));
         switchBtn.addActionListener(evt -> showSwitchPokemonDialog(trainer, onHome));
         releaseBtn.addActionListener(evt -> showReleasePokemonDialog(trainer, onHome));
-        teachMoveBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Teach Move: Not yet implemented."));
+        teachMoveBtn.addActionListener(evt -> showTeachMoveDialog(trainer, onHome));
     }
 
     // Show Pokemon lineup dialog
@@ -1509,6 +1510,274 @@ public class TrainerView extends JPanel {
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+    }
+
+    private void showTeachMoveDialog(Trainer trainer, Runnable onHome) {
+        removeAll();
+
+        JPanel teachMovePanel = new JPanel(null);
+        teachMovePanel.setOpaque(false);
+        teachMovePanel.setBounds(0, 0, 901, 706);
+
+        GUIUtils.addWelcomeLabel(teachMovePanel, "Teach Moves", 35, 39, 353, 40);
+
+        //Select Pokémon
+        JPanel selectPokemonPanel = new JPanel(null);
+        selectPokemonPanel.setOpaque(false);
+        selectPokemonPanel.setBounds(0, 0, 901, 706);
+        teachMovePanel.add(selectPokemonPanel);
+
+        JLabel selectPokemonLabel = new JLabel("Select Pokémon to Teach:");
+        selectPokemonLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        selectPokemonLabel.setBounds(45, 80, 300, 20);
+        selectPokemonPanel.add(selectPokemonLabel);
+
+        // Combine lineup and storage for selection
+        List<Pokemon> allPokemon = new ArrayList<>();
+        allPokemon.addAll(trainer.getPokemonLineup());
+        allPokemon.addAll(trainer.getPokemonStorage());
+
+        JPanel pokemonListPanel = new JPanel();
+        pokemonListPanel.setLayout(new BoxLayout(pokemonListPanel, BoxLayout.Y_AXIS));
+        pokemonListPanel.setOpaque(false);
+
+        ButtonGroup pokemonGroup = new ButtonGroup();
+        for (Pokemon p : allPokemon) {
+            String location = trainer.getPokemonLineup().contains(p) ? "Lineup" : "Storage";
+            JRadioButton radio = new JRadioButton(
+                    "#" + p.getPokedexNumber() + " - " + p.getPokemonName() +
+                            " (Lv." + p.getBaseLevel() + ", " + location + ")"
+            );
+            radio.setFont(new Font("Consolas", Font.PLAIN, 14));
+            radio.setOpaque(false);
+            radio.setActionCommand(String.valueOf(allPokemon.indexOf(p)));
+            pokemonGroup.add(radio);
+            pokemonListPanel.add(radio);
+        }
+
+        JScrollPane pokemonScroll = new JScrollPane(pokemonListPanel);
+        pokemonScroll.setBounds(45, 105, 330, 400);
+        pokemonScroll.setOpaque(false);
+        pokemonScroll.setBorder(null);
+        pokemonScroll.getViewport().setOpaque(false);
+        selectPokemonPanel.add(pokemonScroll);
+
+        // Next button (only enabled when a Pokémon is selected)
+        JButton nextBtn = GUIUtils.createButton1("Next", 493, 345, 140, 35);
+        nextBtn.setEnabled(false);
+        selectPokemonPanel.add(nextBtn);
+
+        // Select Move (initially hidden)
+        JPanel selectMovePanel = new JPanel(null);
+        selectMovePanel.setOpaque(false);
+        selectMovePanel.setBounds(0, 0, 901, 706);
+        selectMovePanel.setVisible(false);
+        teachMovePanel.add(selectMovePanel);
+
+        JLabel selectMoveLabel = new JLabel("Select Move to Teach:");
+        selectMoveLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        selectMoveLabel.setBounds(45, 80, 300, 20);
+        selectMovePanel.add(selectMoveLabel);
+
+        // List of all available moves
+        List<Move> allMoves = controller.getMoveController().getMoveList();
+        JPanel moveListPanel = new JPanel();
+        moveListPanel.setLayout(new BoxLayout(moveListPanel, BoxLayout.Y_AXIS));
+        moveListPanel.setOpaque(false);
+
+        ButtonGroup moveGroup = new ButtonGroup();
+        for (Move m : allMoves) {
+            JRadioButton radio = new JRadioButton(
+                    m.getMoveName() + " (" + m.getMoveClassification() + ")"
+            );
+            radio.setFont(new Font("Consolas", Font.PLAIN, 14));
+            radio.setOpaque(false);
+            radio.setActionCommand(String.valueOf(allMoves.indexOf(m)));
+            moveGroup.add(radio);
+            moveListPanel.add(radio);
+        }
+
+        JScrollPane moveScroll = new JScrollPane(moveListPanel);
+        moveScroll.setBounds(45, 105, 330, 400);
+        moveScroll.setOpaque(false);
+        moveScroll.setBorder(null);
+        moveScroll.getViewport().setOpaque(false);
+        selectMovePanel.add(moveScroll);
+
+        // Panel for move replacement (shown when Pokémon has 4 moves)
+        JPanel replacePanel = new JPanel();
+        replacePanel.setLayout(new BoxLayout(replacePanel, BoxLayout.Y_AXIS));
+        replacePanel.setOpaque(false);
+        replacePanel.setBounds(490, 200, 330, 200);
+        replacePanel.setVisible(false);
+        selectMovePanel.add(replacePanel);
+
+        JLabel replaceLabel = new JLabel("Select Move to Replace:");
+        replaceLabel.setFont(new Font("Consolas", Font.BOLD, 16));
+        replaceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        replacePanel.add(replaceLabel);
+
+        ButtonGroup replaceGroup = new ButtonGroup();
+        JRadioButton[] replaceButtons = new JRadioButton[4];
+        for (int i = 0; i < 4; i++) {
+            replaceButtons[i] = new JRadioButton();
+            replaceButtons[i].setFont(new Font("Consolas", Font.PLAIN, 14));
+            replaceButtons[i].setOpaque(false);
+            replaceButtons[i].setAlignmentX(Component.LEFT_ALIGNMENT);
+            replaceGroup.add(replaceButtons[i]);
+            replacePanel.add(replaceButtons[i]);
+        }
+
+        // Teach button
+        JButton teachBtn = GUIUtils.createButton1("Teach Move", 493, 345, 140, 35);
+        selectMovePanel.add(teachBtn);
+
+        // Back button (to return to Pokémon selection)
+        JButton backToPokemonBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            selectMovePanel.setVisible(false);
+            selectPokemonPanel.setVisible(true);
+        });
+        selectMovePanel.add(backToPokemonBtn);
+
+        // Home button
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) onHome.run();
+        });
+        teachMovePanel.add(btnHome);
+
+        // Back button (to return to manage Pokémon screen)
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            showManagePokemons(trainer, onHome);
+        });
+        teachMovePanel.add(backBtn);
+
+        add(teachMovePanel);
+        revalidate();
+        repaint();
+
+        // Enable Next button only when a Pokémon is selected
+        for (Enumeration<AbstractButton> buttons = pokemonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+            button.addItemListener(e -> {
+                nextBtn.setEnabled(pokemonGroup.getSelection() != null);
+            });
+        }
+
+        // Next button action - show move selection
+        nextBtn.addActionListener(evt -> {
+            selectPokemonPanel.setVisible(false);
+            selectMovePanel.setVisible(true);
+        });
+
+        // Teach button action
+        teachBtn.addActionListener(evt -> {
+            // Get selected Pokémon
+            ButtonModel pokemonSelected = pokemonGroup.getSelection();
+            Pokemon selectedPokemon = allPokemon.get(Integer.parseInt(pokemonSelected.getActionCommand()));
+
+            // Get selected move
+            ButtonModel moveSelected = moveGroup.getSelection();
+            if (moveSelected == null) {
+                JOptionPane.showMessageDialog(this, "Please select a move to teach.");
+                return;
+            }
+            Move selectedMove = allMoves.get(Integer.parseInt(moveSelected.getActionCommand()));
+
+            // Check if Pokémon already knows the move
+            if (selectedPokemon.hasMove(selectedMove.getMoveName())) {
+                JOptionPane.showMessageDialog(this,
+                        selectedPokemon.getPokemonName() + " already knows " + selectedMove.getMoveName() + ".",
+                        "Move Known",
+                        JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            // Check if Pokémon can learn the move (type compatibility)
+            if (!selectedPokemon.canLearnMove(selectedMove)) {
+                JOptionPane.showMessageDialog(this,
+                        selectedPokemon.getPokemonName() + " can't learn " + selectedMove.getMoveName() +
+                                " due to type incompatibility.",
+                        "Cannot Learn Move",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Handle move teaching based on current moves
+            if (selectedPokemon.getMoveSet().size() < 4) {
+                // Directly teach the move if there's space
+                TrainerController.TeachMoveResult result = controller.teachMove(
+                        selectedPokemon, selectedMove, null);
+                if (result.success) {
+                    JOptionPane.showMessageDialog(this,
+                            selectedPokemon.getPokemonName() + " learned " + selectedMove.getMoveName() + "!",
+                            "Move Learned",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    showManagePokemons(trainer, onHome);
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            result.errorMessage,
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+            } else {
+                // Show move replacement panel
+                replacePanel.setVisible(true);
+
+                // Populate current moves
+                List<Move> currentMoves = selectedPokemon.getMoveSet();
+                for (int i = 0; i < 4; i++) {
+                    replaceButtons[i].setText(currentMoves.get(i).getMoveName() +
+                            " (" + currentMoves.get(i).getMoveClassification() + ")");
+                    replaceButtons[i].setActionCommand(String.valueOf(i));
+                    replaceButtons[i].setSelected(false);
+                }
+
+                // Add confirm button
+                JButton confirmBtn = GUIUtils.createButton1("Confirm", 493, 420, 140, 35);
+                selectMovePanel.add(confirmBtn);
+
+                confirmBtn.addActionListener(e -> {
+                    ButtonModel replaceSelected = replaceGroup.getSelection();
+                    if (replaceSelected == null) {
+                        JOptionPane.showMessageDialog(this, "Please select a move to replace.");
+                        return;
+                    }
+
+                    int replaceIndex = Integer.parseInt(replaceSelected.getActionCommand());
+                    Move oldMove = currentMoves.get(replaceIndex);
+
+                    // Check if trying to replace an HM move
+                    if (oldMove.getMoveClassification().equalsIgnoreCase("HM")) {
+                        JOptionPane.showMessageDialog(this,
+                                "Cannot replace HM moves.",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    // Teach the new move
+                    TrainerController.TeachMoveResult result = controller.teachMove(
+                            selectedPokemon, selectedMove, oldMove);
+
+                    if (result.success) {
+                        JOptionPane.showMessageDialog(this,
+                                selectedPokemon.getPokemonName() + " forgot " + oldMove.getMoveName() +
+                                        " and learned " + selectedMove.getMoveName() + "!",
+                                "Move Replaced",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        showManagePokemons(trainer, onHome);
+                    } else {
+                        JOptionPane.showMessageDialog(this,
+                                result.errorMessage,
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+
+                revalidate();
+                repaint();
             }
         });
     }
