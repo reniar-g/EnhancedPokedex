@@ -6,7 +6,7 @@ import model.*;
 
 public class TrainerController {
 
-    private List<Trainer> trainerList;
+    private final List<Trainer> trainerList;
     private ItemController itemController;
     private PokemonController pokemonController;
     private MoveController moveController;

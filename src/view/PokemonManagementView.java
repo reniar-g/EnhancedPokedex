@@ -1,14 +1,14 @@
 package view;
 
 import controller.TrainerController;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
 import model.Move;
 import model.Pokemon;
 import model.Trainer;
 import util.GUIUtils;
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PokemonManagementView extends JPanel {
 

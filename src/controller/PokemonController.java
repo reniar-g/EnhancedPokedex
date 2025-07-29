@@ -52,26 +52,25 @@ public class PokemonController {
 
     // searches for Pokémon based on a keyword used for showing of pictures in pokemon view
     public Pokemon[] getEvolutionChain(Pokemon p) {
-        List<Pokemon> pokedex = getPokedex();
-        Pokemon base = null;
+        List<Pokemon> pokemonList = getPokedex();
         Pokemon secondEvo = null;
         Pokemon thirdEvo = null;
 
         // find base evolution
         Pokemon current = p;
         while (current.getEvolvesFrom() != null && current.getEvolvesFrom() != 0) {
-            for (Pokemon poke : pokedex) {
+            for (Pokemon poke : pokemonList) {
                 if (poke.getPokedexNumber() == current.getEvolvesFrom()) {
                     current = poke;
                     break;
                 }
             }
         }
-        base = current;
+        Pokemon base = current;
 
         // find second and third evolutions
         if (base.getEvolvesTo() != null && base.getEvolvesTo() != 0) {
-            for (Pokemon poke : pokedex) {
+            for (Pokemon poke : pokemonList) {
                 if (poke.getPokedexNumber() == base.getEvolvesTo()) {
                     secondEvo = poke;
                     break;
@@ -79,7 +78,7 @@ public class PokemonController {
             }
             // if second evolution exists, check for third evolution
             if (secondEvo != null && secondEvo.getEvolvesTo() != null && secondEvo.getEvolvesTo() != 0) {
-                for (Pokemon poke : pokedex) {
+                for (Pokemon poke : pokemonList) {
                     if (poke.getPokedexNumber() == secondEvo.getEvolvesTo()) {
                         thirdEvo = poke;
                         break;
@@ -99,6 +98,7 @@ public class PokemonController {
         }
         return null;
     }
+
     // checks if a stat value is valid (greater than 0)
     public boolean isValidStat(double value) {
         return value > 0;

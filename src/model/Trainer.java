@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 public class Trainer {
 
-    private int trainerId;
-    private String trainerName;
-    private String trainerBirthdate;
-    private String trainerSex;
-    private String trainerHometown;
-    private String trainerDescription;
+    private final int trainerId;
+    private final String trainerName;
+    private final String trainerBirthdate;
+    private final String trainerSex;
+    private final String trainerHometown;
+    private final String trainerDescription;
     private double trainerMoney = 1000000.00; // initial money for the trainer (Requirement #4)
-    private ArrayList<Item> inventory = new ArrayList<>();
-    private ArrayList<Pokemon> pokemonLineup = new ArrayList<>();
-    private ArrayList<Pokemon> pokemonStorage = new ArrayList<>();
+    private final ArrayList<Item> inventory = new ArrayList<>();
+    private final ArrayList<Pokemon> pokemonLineup = new ArrayList<>();
+    private final ArrayList<Pokemon> pokemonStorage = new ArrayList<>();
 
     public Trainer(int trainerId, String trainerName, String trainerBirthdate,
             String trainerSex, String trainerHometown, String trainerDescription) {

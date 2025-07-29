@@ -3,7 +3,6 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-// Pokémon class represents a Pokémon with various attributes and methods to manage its state and actions.
 public class Pokemon {
 
     private int pokedexNumber;
@@ -40,12 +39,10 @@ public class Pokemon {
         this.heldItem = null;
     }
 
-    // adds default moves to the Pokémon's move set
     public void addDefaultMoves(ArrayList<Move> globalMoveList) {
-        // if the global move list has at least 2 moves, add Tackle and Defend
         if (globalMoveList.size() >= 2) {
-            moveSet.add(globalMoveList.get(0)); // Add Tackle
-            moveSet.add(globalMoveList.get(1)); // Add Defend
+            moveSet.add(globalMoveList.get(0));
+            moveSet.add(globalMoveList.get(1));
         }
     }
 
@@ -105,7 +102,6 @@ public class Pokemon {
         return heldItem;
     }
 
-    //Setters for Pokemon Attributes
     public void setPokedexNumber(int pokedexNumber) {
         this.pokedexNumber = pokedexNumber;
     }
@@ -162,16 +158,6 @@ public class Pokemon {
         this.heldItem = heldItem;
     }
 
-    public Item removeHeldItem() {
-        Item removed = this.heldItem;
-        this.heldItem = null;
-        return removed;
-    }
-
-    public boolean hasHeldItem() {
-        return this.heldItem != null;
-    }
-
     public void addHealth(int healAmount) {
         hp += healAmount;
     }
@@ -186,10 +172,6 @@ public class Pokemon {
 
     public void addSpeed(int speedAmount) {
         speed += speedAmount;
-    }
-
-    public void levelUp(int levelAmount) {
-        baseLevel += levelAmount;
     }
 
     // checks if the pokémon has a specific move by name

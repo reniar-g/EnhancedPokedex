@@ -2,13 +2,13 @@ package model;
 
 public class Item {
 
-    private int itemId;
-    private String itemName;
-    private String itemCategory;
-    private String itemDescription;
-    private String itemEffect;
-    private String itemPrice;
-    private String itemSellPrice;
+    private final int itemId;
+    private final String itemName;
+    private final String itemCategory;
+    private final String itemDescription;
+    private final String itemEffect;
+    private final String itemPrice;
+    private final String itemSellPrice;
 
     public Item(int itemId, String itemName, String itemCategory, String itemDescription,
             String itemEffect, String itemPrice, String itemSellPrice) {
