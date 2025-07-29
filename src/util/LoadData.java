@@ -216,13 +216,15 @@ public class LoadData {
         }
 
         // add pokemon to trainer
-        ash.addPokemonToLineup(allPokemon.get(0));  // Bulbasaur
+        Pokemon ashBulbasaur = allPokemon.get(0);  // Bulbasaur
+        ashBulbasaur.setBaseLevel(15);  // set level to 15
+        ash.addPokemonToLineup(ashBulbasaur);
         ash.addPokemonToLineup(allPokemon.get(5));  // Charizard
         ash.addPokemonToLineup(allPokemon.get(6));  // Squirtle
 
         // add pikachu with two HM moves and two TM moves
         Pokemon ashPikachu = allPokemon.get(24); // Pikachu
-        ashPikachu.getMoveSet().clear(); // remove default moves
+        ashPikachu.getMoveSet().clear();
         ashPikachu.getMoveSet().add(moves.get(6));  // Flash (HM, Electric)
         ashPikachu.getMoveSet().add(moves.get(7));  // Thunder Wave (HM, Electric)
         ashPikachu.getMoveSet().add(moves.get(8));  // Thunder Shock (TM, Electric)
@@ -248,11 +250,11 @@ public class LoadData {
             // 3 Feathers
             ash.getInventory().add(allItems.get(5));  // Health Feather
             ash.getInventory().add(allItems.get(6));  // Muscle Feather
-            ash.getInventory().add(allItems.get(7));  // Resist Feather
+            ash.getInventory().add(allItems.get(9));  // Resist Feather
 
             // 3 Evolution Stones
-            ash.getInventory().add(allItems.get(11)); // Water Stone
-            ash.getInventory().add(allItems.get(13)); // Leaf Stone
+            ash.getInventory().add(allItems.get(10)); // Fire Stone
+            ash.getInventory().add(allItems.get(12)); // Thunder Stone
             ash.getInventory().add(allItems.get(15)); // Moon Stone
         }
         trainers.add(ash);

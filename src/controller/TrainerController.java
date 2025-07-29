@@ -89,18 +89,21 @@ public class TrainerController {
 
     // uses an item on a Pokemon
     public ItemUseResult useItem(Trainer trainer, Item item, Pokemon pokemon) {
-        if (trainer == null || item == null || pokemon == null) {
+        if (trainer == null || item == null || pokemon == null) { // check for null values, if null return error
             return new ItemUseResult(false, 0, "Invalid trainer, item or Pokemon");
         }
 
+        // check if item is in trainer's inventory
         if (!trainer.getInventory().contains(item)) {
             return new ItemUseResult(false, 0, "Item not in trainer's inventory");
         }
 
+        // check if the pokemon is owned by the trainer
         if (!trainer.getPokemonLineup().contains(pokemon) && !trainer.getPokemonStorage().contains(pokemon)) {
             return new ItemUseResult(false, 0, "Pokemon not owned by trainer");
         }
 
+        // apply the item effect on the Pokemon
         ItemUseResult result = applyItemEffect(item, pokemon);
         if (result.success && !item.getItemCategory().equalsIgnoreCase("Held")) {
             trainer.getInventory().remove(item);
@@ -127,6 +130,7 @@ public class TrainerController {
                 return new ItemUseResult(true, pokemon.getBaseLevel(), "Vitamin applied successfully");
             }
 
+            // check if item is a feather and apply its effect
             if (item instanceof Feather feather) {
                 if (item.getItemName().contains("Health")) {
                     feather.useHealthFeather(pokemon);
@@ -140,17 +144,31 @@ public class TrainerController {
                 return new ItemUseResult(true, pokemon.getBaseLevel(), "Feather applied successfully");
             }
 
+            // check if item is a levelling item or evolution stone
             if (item instanceof Levelling levelling) {
                 if (item.getItemName().equals("Rare Candy")) {
+                    String oldName = pokemon.getPokemonName();
                     levelling.useRareCandy(pokemon);
+
+                    // if pokemon can evolve through level up
+                    if (pokemon.getEvolvesTo() != null && pokemon.getEvolutionLevel() != null) {
+                        if (pokemon.getBaseLevel() >= pokemon.getEvolutionLevel()) {
+                            // pokemon should evolve
+                            evolvePokemonByLevel(pokemon);
+                            return new ItemUseResult(true, pokemon.getBaseLevel(),
+                                    oldName + " grew to level " + pokemon.getBaseLevel() + " and evolved into " + pokemon.getPokemonName() + "!");
+                        }
+                    }
+                    // if pokemon just leveled up, return level up message
                     return new ItemUseResult(true, pokemon.getBaseLevel(),
                             pokemon.getPokemonName() + " grew to level " + pokemon.getBaseLevel());
                 }
             }
 
+            // check if item is an evolution stone
             if (item instanceof EvolutionStone stone) {
                 if (stone.canEvolveWithStone(pokemon)) {
-                    stone.useStone(pokemon);
+                    stone.useStone(pokemon); // apply the stone effect if it can evolve w the stones
                     return new ItemUseResult(true, pokemon.getBaseLevel(),
                             pokemon.getPokemonName() + " evolved using " + stone.getItemName() + "!");
                 } else {
@@ -158,10 +176,45 @@ public class TrainerController {
                             pokemon.getPokemonName() + " cannot evolve with " + stone.getItemName());
                 }
             }
-
             return new ItemUseResult(false, pokemon.getBaseLevel(), "Unknown item type");
         } catch (Exception e) {
             return new ItemUseResult(false, pokemon.getBaseLevel(), e.getMessage());
+        }
+    }
+
+    // evolves a Pokemon through level up
+    private void evolvePokemonByLevel(Pokemon pokemon) {
+        if (pokemon.getEvolvesTo() == null) {
+            return;
+        }
+
+        // find the evolution target in the Pokemon list
+        if (pokemonController != null) {
+            for (Pokemon evolutionCandidate : pokemonController.getPokedex()) {
+                if (evolutionCandidate.getPokedexNumber() == pokemon.getEvolvesTo().intValue()) {
+                    // store current stats before evolution
+                    double currentHp = pokemon.getHp();
+                    double currentAttack = pokemon.getAttack();
+                    double currentDefense = pokemon.getDefense();
+                    double currentSpeed = pokemon.getSpeed();
+
+                    // update the current pokemon to become the evolved form
+                    pokemon.setPokedexNumber(evolutionCandidate.getPokedexNumber());
+                    pokemon.setPokemonName(evolutionCandidate.getPokemonName());
+                    pokemon.setPokemonType1(evolutionCandidate.getPokemonType1());
+                    pokemon.setPokemonType2(evolutionCandidate.getPokemonType2());
+                    pokemon.setEvolvesFrom(evolutionCandidate.getEvolvesFrom());
+                    pokemon.setEvolvesTo(evolutionCandidate.getEvolvesTo());
+                    pokemon.setEvolutionLevel(evolutionCandidate.getEvolutionLevel());
+
+                    // set stats to the higher value between current stats and evolved form's base stats
+                    pokemon.setHP(Math.max(currentHp, evolutionCandidate.getHp()));
+                    pokemon.setAttack(Math.max(currentAttack, evolutionCandidate.getAttack()));
+                    pokemon.setDefense(Math.max(currentDefense, evolutionCandidate.getDefense()));
+                    pokemon.setSpeed(Math.max(currentSpeed, evolutionCandidate.getSpeed()));
+                    break;
+                }
+            }
         }
     }
 
@@ -238,6 +291,8 @@ public class TrainerController {
             }
         }
 
+        // if the trainer's lineup is not full, add to lineup
+        // otherwise, add to storage if storage is not full
         if (trainer.getPokemonLineup().size() < 6) {
             trainer.getPokemonLineup().add(copyPokemon);
             return new AddPokemonResult(true, "lineup", null);
@@ -288,7 +343,6 @@ public class TrainerController {
         }
     }
 
-    // SwitchResult class to encapsulate the result of a switch operation
     public static class SwitchResult {
 
         public final boolean success;
@@ -305,7 +359,8 @@ public class TrainerController {
         if (trainer == null || pokemon == null) {
             return null;
         }
-
+        // ternary operator to determine source list
+        // if fromLineup is true, use lineup; otherwise use storage
         ArrayList<Pokemon> source = fromLineup ? trainer.getPokemonLineup() : trainer.getPokemonStorage();
         if (source.contains(pokemon)) {
             source.remove(pokemon);

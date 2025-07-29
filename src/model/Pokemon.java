@@ -192,11 +192,6 @@ public class Pokemon {
         baseLevel += levelAmount;
     }
 
-    // helper method to format nullable integers
-    private String formatNullableInteger(Integer value) {
-        return value == null ? "N/A" : value.toString();
-    }
-
     // checks if the pokémon has a specific move by name
     public boolean hasMove(String moveName) {
         for (Move m : moveSet) {
