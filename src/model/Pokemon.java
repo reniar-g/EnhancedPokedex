@@ -39,13 +39,6 @@ public class Pokemon {
         this.heldItem = null;
     }
 
-    public void addDefaultMoves(ArrayList<Move> globalMoveList) {
-        if (globalMoveList.size() >= 2) {
-            moveSet.add(globalMoveList.get(0));
-            moveSet.add(globalMoveList.get(1));
-        }
-    }
-
     public int getPokedexNumber() {
         return pokedexNumber;
     }

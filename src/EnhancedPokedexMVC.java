@@ -18,25 +18,19 @@ public class EnhancedPokedexMVC {
     private static ItemController itemController;
     private static TrainerController trainerController;
 
-    public static final String[] VALID_POKEMON_TYPES = {
-        "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison",
-        "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
-    };
-
     private static void loadData() {
-        // Clear existing data
+        // clears the data and adds the new data
         pokedex.clear();
         itemList.clear();
         moveList.clear();
         trainerList.clear();
 
-        // Load data from LoadData class
         pokedex.addAll(LoadData.loadPokemons());
         moveList.addAll(LoadData.loadMoves());
         itemList.addAll(LoadData.loadItems());
         trainerList.addAll(LoadData.loadTrainers());
 
-        // Assign default moves to each Pokemon
+        // assign default moves to each Pokemon
         if (moveList.size() >= 2) {
             for (Pokemon p : pokedex) {
                 p.getMoveSet().clear();

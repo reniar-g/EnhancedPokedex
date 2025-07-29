@@ -97,7 +97,7 @@ public class AddTrainerView extends JPanel {
 
         // action listener for submit button
         // validates the input and adds the trainer
-        submitBtn.addActionListener(evt -> {
+        submitBtn.addActionListener(_ -> {
             try {
                 int id = Integer.parseInt(idField.getText().trim());
                 String name = nameField.getText().trim();
@@ -139,7 +139,7 @@ public class AddTrainerView extends JPanel {
         });
 
         // home button
-        JButton btnHome = MainPokedexView.homeButton(evt -> {
+        JButton btnHome = MainPokedexView.homeButton(_ -> {
             if (onHome != null) {
                 onHome.run();
             }
@@ -147,7 +147,7 @@ public class AddTrainerView extends JPanel {
         addPanel.add(btnHome);
 
         // back button
-        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, _ -> {
             if (onHome != null) {
                 onHome.run();
             }

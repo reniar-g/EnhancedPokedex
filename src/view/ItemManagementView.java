@@ -12,7 +12,7 @@ import model.Pokemon;
 
 public class ItemManagementView extends JPanel {
 
-    private TrainerController controller;
+    private final TrainerController controller;
 
     public ItemManagementView(TrainerController controller) {
         this.controller = controller;

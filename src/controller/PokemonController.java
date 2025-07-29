@@ -45,8 +45,6 @@ public class PokemonController {
 
         Pokemon p = new Pokemon(pokedexNumber, name, type1, type2, baseLevel, evolvesFrom, evolvesTo, evolutionLevel,
                 (int) hp, (int) attack, (int) defense, (int) speed);
-
-        p.addDefaultMoves(moveController.getMoveList()); // add default moves to the Pokémon (Requirement #3)
         pokedex.add(p);
     }
 

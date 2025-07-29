@@ -5,13 +5,17 @@ import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 import model.Move;
-import src.EnhancedPokedexMVC;
 import util.*;
 
 public class MoveView extends JPanel {
 
     private final MoveController controller;
     private final List<Move> moveList;
+
+    private static final String[] VALID_POKEMON_TYPES = {
+        "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison",
+        "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
+    };
 
     private JPanel movesWelcomePanel, movesMainPanel;
     private JLabel movesWelcomeDesc;
@@ -189,7 +193,7 @@ public class MoveView extends JPanel {
         JLabel validTypesLabel = new JLabel();
         validTypesLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
         validTypesLabel.setBounds(50, 360, 325, 70);
-        validTypesLabel.setText("<html><div style='text-align:justify; font-size:10px;'><b>Valid Types:</b> " + String.join(", ", EnhancedPokedexMVC.VALID_POKEMON_TYPES) + "</div></html>");
+        validTypesLabel.setText("<html><div style='text-align:justify; font-size:10px;'><b>Valid Types:</b> " + String.join(", ", VALID_POKEMON_TYPES) + "</div></html>");
         validTypesLabel.setHorizontalAlignment(SwingConstants.CENTER);
         validTypesLabel.setVerticalAlignment(SwingConstants.TOP);
         addPanel.add(validTypesLabel);
@@ -204,7 +208,7 @@ public class MoveView extends JPanel {
             String type2 = moveType2Field.getText().trim();
             String category = moveCategoryField.getText().trim();
             String desc = moveDescField.getText().trim();
-            String[] validTypes = EnhancedPokedexMVC.VALID_POKEMON_TYPES;
+            String[] validTypes = VALID_POKEMON_TYPES;
             if (name.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Move name cannot be empty.");
                 return;

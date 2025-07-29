@@ -5,14 +5,18 @@ import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 import model.Pokemon;
-import src.EnhancedPokedexMVC;
 import util.*;
 
 public class PokemonView extends JPanel {
 
-    private PokemonController controller;
+    private final PokemonController controller;
     private List<Pokemon> pokedex;
     private int currentPokemonIndex = 0;
+
+    private static final String[] VALID_POKEMON_TYPES = {
+        "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison",
+        "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
+    };
 
     private JLabel pokemonImageLabel, pokemonNameLabel, pokemonLevelLabel, hpLabel, atkLabel, defLabel, spdLabel, typeLabel1, typeLabel2;
     private JPanel pokemonWelcomePanel, pokemonMainPanel, evolutionPanel, boxBase, boxSecond, boxThird;
@@ -319,7 +323,7 @@ public class PokemonView extends JPanel {
         addPanel.add(evoLevelField);
         GUIUtils.removeAllPanels(pokemonMainPanel);
 
-        String[] validTypes = EnhancedPokedexMVC.VALID_POKEMON_TYPES;
+        String[] validTypes = VALID_POKEMON_TYPES;
 
         GUIUtils.addWelcomeLabel(addPanel, "Add New Pokémon", 35, 39, 353, 40);
 
@@ -723,15 +727,8 @@ public class PokemonView extends JPanel {
             pokemonImageLabel.setIcon(new ImageIcon(img));
 
             // checks if the pokemon has an evolution chain
-            Pokemon base = null;
-            Pokemon secondEvo = null;
-            Pokemon thirdEvo = null;
-
             Pokemon[] chain = controller.getEvolutionChain(p);
-            base = chain[0];
-            secondEvo = chain[1];
-            thirdEvo = chain[2];
-            updateEvolutionBoxes(base, secondEvo, thirdEvo);
+            updateEvolutionBoxes(chain[0], chain[1], chain[2]);
         }
     }
 
