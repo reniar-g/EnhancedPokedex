@@ -10,10 +10,8 @@ public class Trainer {
     private String trainerSex;
     private String trainerHometown;
     private String trainerDescription;
-    private double trainerMoney;
-    private ArrayList<Item> inventory = new ArrayList<>(); // Inventory of items owned by the trainer
-    private ArrayList<Pokemon> pokemonList = new ArrayList<>(); // List of Pokémon owned by the trainer
-
+    private double trainerMoney = 1000000.00; // Initial money for the trainer (Requirement #4)
+    private ArrayList<Item> inventory = new ArrayList<>();
     private ArrayList<Pokemon> pokemonLineup = new ArrayList<>();
     private ArrayList<Pokemon> pokemonStorage = new ArrayList<>();
 
@@ -25,26 +23,7 @@ public class Trainer {
         this.trainerSex = trainerSex;
         this.trainerHometown = trainerHometown;
         this.trainerDescription = trainerDescription;
-        this.trainerMoney = 1000000.00; // Initial money for the trainer (Requirement #4)
 
-        addDefaultItems();
-    }
-
-    private void addDefaultItems() {
-        // Add 5 Rare Candies (adjust quantity as needed)
-        Levelling rareCandy = new Levelling(
-                101, // itemId
-                "Rare Candy",
-                "Leveling",
-                "A candy that raises the level of a Pokémon by one.",
-                "Levels up Pokémon",
-                "P5000",
-                "P2500"
-        );
-
-        for (int i = 0; i < 5; i++) {
-            this.inventory.add(rareCandy);
-        }
     }
 
     // Getters for trainer attributes
@@ -87,6 +66,10 @@ public class Trainer {
 
     public ArrayList<Pokemon> getPokemonStorage() {
         return pokemonStorage;
+    }
+
+    public void setTrainerMoney(double money) {
+        this.trainerMoney = money;
     }
 
     /**
@@ -190,6 +173,10 @@ public class Trainer {
         return summary;
     }
 
+    /**
+     * Adds a Pokémon to the trainer's lineup or storage. Returns true if added
+     * to lineup, false if added to storage.
+     */
     public boolean addPokemonToLineup(Pokemon pokemon) {
         if (pokemonLineup.size() < 6) {
             pokemonLineup.add(pokemon);
@@ -200,6 +187,10 @@ public class Trainer {
         }
     }
 
+    /**
+     * Switches a Pokémon from storage to the lineup. Returns true if
+     * successful, false if storage index is invalid.
+     */
     public boolean switchPokemonToLineup(int storageIndex) {
         if (pokemonLineup.size() > 6) {
             return false;
@@ -213,6 +204,10 @@ public class Trainer {
         return false;
     }
 
+    /**
+     * Releases a Pokémon from the lineup or storage. Returns the released
+     * Pokémon, or null if index is invalid.
+     */
     public Pokemon releasePokemon(boolean isLineup, int index) {
         if (isLineup) {
             if (index >= 0 && index < pokemonLineup.size()) {
@@ -225,11 +220,6 @@ public class Trainer {
         }
 
         return null;
-    }
-
-    //SETTERS
-    public void setTrainerMoney(double money) {
-        this.trainerMoney = money;
     }
 
     /**
@@ -261,6 +251,10 @@ public class Trainer {
                 trainerMoney);
     }
 
+    /**
+     * Gets a Pokémon by name from the trainer's lineup or storage. Returns null
+     * if not found.
+     */
     public Item getItemByName(String itemName) {
         for (Item i : inventory) {
             if (i.getItemName().equalsIgnoreCase(itemName)) {

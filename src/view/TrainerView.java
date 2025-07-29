@@ -939,7 +939,7 @@ public class TrainerView extends JPanel {
                 pokePanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
                 34, 90, 356, 30,
-                45, 125, 330, 220,
+                45, 125, 330, 140,
                 lineupListPanel
         );
 
@@ -947,8 +947,8 @@ public class TrainerView extends JPanel {
         GUIUtils.createLabeledScrollPanel(
                 pokePanel,
                 "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
-                34, 365, 356, 30,
-                45, 400, 330, 220,
+                34, 270, 356, 30,
+                45, 305, 330, 135,
                 storageListPanel
         );
 
@@ -1100,10 +1100,10 @@ public class TrainerView extends JPanel {
         ButtonGroup group = new ButtonGroup();
         for (Pokemon pokemon : allPokemon) {
             JRadioButton radio = new JRadioButton(
-                    "#" + pokemon.getPokedexNumber() + " - " + pokemon.getPokemonName() +
-                            " (" + pokemon.getPokemonType1() +
-                            (pokemon.getPokemonType2() != null && !pokemon.getPokemonType2().isEmpty() ?
-                                    "/" + pokemon.getPokemonType2() : "") + ")"
+                    "#" + pokemon.getPokedexNumber() + " - " + pokemon.getPokemonName()
+                    + " (" + pokemon.getPokemonType1()
+                    + (pokemon.getPokemonType2() != null && !pokemon.getPokemonType2().isEmpty()
+                    ? "/" + pokemon.getPokemonType2() : "") + ")"
             );
             radio.setFont(new Font("Consolas", Font.PLAIN, 14));
             radio.setOpaque(false);
@@ -1115,6 +1115,9 @@ public class TrainerView extends JPanel {
         JScrollPane scrollPane = new JScrollPane(listPanel);
         scrollPane.setBounds(45, 105, 330, 320);
         scrollPane.setOpaque(false);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(14);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(null);
         scrollPane.getViewport().setOpaque(false);
         addPanel.add(scrollPane);
@@ -1285,15 +1288,15 @@ public class TrainerView extends JPanel {
                 switchPanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
                 34, 90, 356, 30,
-                45, 125, 330, 220,
+                45, 125, 330, 140,
                 lineupPanel
         );
 
         GUIUtils.createLabeledScrollPanel(
                 switchPanel,
                 "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
-                34, 365, 356, 30,
-                45, 400, 330, 220,
+                34, 270, 356, 30,
+                45, 305, 330, 135,
                 storagePanel
         );
 
@@ -1303,7 +1306,9 @@ public class TrainerView extends JPanel {
 
         // Add home button
         JButton btnHome = MainPokedexView.homeButton(evt -> {
-            if (onHome != null) onHome.run();
+            if (onHome != null) {
+                onHome.run();
+            }
         });
         switchPanel.add(btnHome);
 
@@ -1424,15 +1429,15 @@ public class TrainerView extends JPanel {
                 releasePanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
                 34, 90, 356, 30,
-                45, 125, 330, 220,
+                45, 125, 330, 140,
                 lineupPanel
         );
 
         GUIUtils.createLabeledScrollPanel(
                 releasePanel,
                 "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
-                34, 365, 356, 30,
-                45, 400, 330, 220,
+                34, 270, 356, 30,
+                45, 305, 330, 135,
                 storagePanel
         );
 
@@ -1442,7 +1447,9 @@ public class TrainerView extends JPanel {
 
         // Add home button
         JButton btnHome = MainPokedexView.homeButton(evt -> {
-            if (onHome != null) onHome.run();
+            if (onHome != null) {
+                onHome.run();
+            }
         });
         releasePanel.add(btnHome);
 

@@ -668,7 +668,7 @@ public class PokemonView extends JPanel {
                         (String) answers[1], // name
                         (String) answers[2], // type1
                         (String) answers[3], // type2
-                        1, // baseLevel
+                        5, // baseLevel
                         (Integer) answers[4], // evolvesFrom
                         (Integer) answers[5], // evolvesTo
                         (Integer) answers[6], // evolutionLevel

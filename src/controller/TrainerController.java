@@ -148,12 +148,6 @@ public class TrainerController {
         return null;
     }
 
-    // These methods have been moved to ItemController
-    // Keeping the method signatures here for reference during the transition
-    /*
-    public BuyItemResult buyItem(Trainer trainer, Item item)
-    public SellItemResult sellItem(Trainer trainer, Item item)
-     */
     /**
      * Attempts to buy an item for a trainer
      *
