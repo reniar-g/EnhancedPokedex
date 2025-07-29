@@ -15,23 +15,14 @@ import model.*;
 
 public class GUIUtils {
 
-    // Color constants for the GUI
+    // color constants for the GUI
     public static final Color POKEDEX_RED = new Color(220, 50, 50);
     public static final Color POKEDEX_BLUE = new Color(10, 168, 255);
     public static final Color POKEDEX_GREEN = new Color(202, 213, 181);
     public static final Color BUTTON_SHADOW = new Color(68, 95, 146);
     public static final Border buttonShadowBorder = BorderFactory.createLineBorder(BUTTON_SHADOW, 1);
 
-    /**
-     * Adds a styled welcome label to the specified panel.
-     *
-     * @param panel The JPanel to add the label to.
-     * @param text The text to display.
-     * @param x The x position of the label.
-     * @param y The y position of the label.
-     * @param width The width of the label.
-     * @param height The height of the label.
-     */
+    // adds a welcome label to the given panel
     public static void addWelcomeLabel(JPanel panel, String text, int x, int y, int width, int height) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Consolas", Font.BOLD, 27));
@@ -41,16 +32,7 @@ public class GUIUtils {
         panel.add(label);
     }
 
-    /**
-     * Creates a styled button (variant 1) for the UI.
-     *
-     * @param text The button text.
-     * @param x The x position.
-     * @param y The y position.
-     * @param width The button width.
-     * @param height The button height.
-     * @return The created JButton.
-     */
+    // creates a button for the UI.
     public static JButton createButton1(String text, int x, int y, int width, int height) {
         JButton button = new JButton(text);
         button.setFont(new Font("Consolas", Font.BOLD, 14));
@@ -61,37 +43,7 @@ public class GUIUtils {
         return button;
     }
 
-    /**
-     * Creates a styled button (variant 2) for the UI.
-     *
-     * @param text The button text.
-     * @param x The x position.
-     * @param y The y position.
-     * @param width The button width.
-     * @param height The button height.
-     * @return The created JButton.
-     */
-    public static JButton createButton2(String text, int x, int y, int width, int height) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Consolas", Font.BOLD, 14));
-        button.setBounds(x, y, width, height);
-        button.setBorder(buttonShadowBorder);
-        button.setBackground(GUIUtils.POKEDEX_BLUE);
-        button.setMargin(new Insets(0, 0, 0, 0));
-        return button;
-    }
-
-    /**
-     * Creates a navigation button with an action listener.
-     *
-     * @param text The button text.
-     * @param x The x position.
-     * @param y The y position.
-     * @param width The button width.
-     * @param height The button height.
-     * @param action The ActionListener for the button.
-     * @return The created JButton.
-     */
+    // creates a nav button for next and back in the pokemon list
     public static JButton createNavButton(String text, int x, int y, int width, int height, ActionListener action) {
         JButton button = new JButton(text);
         button.setFont(new Font("Consolas", Font.BOLD, 14));
@@ -105,22 +57,7 @@ public class GUIUtils {
         return button;
     }
 
-    /**
-     * Creates a labeled scroll panel and adds it to the parent panel.
-     *
-     * @param parent The parent JPanel.
-     * @param labelText The label text.
-     * @param labelX The label x position.
-     * @param labelY The label y position.
-     * @param labelW The label width.
-     * @param labelH The label height.
-     * @param scrollX The scroll pane x position.
-     * @param scrollY The scroll pane y position.
-     * @param scrollW The scroll pane width.
-     * @param scrollH The scroll pane height.
-     * @param listPanel The panel to be placed inside the scroll pane.
-     * @return The created JScrollPane.
-     */
+    // creates a labeled scroll panel with a label and a scroll pane containing a list panel.
     public static JScrollPane createLabeledScrollPanel(
             JPanel parent,
             String labelText,
@@ -152,47 +89,20 @@ public class GUIUtils {
         return scrollPane;
     }
 
-    /**
-     * Container for search field components (text field and button).
-     */
+    // a class to hold the components of a search field and button.
+    // basically this is used to return both the text field and button from a method.
     public static class SearchFieldComponents {
 
         public final JTextField field;
         public final JButton button;
 
-        /**
-         * Constructs a SearchFieldComponents object.
-         *
-         * @param field The JTextField component.
-         * @param button The JButton component.
-         */
         public SearchFieldComponents(JTextField field, JButton button) {
             this.field = field;
             this.button = button;
         }
     }
 
-    /**
-     * Creates a labeled search field and button, and adds them to the parent
-     * panel.
-     *
-     * @param parent The parent JPanel.
-     * @param labelText The label text.
-     * @param labelX The label x position.
-     * @param labelY The label y position.
-     * @param labelW The label width.
-     * @param labelH The label height.
-     * @param fieldX The text field x position.
-     * @param fieldY The text field y position.
-     * @param fieldW The text field width.
-     * @param fieldH The text field height.
-     * @param buttonX The button x position.
-     * @param buttonY The button y position.
-     * @param buttonW The button width.
-     * @param buttonH The button height.
-     * @param buttonText The button text.
-     * @return A SearchFieldComponents object containing the field and button.
-     */
+    // creates a search field with a label and a button.
     public static SearchFieldComponents createSearchField(
             JPanel parent,
             String labelText,
@@ -230,12 +140,7 @@ public class GUIUtils {
         return new SearchFieldComponents(field, button);
     }
 
-    /**
-     * Creates a label displaying Pokémon information.
-     *
-     * @param p The Pokémon to display.
-     * @return The created JLabel.
-     */
+    // creates a label for displaying information about a Pokemon.
     public static JLabel createPokemonInfoLabel(Pokemon p) {
         JLabel pokeLabel = new JLabel(
                 "<html><div>"
@@ -257,12 +162,7 @@ public class GUIUtils {
         return pokeLabel;
     }
 
-    /**
-     * Removes all components from the given JPanel, clearing its current state.
-     * This is used to reset the view when switching between different panels.
-     *
-     * @param panel The JPanel to clear.
-     */
+    // removes all components from a given panel and repaints it.
     public static void removeAllPanels(JPanel panel) {
         if (panel != null) {
             panel.removeAll();

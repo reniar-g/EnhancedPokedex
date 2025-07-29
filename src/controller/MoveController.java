@@ -15,12 +15,9 @@ public class MoveController {
         return moveList;
     }
 
-    // Removed terminal-based methods since we're using GUI only
-    /**
-     * Adds a new move to the move list via GUI. Returns true if added, false if
-     * not (e.g., duplicate name or invalid input).
-     */
+    // adds a new move to the list
     public boolean addMove(String name, String type1, String type2, String classification, String description) {
+        // validate the inputs
         if (name == null || name.trim().isEmpty()
                 || type1 == null || type1.trim().isEmpty()
                 || classification == null || classification.trim().isEmpty()
@@ -30,7 +27,7 @@ public class MoveController {
         if (isMoveNameExists(name)) {
             return false;
         }
-        // Only allow HM or TM for classification
+        // only accepts HM or TM
         String classUpper = classification.trim().toUpperCase();
         if (!classUpper.equals("HM") && !classUpper.equals("TM")) {
             return false;
@@ -41,16 +38,13 @@ public class MoveController {
         return true;
     }
 
-    // Removed console output methods - GUI handles move display
-    /**
-     * Checks if a move name already exists in the move list.
-     */
+    // checks if a move name already exists in the list
     private boolean isMoveNameExists(String name) {
         for (Move m : moveList) {
             if (m.getMoveName().equalsIgnoreCase(name)) {
-                return true; // Move name already exists
+                return true; // move name already exists
             }
         }
-        return false; // Move name does not exist
+        return false; // move name does not exist
     }
 }
