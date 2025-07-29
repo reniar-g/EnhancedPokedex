@@ -15,6 +15,20 @@ public class TrainerController {
         this.trainerList = trainerList;
     }
 
+    private List<Move> getDefaultMoves() {
+        List<Move> defaultMoves = new ArrayList<>();
+        // Find Tackle and Defend moves from the moveList
+        if (moveController != null) {
+            for (Move move : moveController.getMoveList()) {
+                if (move.getMoveName().equalsIgnoreCase("Tackle")
+                        || move.getMoveName().equalsIgnoreCase("Defend")) {
+                    defaultMoves.add(move);
+                }
+            }
+        }
+        return defaultMoves;
+    }
+
     /**
      * Gets the active Pokemon lineup for a trainer
      *
@@ -375,12 +389,6 @@ public class TrainerController {
         }
     }
 
-    //Adds a Pokemon to Lineup
-    /**
-     * Adds a Pokemon to a trainer's team
-     *
-     * @return AddPokemonResult containing success status and placement location
-     */
     public AddPokemonResult addPokemonToTrainer(Trainer trainer, Pokemon originalPokemon) {
         if (trainer == null || originalPokemon == null) {
             return new AddPokemonResult(false, null, "Invalid trainer or Pokemon");
@@ -401,9 +409,21 @@ public class TrainerController {
                 (int) originalPokemon.getSpeed()
         );
 
-        // Copy moves
+        // Add default moves first (Tackle and Defend)
+        List<Move> defaultMoves = getDefaultMoves();
+        if (defaultMoves.size() < 2) {
+            return new AddPokemonResult(false, null, "Default moves (Tackle and Defend) not found in move list");
+        }
+        copyPokemon.getMoveSet().addAll(defaultMoves);
+
+        // Copy additional moves if any (up to maximum of 4 total)
         for (Move move : originalPokemon.getMoveSet()) {
-            copyPokemon.getMoveSet().add(move);
+            if (!move.getMoveName().equalsIgnoreCase("Tackle")
+                    && !move.getMoveName().equalsIgnoreCase("Defend")) {
+                if (copyPokemon.getMoveSet().size() < 4) {
+                    copyPokemon.getMoveSet().add(move);
+                }
+            }
         }
 
         if (trainer.getPokemonLineup().size() < 6) {
@@ -502,25 +522,89 @@ public class TrainerController {
             return new TeachMoveResult(false, null, null, "Invalid Pokemon or move");
         }
 
-        if (!pokemon.canLearnMove(newMove)) {
-            return new TeachMoveResult(false, null, null, "Type mismatch - cannot learn move");
-        }
-
+        // Check if Pokemon already knows the move
         if (pokemon.hasMove(newMove.getMoveName())) {
-            return new TeachMoveResult(false, null, null, "Already knows this move");
+            return new TeachMoveResult(false, null, null,
+                    pokemon.getPokemonName() + " already knows " + newMove.getMoveName());
         }
 
+        // Check type compatibility
+        boolean typeMatches = false;
+        String pokemonType1 = pokemon.getPokemonType1();
+        String pokemonType2 = pokemon.getPokemonType2();
+        String moveType1 = newMove.getMoveType1();
+        String moveType2 = newMove.getMoveType2();
+
+        // Check if move's primary type matches either of Pokemon's types
+        if (moveType1 != null && !moveType1.isEmpty()) {
+            if (moveType1.equalsIgnoreCase(pokemonType1)) {
+                typeMatches = true;
+            }
+            if (!typeMatches && pokemonType2 != null && !pokemonType2.isEmpty()
+                    && moveType1.equalsIgnoreCase(pokemonType2)) {
+                typeMatches = true;
+            }
+        }
+
+        // If no match yet, check if move's secondary type matches either of Pokemon's types
+        if (!typeMatches && moveType2 != null && !moveType2.isEmpty()) {
+            if (moveType2.equalsIgnoreCase(pokemonType1)) {
+                typeMatches = true;
+            }
+            if (!typeMatches && pokemonType2 != null && !pokemonType2.isEmpty()
+                    && moveType2.equalsIgnoreCase(pokemonType2)) {
+                typeMatches = true;
+            }
+        }
+
+        if (!typeMatches) {
+            return new TeachMoveResult(false, null, null,
+                    pokemon.getPokemonName() + " cannot learn " + newMove.getMoveName()
+                    + " due to type incompatibility. Move types: " + moveType1
+                    + (moveType2 != null && !moveType2.isEmpty() ? "/" + moveType2 : "")
+                    + ", Pokemon types: " + pokemonType1
+                    + (pokemonType2 != null && !pokemonType2.isEmpty() ? "/" + pokemonType2 : ""));
+        }
+
+        // Handle HM moves specially
+        if (newMove.getMoveClassification().equalsIgnoreCase("HM")) {
+            // Add HM move regardless of current move count
+            pokemon.getMoveSet().add(newMove);
+            return new TeachMoveResult(true, null, newMove, null);
+        }
+
+        // Handle regular moves
         if (pokemon.getMoveSet().size() >= 4) {
+            // Need to replace a move
             if (oldMove == null) {
-                return new TeachMoveResult(false, null, null, "Must specify move to forget");
+                return new TeachMoveResult(false, null, null,
+                        "Pokemon already knows 4 moves. Select a move to forget.");
             }
-            if (oldMove.getMoveClassification().equalsIgnoreCase("HM")) {
-                return new TeachMoveResult(false, null, null, "Cannot forget HM moves");
+
+            // Verify the move to replace exists and is not an HM
+            boolean foundMove = false;
+            for (Move m : pokemon.getMoveSet()) {
+                if (m.getMoveName().equals(oldMove.getMoveName())) {
+                    if (m.getMoveClassification().equalsIgnoreCase("HM")) {
+                        return new TeachMoveResult(false, null, null,
+                                "Cannot replace HM move " + oldMove.getMoveName());
+                    }
+                    foundMove = true;
+                    break;
+                }
             }
+
+            if (!foundMove) {
+                return new TeachMoveResult(false, null, null,
+                        "Selected move to forget not found in Pokemon's moveset");
+            }
+
+            // Replace the move
             pokemon.getMoveSet().remove(oldMove);
             pokemon.getMoveSet().add(newMove);
             return new TeachMoveResult(true, oldMove, newMove, null);
         } else {
+            // Just add the move since we have space
             pokemon.getMoveSet().add(newMove);
             return new TeachMoveResult(true, null, newMove, null);
         }

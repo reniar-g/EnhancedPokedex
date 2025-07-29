@@ -2,6 +2,7 @@ package util;
 
 import java.util.ArrayList;
 import model.*;
+import controller.*;
 
 public class LoadData {
 
@@ -79,7 +80,10 @@ public class LoadData {
         moves.add(new Move("Surf", "Rides waves across water.", "HM", "Water", ""));
         moves.add(new Move("Strength", "Moves heavy boulders.", "HM", "Normal", ""));
         moves.add(new Move("Flash", "Lights up dark caves.", "HM", "Electric", ""));
+        moves.add(new Move("Thunder Wave", "Paralyzes the target with a weak electric charge.", "HM", "Electric", ""));
+        moves.add(new Move("Thunder Shock", "A weak electric attack that may paralyze the target.", "TM", "Electric", ""));
         moves.add(new Move("Thunderbolt", "A strong electric attack. May paralyze the target.", "TM", "Electric", ""));
+        moves.add(new Move("Buzzy Buzz", "A powerful electric attack that may paralyze the target.", "TM", "Electric", ""));
         moves.add(new Move("Ice Beam", "A beam of ice is shot at the foe. May freeze the target.", "TM", "Ice", ""));
         moves.add(new Move("Flamethrower", "A powerful fire attack. May burn the target.", "TM", "Fire", ""));
         moves.add(new Move("Psychic", "A strong psychic attack.", "TM", "Psychic", ""));
@@ -89,6 +93,7 @@ public class LoadData {
         moves.add(new Move("Quick Attack", "An extremely fast attack that always strikes first.", "TM", "Normal", ""));
         moves.add(new Move("Shadow Ball", "Hurls a shadowy blob at the foe. May lower the target's Special Defense.", "TM", "Ghost", ""));
         moves.add(new Move("Toxic", "Badly poisons the foe.", "TM", "Poison", ""));
+
 
         return moves;
     }
@@ -189,6 +194,7 @@ public class LoadData {
         ArrayList<Trainer> trainers = new ArrayList<>();
         ArrayList<Pokemon> allPokemon = loadPokemons();
         ArrayList<Item> allItems = loadItems();
+        ArrayList<Move> moves = loadMoves();
 
         Trainer ash = new Trainer(1, "Ash Ketchum", "22/05/1987", "M", "Pallet Town",
                 "The Show's Protagonist");
@@ -206,10 +212,26 @@ public class LoadData {
                 "Rock-type Pokémon Trainer");
 
         // Default pokemons and items of trainer 1
+        // Add default moves to each Pokemon first
+        for (Pokemon pokemon : allPokemon) {
+            pokemon.getMoveSet().add(moves.get(0));  // Tackle
+            pokemon.getMoveSet().add(moves.get(1));  // Defend
+        }
+        
+        // Now add Pokemon to trainer
         ash.addPokemonToLineup(allPokemon.get(0));  // Bulbasaur
         ash.addPokemonToLineup(allPokemon.get(5));  // Charizard
         ash.addPokemonToLineup(allPokemon.get(6));  // Squirtle
-        ash.addPokemonToLineup(allPokemon.get(24)); // Pikachu
+        
+        // Add Pikachu with custom moves
+        Pokemon ashPikachu = allPokemon.get(24); // Pikachu
+        ashPikachu.getMoveSet().clear(); // Remove default moves
+        ashPikachu.getMoveSet().add(moves.get(6));  // Flash (HM, Electric)
+        ashPikachu.getMoveSet().add(moves.get(7));  // Thunder Wave (HM, Electric)
+        ashPikachu.getMoveSet().add(moves.get(8));  // Thunder Shock (TM, Electric)
+        ashPikachu.getMoveSet().add(moves.get(9));  // Thunderbolt (TM, Electric)
+        ash.addPokemonToLineup(ashPikachu);
+        
         ash.addPokemonToLineup(allPokemon.get(36)); // Vulpix
 
         // Add Ash's 5 storage Pokemon
@@ -219,7 +241,7 @@ public class LoadData {
         ash.getPokemonStorage().add(allPokemon.get(51)); // Meowth
         ash.getPokemonStorage().add(allPokemon.get(52)); // Persian
 
-        // Add Ash's default items (3 of each)
+        // add ash default items
         for (int i = 0; i < 3; i++) {
             // 3 Vitamins
             ash.getInventory().add(allItems.get(0));  // HP Up
@@ -239,8 +261,6 @@ public class LoadData {
         trainers.add(ash);
 
         // trainer 2 default pokemons and items
-
-
         rainer.addPokemonToLineup(allPokemon.get(0));  // Bulbasaur
         rainer.addPokemonToLineup(allPokemon.get(24)); // Pikachu
         rainer.getPokemonStorage().add(allPokemon.get(15)); // Pidgey
