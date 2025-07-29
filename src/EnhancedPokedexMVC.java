@@ -3,7 +3,7 @@ package src;
 import controller.*;
 import java.util.ArrayList;
 import model.*;
-import util.InputUtils;
+import util.LoadData;
 import view.MainPokedexView;
 
 public class EnhancedPokedexMVC {
@@ -18,32 +18,39 @@ public class EnhancedPokedexMVC {
     private static ItemController itemController;
     private static TrainerController trainerController;
 
-    private static final String POKEMON_CSV = "src/data/Pokemons.csv";
-    private static final String MOVE_CSV = "src/data/Moves.csv";
-    private static final String ITEM_CSV = "src/data/Items.csv";
-    private static final String TRAINER_CSV = "src/data/Trainers.csv";
-
     public static final String[] VALID_POKEMON_TYPES = {
         "Normal", "Fire", "Water", "Electric", "Grass", "Ice", "Fighting", "Poison",
         "Ground", "Flying", "Psychic", "Bug", "Rock", "Ghost", "Dragon", "Dark", "Steel", "Fairy"
     };
 
-    private static void loadDataFromFiles() {
+    private static void loadData() {
+        // Clear existing data
         pokedex.clear();
         itemList.clear();
         moveList.clear();
         trainerList.clear();
 
-        pokedex.addAll(InputUtils.loadPokemonsFromCSV(POKEMON_CSV));
-        itemList.addAll(InputUtils.loadItemsFromCSV(ITEM_CSV));
-        moveList.addAll(InputUtils.loadMovesFromCSV(MOVE_CSV));
-        trainerList.addAll(InputUtils.loadTrainersFromCSV(TRAINER_CSV));
+        // Load data from LoadData class
+        pokedex.addAll(LoadData.loadPokemons());
+        moveList.addAll(LoadData.loadMoves());
+        itemList.addAll(LoadData.loadItems());
+        trainerList.addAll(LoadData.loadTrainers());
 
+        // Assign default moves to each Pokemon
         if (moveList.size() >= 2) {
             for (Pokemon p : pokedex) {
                 p.getMoveSet().clear();
-                p.getMoveSet().add(moveList.get(0));
-                p.getMoveSet().add(moveList.get(1));
+                // If Pokemon doesn't have 2 moves yet, add basic moves
+                while (p.getMoveSet().size() < 2) {
+                    for (Move move : moveList) {
+                        if (move.getMoveType1().equals("Normal")) {
+                            p.getMoveSet().add(move);
+                            if (p.getMoveSet().size() >= 2) {
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -60,8 +67,8 @@ public class EnhancedPokedexMVC {
     }
 
     public static void main(String[] args) {
+        loadData();
         initializeControllers();
-        loadDataFromFiles();
         new MainPokedexView(pokedex, moveList, itemList, trainerList);
     }
 }
