@@ -55,10 +55,10 @@ public class TrainerView extends JPanel {
         JButton addBtn = GUIUtils.createButton1("Add Trainer", 493, 345, 140, 35);
         trainersWelcomePanel.add(addBtn);
 
-        JButton viewBtn = GUIUtils.createButton2("View Trainers", 640, 345, 140, 35);
+        JButton viewBtn = GUIUtils.createButton1("View Trainers", 640, 345, 140, 35);
         trainersWelcomePanel.add(viewBtn);
 
-        JButton selectBtn = GUIUtils.createButton2("Select Trainers", 493, 387, 140, 35);
+        JButton selectBtn = GUIUtils.createButton1("Select Trainers", 493, 387, 140, 35);
         trainersWelcomePanel.add(selectBtn);
 
         JButton btnHome = MainPokedexView.homeButton(e -> {
@@ -180,7 +180,7 @@ public class TrainerView extends JPanel {
         JButton manageItemsBtn = GUIUtils.createButton1("Manage Items", 493, 345, 140, 35);
         actionPanel.add(manageItemsBtn);
 
-        JButton managePokeBtn = GUIUtils.createButton2("Manage Pokémon", 640, 345, 140, 35);
+        JButton managePokeBtn = GUIUtils.createButton1("Manage Pokémon", 640, 345, 140, 35);
         actionPanel.add(managePokeBtn);
 
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
@@ -225,9 +225,9 @@ public class TrainerView extends JPanel {
 
         // Buttons for actions
         JButton buyBtn = GUIUtils.createButton1("Buy Item", 493, 345, 140, 35);
-        JButton sellBtn = GUIUtils.createButton2("Sell Item", 640, 345, 140, 35);
-        JButton useBtn = GUIUtils.createButton2("Use Item", 493, 387, 140, 35);
-        JButton viewInvBtn = GUIUtils.createButton2("View Inventory", 640, 387, 140, 35);
+        JButton sellBtn = GUIUtils.createButton1("Sell Item", 640, 345, 140, 35);
+        JButton useBtn = GUIUtils.createButton1("Use Item", 493, 387, 140, 35);
+        JButton viewInvBtn = GUIUtils.createButton1("View Inventory", 640, 387, 140, 35);
         mainPanel.add(buyBtn);
         mainPanel.add(sellBtn);
         mainPanel.add(useBtn);
@@ -368,9 +368,9 @@ public class TrainerView extends JPanel {
 
         // Action buttons
         JButton addPokemonBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
-        JButton switchBtn = GUIUtils.createButton2("Switch to Storage", 640, 345, 140, 35);
-        JButton releaseBtn = GUIUtils.createButton2("Release Pokémon", 493, 387, 140, 35);
-        JButton teachMoveBtn = GUIUtils.createButton2("Teach Moves", 640, 387, 140, 35);
+        JButton switchBtn = GUIUtils.createButton1("Switch to Storage", 640, 345, 140, 35);
+        JButton releaseBtn = GUIUtils.createButton1("Release Pokémon", 493, 387, 140, 35);
+        JButton teachMoveBtn = GUIUtils.createButton1("Teach Moves", 640, 387, 140, 35);
 
         pokePanel.add(addPokemonBtn);
         pokePanel.add(switchBtn);

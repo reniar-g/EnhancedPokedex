@@ -10,7 +10,7 @@ public class Trainer {
     private String trainerSex;
     private String trainerHometown;
     private String trainerDescription;
-    private double trainerMoney = 1000000.00; // Initial money for the trainer (Requirement #4)
+    private double trainerMoney = 1000000.00; // initial money for the trainer (Requirement #4)
     private ArrayList<Item> inventory = new ArrayList<>();
     private ArrayList<Pokemon> pokemonLineup = new ArrayList<>();
     private ArrayList<Pokemon> pokemonStorage = new ArrayList<>();
@@ -26,7 +26,6 @@ public class Trainer {
 
     }
 
-    // Getters for trainer attributes
     public int getTrainerId() {
         return trainerId;
     }
@@ -55,7 +54,6 @@ public class Trainer {
         return trainerMoney;
     }
 
-    // Getters for Pokémon list of the trainer
     public ArrayList<Item> getInventory() {
         return inventory;
     }
@@ -72,43 +70,25 @@ public class Trainer {
         this.trainerMoney = money;
     }
 
-    /**
-     * Adds an item to the trainer's inventory, enforcing the 10 unique/50 total
-     * item limits. Returns true if added, false if limits would be exceeded.
-     */
+    // adds an item to the trainer's inventory
     public boolean addItem(Item item) {
         int totalItems = getTotalItemCount();
         int uniqueItems = getUniqueItemCount();
         boolean hasItem = hasItem(item);
+        // if the item is already in inventory and the quantity is less than 10,
         if (!hasItem && uniqueItems >= 10) {
-            // Cannot add more unique items
+            // cannot add more unique items
             return false;
         }
-        if (totalItems >= 50) {
-            // Cannot add more total items
+        if (totalItems >= 50) { // if total items are already 50
+            // cannot add more total items
             return false;
         }
         inventory.add(item);
         return true;
     }
 
-    /**
-     * Returns true if the trainer must discard items (over 50 total).
-     */
-    public boolean mustDiscardItems() {
-        return getTotalItemCount() > 50;
-    }
-
-    /**
-     * Discards one instance of the given item from inventory. Returns true if
-     * successful.
-     */
-    public boolean discardItem(Item item) {
-        return removeItem(item);
-    }
-
-    // Removes one instance of an item from the trainer's inventory
-    // Returns true if the item was successfully removed, false if it was not found
+    // removes an item from the trainer's inventory
     public boolean removeItem(Item item) {
         return inventory.remove(item);
     }
@@ -123,7 +103,7 @@ public class Trainer {
         return false;
     }
 
-    // Gets the quantity of a specific item
+    // gets the quantity of a specific item in the trainer's inventory
     public int getItemQuantity(Item item) {
         int count = 0;
         for (Item i : inventory) {
@@ -134,7 +114,7 @@ public class Trainer {
         return count;
     }
 
-    // Gets the number of unique items
+    // gets the quantity of a specific item by its ID
     public int getUniqueItemCount() {
         ArrayList<Integer> uniqueIds = new ArrayList<>();
         for (Item i : inventory) {
@@ -145,38 +125,12 @@ public class Trainer {
         return uniqueIds.size();
     }
 
-    // Gets the total number of items
+    // gets the total number of items in the trainer's inventory
     public int getTotalItemCount() {
         return inventory.size();
     }
 
-    /**
-     * Gets a formatted inventory summary for display
-     *
-     * @return List of item summaries with quantities
-     */
-    public ArrayList<String> getInventorySummary() {
-        ArrayList<String> summary = new ArrayList<>();
-        if (!inventory.isEmpty()) {
-            ArrayList<Integer> shownIds = new ArrayList<>();
-            for (Item item : inventory) {
-                if (!shownIds.contains(item.getItemId())) {
-                    int qty = getItemQuantity(item);
-                    summary.add(String.format("%s (x%d) - %s",
-                            item.getItemName(),
-                            qty,
-                            item.getItemCategory()));
-                    shownIds.add(item.getItemId());
-                }
-            }
-        }
-        return summary;
-    }
-
-    /**
-     * Adds a Pokémon to the trainer's lineup or storage. Returns true if added
-     * to lineup, false if added to storage.
-     */
+    // adds a pokemon to the trainer's lineup or storage
     public boolean addPokemonToLineup(Pokemon pokemon) {
         if (pokemonLineup.size() < 6) {
             pokemonLineup.add(pokemon);
@@ -185,82 +139,5 @@ public class Trainer {
             pokemonStorage.add(pokemon);
             return false;
         }
-    }
-
-    /**
-     * Switches a Pokémon from storage to the lineup. Returns true if
-     * successful, false if storage index is invalid.
-     */
-    public boolean switchPokemonToLineup(int storageIndex) {
-        if (pokemonLineup.size() > 6) {
-            return false;
-        }
-
-        if (storageIndex >= 0 && storageIndex < pokemonStorage.size()) {
-            pokemonLineup.add(pokemonStorage.remove(storageIndex));
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Releases a Pokémon from the lineup or storage. Returns the released
-     * Pokémon, or null if index is invalid.
-     */
-    public Pokemon releasePokemon(boolean isLineup, int index) {
-        if (isLineup) {
-            if (index >= 0 && index < pokemonLineup.size()) {
-                return pokemonLineup.remove(index);
-            }
-        } else {
-            if (index >= 0 && index < pokemonStorage.size()) {
-                return pokemonStorage.remove(index);
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Gets a formatted summary of trainer information
-     *
-     * @return Formatted trainer information for display
-     */
-    public String getTrainerSummary() {
-        return String.format("%s from %s\nBirthdate: %s\nMoney: P%.2f",
-                trainerName,
-                trainerHometown,
-                trainerBirthdate,
-                trainerMoney);
-    }
-
-    /**
-     * Gets a detailed trainer information map for display
-     *
-     * @return Detailed trainer information
-     */
-    public String getTrainerDetails() {
-        return String.format("ID: %d\nName: %s\nBirthdate: %s\nSex: %s\nHometown: %s\nDescription: %s\nMoney: P%.2f",
-                trainerId,
-                trainerName,
-                trainerBirthdate,
-                trainerSex,
-                trainerHometown,
-                trainerDescription,
-                trainerMoney);
-    }
-
-    /**
-     * Gets a Pokémon by name from the trainer's lineup or storage. Returns null
-     * if not found.
-     */
-    public Item getItemByName(String itemName) {
-        for (Item i : inventory) {
-            if (i.getItemName().equalsIgnoreCase(itemName)) {
-                return i;
-            }
-        }
-        return null;
     }
 }

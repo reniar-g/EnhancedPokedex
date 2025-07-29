@@ -24,6 +24,7 @@ public class MoveView extends JPanel {
         showMovesWelcomePanel(onHome);
     }
 
+    // shows all of the moves 
     private void showViewAllMoves(Runnable onHome) {
         if (movesMainPanel != null) {
             GUIUtils.removeAllPanels(movesMainPanel);
@@ -33,10 +34,8 @@ public class MoveView extends JPanel {
         movesMainPanel.setOpaque(false);
         movesMainPanel.setBounds(0, 0, 901, 706);
 
-        // Title
         GUIUtils.addWelcomeLabel(movesMainPanel, "All Moves", 35, 39, 353, 40);
 
-        // Scrollable list of moves
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
@@ -48,16 +47,14 @@ public class MoveView extends JPanel {
             moveNum++;
         }
 
-        // Make the scrollable panel fill the big left area
         GUIUtils.createLabeledScrollPanel(
                 movesMainPanel,
                 "<html><span style='font-size:18px;'><b>List of Moves</b></span></html>",
-                34, 90, 356, 30, // Label at top left
-                45, 125, 310, 320, // Scroll panel fills most of left side
+                34, 90, 356, 30,
+                45, 125, 310, 320,
                 listPanel
         );
 
-        // Search field
         GUIUtils.SearchFieldComponents search = GUIUtils.createSearchField(
                 movesMainPanel,
                 "Search Move:",
@@ -95,7 +92,6 @@ public class MoveView extends JPanel {
             }
         });
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -103,7 +99,6 @@ public class MoveView extends JPanel {
         });
         movesMainPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             remove(movesMainPanel);
             showMovesWelcomePanel(onHome);
@@ -131,7 +126,7 @@ public class MoveView extends JPanel {
         return moveLabel;
     }
 
-    // Show the add move form
+    // show the add move panel
     private void showAddMove(Runnable onHome) {
         GUIUtils.removeAllPanels(movesMainPanel);
 
@@ -141,7 +136,6 @@ public class MoveView extends JPanel {
 
         GUIUtils.addWelcomeLabel(addPanel, "Add New Move", 35, 39, 353, 40);
 
-        // Move Name
         JLabel moveNameLabel = new JLabel("Move Name:");
         moveNameLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         moveNameLabel.setBounds(50, 120, 120, 20);
@@ -152,7 +146,6 @@ public class MoveView extends JPanel {
         moveNameField.setMargin(new Insets(0, 0, 0, 0));
         addPanel.add(moveNameField);
 
-        // Type 1 and Type 2
         JLabel moveType1Label = new JLabel("Type 1:");
         moveType1Label.setFont(new Font("Consolas", Font.BOLD, 15));
         moveType1Label.setBounds(50, 180, 120, 20);
@@ -173,7 +166,6 @@ public class MoveView extends JPanel {
         moveType2Field.setMargin(new Insets(0, 0, 0, 0));
         addPanel.add(moveType2Field);
 
-        // Category
         JLabel moveCategoryLabel = new JLabel("Category (TM or HM):");
         moveCategoryLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         moveCategoryLabel.setBounds(50, 240, 180, 20);
@@ -184,7 +176,6 @@ public class MoveView extends JPanel {
         moveCategoryField.setMargin(new Insets(0, 0, 0, 0));
         addPanel.add(moveCategoryField);
 
-        // Description
         JLabel moveDescLabel = new JLabel("Description:");
         moveDescLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         moveDescLabel.setBounds(50, 300, 120, 20);
@@ -195,7 +186,6 @@ public class MoveView extends JPanel {
         moveDescField.setMargin(new Insets(0, 0, 0, 0));
         addPanel.add(moveDescField);
 
-        // Valid Types below description
         JLabel validTypesLabel = new JLabel();
         validTypesLabel.setFont(new Font("Consolas", Font.PLAIN, 10));
         validTypesLabel.setBounds(50, 360, 325, 70);
@@ -204,7 +194,7 @@ public class MoveView extends JPanel {
         validTypesLabel.setVerticalAlignment(SwingConstants.TOP);
         addPanel.add(validTypesLabel);
 
-        // Enter button
+        // enter button
         JButton enterBtn = GUIUtils.createNavButton("Enter", 787, 345, 67, 35, null);
         addPanel.add(enterBtn);
 
@@ -268,7 +258,7 @@ public class MoveView extends JPanel {
         repaint();
     }
 
-    // Update welcome panel to use new screens
+    // the main menu for moves
     private void showMovesWelcomePanel(Runnable onHome) {
         if (movesWelcomePanel != null) {
             remove(movesWelcomePanel);
@@ -297,7 +287,7 @@ public class MoveView extends JPanel {
         JButton movesAddBtn = GUIUtils.createButton1("Add New Move", 493, 345, 140, 35);
         movesWelcomePanel.add(movesAddBtn);
 
-        JButton movesViewBtn = GUIUtils.createButton2("View All Moves", 640, 345, 140, 35);
+        JButton movesViewBtn = GUIUtils.createButton1("View All Moves", 640, 345, 140, 35);
         movesWelcomePanel.add(movesViewBtn);
 
         JButton btnHome = MainPokedexView.homeButton(e -> {
@@ -307,7 +297,6 @@ public class MoveView extends JPanel {
         });
         movesWelcomePanel.add(btnHome);
 
-        // Add button actions
         movesViewBtn.addActionListener(e -> {
             remove(movesWelcomePanel);
             showViewAllMoves(onHome);

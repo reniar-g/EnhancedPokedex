@@ -17,7 +17,6 @@ public class PokemonView extends JPanel {
     private JLabel pokemonImageLabel, pokemonNameLabel, pokemonLevelLabel, hpLabel, atkLabel, defLabel, spdLabel, typeLabel1, typeLabel2;
     private JPanel pokemonWelcomePanel, pokemonMainPanel, evolutionPanel, boxBase, boxSecond, boxThird;
 
-    // Constructs a new PokemonView panel. Initializes the view and displays the welcome panel.
     public PokemonView(PokemonController controller, Runnable onHome) {
         this.controller = controller;
         this.pokedex = controller.getPokedex();
@@ -26,11 +25,7 @@ public class PokemonView extends JPanel {
         showPokemonWelcomePanel(onHome);
     }
 
-    /**
-     * Displays the welcome panel with options to add or view Pokémon.
-     *
-     * @param onHome Runnable callback to return to the home/main menu.
-     */
+    // the main menu for pokemon management
     private void showPokemonWelcomePanel(Runnable onHome) {
         GUIUtils.removeAllPanels(pokemonMainPanel);
 
@@ -38,7 +33,6 @@ public class PokemonView extends JPanel {
         pokemonWelcomePanel.setOpaque(false);
         pokemonWelcomePanel.setBounds(0, 0, 901, 706);
 
-        // Welcome label and description
         GUIUtils.addWelcomeLabel(pokemonWelcomePanel, "Manage Pokémons", 35, 39, 353, 40);
 
         JLabel pokemonWelcomeDesc = new JLabel();
@@ -55,11 +49,10 @@ public class PokemonView extends JPanel {
         pokemonWelcomeDesc.setOpaque(false);
         pokemonWelcomePanel.add(pokemonWelcomeDesc);
 
-        // Add buttons for adding and viewing Pokémon
         JButton pokemonAddBtn = GUIUtils.createButton1("Add New Pokémon", 493, 345, 140, 35);
         pokemonWelcomePanel.add(pokemonAddBtn);
 
-        JButton pokemonViewBtn = GUIUtils.createButton2("View All Pokémon", 640, 345, 140, 35);
+        JButton pokemonViewBtn = GUIUtils.createButton1("View All Pokémon", 640, 345, 140, 35);
         pokemonWelcomePanel.add(pokemonViewBtn);
 
         JButton btnHome = MainPokedexView.homeButton(e -> {
@@ -70,7 +63,6 @@ public class PokemonView extends JPanel {
         pokemonWelcomePanel.add(btnHome);
         add(pokemonWelcomePanel);
 
-        // Only show main panel when "View All Pokémon" is pressed
         pokemonViewBtn.addActionListener(e -> {
             remove(pokemonWelcomePanel);
             showViewAllPokemons(onHome);
@@ -78,7 +70,6 @@ public class PokemonView extends JPanel {
             repaint();
         });
 
-        // Only show add Pokémon panel when "Add New Pokémon" is pressed
         pokemonAddBtn.addActionListener(e -> {
             remove(pokemonWelcomePanel);
             showAddPokemon(onHome);
@@ -87,22 +78,15 @@ public class PokemonView extends JPanel {
         });
     }
 
-    /**
-     * Displays the main Pokémon view panel, showing details, evolution chain,
-     * scrollable list, and search controls.
-     *
-     * @param onHome Runnable callback to return to the home/main menu.
-     */
+    // shows the main panel for viewing all pokémons
     private void showViewAllPokemons(Runnable onHome) {
         this.pokedex = controller.getPokedex();
         GUIUtils.removeAllPanels(pokemonMainPanel);
 
-        // Create the main panel for viewing Pokémon
         pokemonMainPanel = new JPanel(null);
         pokemonMainPanel.setOpaque(false);
         pokemonMainPanel.setBounds(0, 0, 901, 706);
 
-        // Pokemon details labels
         pokemonNameLabel = new JLabel();
         pokemonNameLabel.setFont(new Font("Consolas", Font.BOLD, 20));
         pokemonNameLabel.setBounds(40, 39, 300, 40);
@@ -152,7 +136,6 @@ public class PokemonView extends JPanel {
         pokemonImageLabel.setVerticalAlignment(SwingConstants.CENTER);
         pokemonMainPanel.add(pokemonImageLabel);
 
-        // Evolution panel for displaying evolution chain
         evolutionPanel = new JPanel(null);
         evolutionPanel.setOpaque(false);
         evolutionPanel.setBounds(35, 180, 900, 170);
@@ -171,14 +154,12 @@ public class PokemonView extends JPanel {
 
         pokemonMainPanel.add(evolutionPanel);
 
-        // Next and Previous buttons for navigating Pokémon
         JButton pokeNextBtn = GUIUtils.createNavButton("Next", 755, 559, 75, 75, e -> showNextPokemon());
         pokemonMainPanel.add(pokeNextBtn);
 
         JButton pokePrevBtn = GUIUtils.createNavButton("Previous", 520, 559, 75, 75, e -> showPreviousPokemon());
         pokemonMainPanel.add(pokePrevBtn);
 
-        // Home button to return to the main menu
         JButton pokeMenuBtn = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -186,7 +167,6 @@ public class PokemonView extends JPanel {
         });
         pokemonMainPanel.add(pokeMenuBtn);
 
-        // Add Back button to return to welcome panel
         JButton pokeBackBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             remove(pokemonMainPanel);
             showPokemonWelcomePanel(onHome);
@@ -196,7 +176,6 @@ public class PokemonView extends JPanel {
         pokeBackBtn.setMargin(new Insets(0, 0, 0, 0));
         pokemonMainPanel.add(pokeBackBtn);
 
-        // Scrollable panel for the list of Pokémon
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
@@ -219,10 +198,8 @@ public class PokemonView extends JPanel {
                 645, 565, 62, 43,
                 "Search"
         );
-        // Add each Pokémon's stats as a label
         updatePokemonListPanel(listPanel);
 
-        // Add action listener for the search button
         search.button.addActionListener(e -> {
             String query = search.field.getText().trim();
             if (query.isEmpty()) {
@@ -257,19 +234,13 @@ public class PokemonView extends JPanel {
         add(pokemonMainPanel);
     }
 
-    /**
-     * Displays the add Pokémon form, prompting for each field step-by-step with
-     * validation.
-     *
-     * @param onHome Runnable callback to return to the home/main menu.
-     */
+    // shows the panel for adding a new Pokémon
     private void showAddPokemon(Runnable onHome) {
 
         JPanel addPanel = new JPanel(null);
         addPanel.setOpaque(false);
         addPanel.setBounds(0, 0, 901, 706);
 
-        // Vertical layout for base stats fields
         JLabel baseHpLabel = new JLabel("Base HP:");
         baseHpLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         baseHpLabel.setBounds(50, 180, 120, 20);
@@ -314,7 +285,6 @@ public class PokemonView extends JPanel {
         baseSpdField.setVisible(false);
         addPanel.add(baseSpdField);
 
-        // Vertical layout for evolution fields
         JLabel evolvesFromLabel = new JLabel("Evolves From:");
         evolvesFromLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         evolvesFromLabel.setBounds(50, 200, 120, 20);
@@ -351,10 +321,8 @@ public class PokemonView extends JPanel {
 
         String[] validTypes = EnhancedPokedexMVC.VALID_POKEMON_TYPES;
 
-        // Title label
         GUIUtils.addWelcomeLabel(addPanel, "Add New Pokémon", 35, 39, 353, 40);
 
-        // Question label and answer field
         JLabel pokeQuestionLabel = new JLabel();
         pokeQuestionLabel.setFont(new Font("Consolas", Font.PLAIN, 16));
         pokeQuestionLabel.setBounds(49, 160, 334, 500);
@@ -366,7 +334,6 @@ public class PokemonView extends JPanel {
         pokeAnswerField.setBounds(50, 180, 300, 30);
         addPanel.add(pokeAnswerField);
 
-        // Type fields for simultaneous input
         JTextField type1Field = new JTextField();
         type1Field.setBounds(50, 180, 140, 30);
         type1Field.setVisible(false);
@@ -383,11 +350,9 @@ public class PokemonView extends JPanel {
         type2Label.setVisible(false);
         addPanel.add(type2Label);
 
-        // Enter button to submit answers
         JButton pokeEnterButton = GUIUtils.createNavButton("Enter", 787, 345, 67, 35, null);
         addPanel.add(pokeEnterButton);
 
-        // Valid types label (bold only the label)
         JLabel validTypesLabel = new JLabel();
         validTypesLabel.setFont(new Font("Consolas", Font.BOLD, 15));
         validTypesLabel.setBounds(49, 230, 334, 500);
@@ -397,7 +362,6 @@ public class PokemonView extends JPanel {
         addPanel.add(validTypesLabel);
         add(addPanel);
 
-        // Instruction label
         JLabel pokeInstrucLabel = new JLabel(
                 "<html>Enter the following variables and press the <b>\"enter\"</b> button on the right side.</html>"
         );
@@ -420,220 +384,98 @@ public class PokemonView extends JPanel {
             "<html><b>Base Speed:</b></html>"};
 
         pokeQuestionLabel.setText(questions[0]);
-        Object[] answers = new Object[questions.length + 1]; // answers[2]=type1, answers[3]=type2
+        Object[] answers = new Object[questions.length + 1];
         int[] current = {0};
 
         updateValidTypesLabel(validTypesLabel, current[0], validTypes);
 
         pokeEnterButton.addActionListener(e -> {
-            if (current[0] == 2) {
-                // Show both type fields
-                String type1Input = type1Field.getText().trim();
-                String type2Input = type2Field.getText().trim();
-                String canonicalType1 = controller.getCanonicalType(type1Input, validTypes);
-                if (canonicalType1 == null) {
-                    JOptionPane.showMessageDialog(this, "Invalid Type 1. Allowed types are:\n" + String.join(", ", validTypes));
-                    return;
-                }
-                answers[2] = canonicalType1;
-                if (type2Input.isEmpty()) {
-                    answers[3] = "";
-                } else {
-                    String canonicalType2 = controller.getCanonicalType(type2Input, validTypes);
-                    if (canonicalType2 == null) {
-                        JOptionPane.showMessageDialog(this, "Invalid Type 2. Allowed types are:\n" + String.join(", ", validTypes));
+            switch (current[0]) {
+                case 2 -> {
+                    String type1Input = type1Field.getText().trim();
+                    String type2Input = type2Field.getText().trim();
+                    String canonicalType1 = controller.getCanonicalType(type1Input, validTypes);
+
+                    // validate type 1
+                    if (canonicalType1 == null) {
+                        JOptionPane.showMessageDialog(this, "Invalid Type 1. Allowed types are:\n" + String.join(", ", validTypes));
                         return;
                     }
-                    answers[3] = canonicalType2;
-                }
-                current[0] += 1;
-                type1Field.setText("");
-                type2Field.setText("");
-                type1Field.setVisible(false);
-                type2Field.setVisible(false);
-                type2Label.setVisible(false);
-                pokeAnswerField.setVisible(true);
-            } else if (current[0] == 3) {
-                // Show all evolves fields together vertically, hide valid types label
-                validTypesLabel.setVisible(false);
-                String evolvesFromInput = evolvesFromField.getText().trim();
-                String evolvesToInput = evolvesToField.getText().trim();
-                String evoLevelInput = evoLevelField.getText().trim();
-                Integer evolvesFrom = null, evolvesTo = null, evoLevel = null;
-                if (!evolvesFromInput.isEmpty()) {
-                    try {
-                        evolvesFrom = Integer.parseInt(evolvesFromInput);
-                        if (!controller.isPokedexNumberExists(evolvesFrom)) {
-                            JOptionPane.showMessageDialog(this, "Referenced Pokédex number for Evolves From does not exist.");
+                    answers[2] = canonicalType1;
+
+                    // validate type 2
+                    if (type2Input.isEmpty()) {
+                        answers[3] = "";
+                    } else {
+                        String canonicalType2 = controller.getCanonicalType(type2Input, validTypes);
+                        if (canonicalType2 == null) {
+                            JOptionPane.showMessageDialog(this, "Invalid Type 2. Allowed types are:\n" + String.join(", ", validTypes));
                             return;
                         }
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(this, "Invalid number for Evolves From.");
-                        return;
+                        answers[3] = canonicalType2;
                     }
-                }
-                if (!evolvesToInput.isEmpty()) {
-                    try {
-                        evolvesTo = Integer.parseInt(evolvesToInput);
-                        // No existence check for Evolves To (can be new)
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(this, "Invalid number for Evolves To.");
-                        return;
-                    }
-                }
-                if (!evoLevelInput.isEmpty()) {
-                    try {
-                        evoLevel = Integer.parseInt(evoLevelInput);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(this, "Invalid number for Evo Level.");
-                        return;
-                    }
-                }
-                answers[4] = evolvesFrom;
-                answers[5] = evolvesTo;
-                answers[6] = evoLevel;
-                current[0] += 3;
-                evolvesFromField.setText("");
-                evolvesToField.setText("");
-                evoLevelField.setText("");
-                evolvesFromField.setVisible(false);
-                evolvesToField.setVisible(false);
-                evoLevelField.setVisible(false);
-                evolvesFromLabel.setVisible(false);
-                evolvesToLabel.setVisible(false);
-                evoLevelLabel.setVisible(false);
-                // Show base stats fields next
-                baseHpLabel.setVisible(true);
-                baseHpField.setVisible(true);
-                baseAtkLabel.setVisible(true);
-                baseAtkField.setVisible(true);
-                baseDefLabel.setVisible(true);
-                baseDefField.setVisible(true);
-                baseSpdLabel.setVisible(true);
-                baseSpdField.setVisible(true);
-            } else if (current[0] == 6) {
-                // Collect base stats from vertical fields
-                String hpInput = baseHpField.getText().trim();
-                String atkInput = baseAtkField.getText().trim();
-                String defInput = baseDefField.getText().trim();
-                String spdInput = baseSpdField.getText().trim();
-                double hp, atk, def, spd;
-                try {
-                    if (hpInput.isEmpty()) {
-                        throw new NumberFormatException();
-                    }
-                    hp = Double.parseDouble(hpInput);
-                    if (!controller.isValidStat(hp)) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid Base HP. Must be a number > 0.");
-                    return;
-                }
-                try {
-                    atk = Double.parseDouble(atkInput);
-                    if (!controller.isValidStat(atk)) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid Base Attack. Must be a number > 0.");
-                    return;
-                }
-                try {
-                    def = Double.parseDouble(defInput);
-                    if (!controller.isValidStat(def)) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid Base Defense. Must be a number > 0.");
-                    return;
-                }
-                try {
-                    spd = Double.parseDouble(spdInput);
-                    if (!controller.isValidStat(spd)) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid Base Speed. Must be a number > 0.");
-                    return;
-                }
-                answers[7] = hp;
-                answers[8] = atk;
-                answers[9] = def;
-                answers[10] = spd;
-                baseHpField.setText("");
-                baseAtkField.setText("");
-                baseDefField.setText("");
-                baseSpdField.setText("");
-                baseHpLabel.setVisible(false);
-                baseHpField.setVisible(false);
-                baseAtkLabel.setVisible(false);
-                baseAtkField.setVisible(false);
-                baseDefLabel.setVisible(false);
-                baseDefField.setVisible(false);
-                baseSpdLabel.setVisible(false);
-                baseSpdField.setVisible(false);
-                // Skip the individual stat questions and go to the end
-                current[0] = 11;
-            } else {
-                String input = pokeAnswerField.getText().trim();
-                switch (current[0]) {
-                    case 0 -> { // Pokédex Number
-                        try {
-                            int num = Integer.parseInt(input);
-                            if (controller.isPokedexNumberExists(num)) {
-                                JOptionPane.showMessageDialog(this, "Pokédex Number already exists!");
-                                return;
-                            }
-                            answers[0] = num;
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this, "Invalid Pokédex Number.");
-                            return;
-                        }
-                    }
-                    case 1 -> { // Name
-                        if (input.isEmpty()) {
-                            JOptionPane.showMessageDialog(this, "Name cannot be empty.");
-                            return;
-                        }
-                        if (controller.isPokemonNameExists(input)) {
-                            JOptionPane.showMessageDialog(this, "Pokémon Name already exists!");
-                            return;
-                        }
-                        answers[1] = formatPokemonName(input);
-                    }
-                }
-                if (current[0] == 7) {
-                    // Skip base stats single field input, go to next
-                    current[0]++;
-                } else {
-                    current[0]++;
-                }
-                pokeAnswerField.setText("");
-            }
-            if (current[0] < questions.length) {
-                pokeQuestionLabel.setText(questions[current[0]]);
-                updateValidTypesLabel(validTypesLabel, current[0], validTypes);
-                if (current[0] == 2) {
-                    pokeAnswerField.setVisible(false);
-                    type1Field.setVisible(true);
-                    type2Field.setVisible(true);
-                    type2Label.setVisible(true);
-                } else if (current[0] == 3) {
-                    pokeAnswerField.setVisible(false);
+                    current[0] += 1;
+                    type1Field.setText("");
+                    type2Field.setText("");
                     type1Field.setVisible(false);
                     type2Field.setVisible(false);
                     type2Label.setVisible(false);
-                    evolvesFromField.setVisible(true);
-                    evolvesToField.setVisible(true);
-                    evoLevelField.setVisible(true);
-                    evolvesFromLabel.setVisible(true);
-                    evolvesToLabel.setVisible(true);
-                    evoLevelLabel.setVisible(true);
+                    pokeAnswerField.setVisible(true);
+                }
+                case 3 -> {
                     validTypesLabel.setVisible(false);
-                } else if (current[0] == 6) {
-                    // Show base stats fields vertically
-                    pokeAnswerField.setVisible(false);
+                    String evolvesFromInput = evolvesFromField.getText().trim();
+                    String evolvesToInput = evolvesToField.getText().trim();
+                    String evoLevelInput = evoLevelField.getText().trim();
+                    Integer evolvesFrom = null, evolvesTo = null, evoLevel = null;
+
+                    // validate evolution inputs
+                    if (!evolvesFromInput.isEmpty()) {
+                        try {
+                            evolvesFrom = Integer.parseInt(evolvesFromInput);
+                            if (!controller.isPokedexNumberExists(evolvesFrom)) {
+                                JOptionPane.showMessageDialog(this, "Referenced Pokédex number for Evolves From does not exist.");
+                                return;
+                            }
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(this, "Invalid number for Evolves From.");
+                            return;
+                        }
+                    }
+                    // checks if evolves to is empty
+                    if (!evolvesToInput.isEmpty()) {
+                        try {
+                            evolvesTo = Integer.parseInt(evolvesToInput);
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(this, "Invalid number for Evolves To.");
+                            return;
+                        }
+                    }
+                    // checks if evo level is empty
+                    if (!evoLevelInput.isEmpty()) {
+                        try {
+                            evoLevel = Integer.parseInt(evoLevelInput);
+                        } catch (NumberFormatException ex) {
+                            JOptionPane.showMessageDialog(this, "Invalid number for Evo Level.");
+                            return;
+                        }
+                    }
+                    answers[4] = evolvesFrom;
+                    answers[5] = evolvesTo;
+                    answers[6] = evoLevel;
+                    current[0] += 3;
+                    // hide the fields
+                    evolvesFromField.setText("");
+                    evolvesToField.setText("");
+                    evoLevelField.setText("");
+                    evolvesFromField.setVisible(false);
+                    evolvesToField.setVisible(false);
+                    evoLevelField.setVisible(false);
+                    evolvesFromLabel.setVisible(false);
+                    evolvesToLabel.setVisible(false);
+                    evoLevelLabel.setVisible(false);
+
+                    // show the base stats fields 
                     baseHpLabel.setVisible(true);
                     baseHpField.setVisible(true);
                     baseAtkLabel.setVisible(true);
@@ -642,17 +484,60 @@ public class PokemonView extends JPanel {
                     baseDefField.setVisible(true);
                     baseSpdLabel.setVisible(true);
                     baseSpdField.setVisible(true);
-                } else {
-                    pokeAnswerField.setVisible(true);
-                    type1Field.setVisible(false);
-                    type2Field.setVisible(false);
-                    type2Label.setVisible(false);
-                    evolvesFromField.setVisible(false);
-                    evolvesToField.setVisible(false);
-                    evoLevelField.setVisible(false);
-                    evolvesFromLabel.setVisible(false);
-                    evolvesToLabel.setVisible(false);
-                    evoLevelLabel.setVisible(false);
+                }
+                case 6 -> {
+                    String hpInput = baseHpField.getText().trim();
+                    String atkInput = baseAtkField.getText().trim();
+                    String defInput = baseDefField.getText().trim();
+                    String spdInput = baseSpdField.getText().trim();
+                    double hp, atk, def, spd;
+                    try {
+                        if (hpInput.isEmpty()) {
+                            throw new NumberFormatException();
+                        }
+                        hp = Double.parseDouble(hpInput);
+                        if (!controller.isValidStat(hp)) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Invalid Base HP. Must be a number > 0.");
+                        return;
+                    }
+                    try {
+                        atk = Double.parseDouble(atkInput);
+                        if (!controller.isValidStat(atk)) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Invalid Base Attack. Must be a number > 0.");
+                        return;
+                    }
+                    try {
+                        def = Double.parseDouble(defInput);
+                        if (!controller.isValidStat(def)) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Invalid Base Defense. Must be a number > 0.");
+                        return;
+                    }
+                    try {
+                        spd = Double.parseDouble(spdInput);
+                        if (!controller.isValidStat(spd)) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(this, "Invalid Base Speed. Must be a number > 0.");
+                        return;
+                    }
+                    answers[7] = hp;
+                    answers[8] = atk;
+                    answers[9] = def;
+                    answers[10] = spd;
+                    baseHpField.setText("");
+                    baseAtkField.setText("");
+                    baseDefField.setText("");
+                    baseSpdField.setText("");
                     baseHpLabel.setVisible(false);
                     baseHpField.setVisible(false);
                     baseAtkLabel.setVisible(false);
@@ -661,6 +546,100 @@ public class PokemonView extends JPanel {
                     baseDefField.setVisible(false);
                     baseSpdLabel.setVisible(false);
                     baseSpdField.setVisible(false);
+                    current[0] = 11;
+                }
+                default -> {
+                    String input = pokeAnswerField.getText().trim();
+                    switch (current[0]) {
+                        case 0 -> { // Pokédex Number
+                            try {
+                                int num = Integer.parseInt(input);
+                                if (controller.isPokedexNumberExists(num)) {
+                                    JOptionPane.showMessageDialog(this, "Pokédex Number already exists!");
+                                    return;
+                                }
+                                answers[0] = num;
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(this, "Invalid Pokédex Number.");
+                                return;
+                            }
+                        }
+                        case 1 -> { // Name
+                            if (input.isEmpty()) {
+                                JOptionPane.showMessageDialog(this, "Name cannot be empty.");
+                                return;
+                            }
+                            if (controller.isPokemonNameExists(input)) {
+                                JOptionPane.showMessageDialog(this, "Pokémon Name already exists!");
+                                return;
+                            }
+                            answers[1] = formatPokemonName(input);
+                        }
+                    }
+                    if (current[0] == 7) {
+                        // Skip base stats single field input, go to next
+                        current[0]++;
+                    } else {
+                        current[0]++;
+                    }
+                    pokeAnswerField.setText("");
+                }
+            }
+            if (current[0] < questions.length) {
+                pokeQuestionLabel.setText(questions[current[0]]);
+                updateValidTypesLabel(validTypesLabel, current[0], validTypes);
+                switch (current[0]) {
+                    case 2 -> {
+                        pokeAnswerField.setVisible(false);
+                        type1Field.setVisible(true);
+                        type2Field.setVisible(true);
+                        type2Label.setVisible(true);
+                    }
+                    case 3 -> {
+                        pokeAnswerField.setVisible(false);
+                        type1Field.setVisible(false);
+                        type2Field.setVisible(false);
+                        type2Label.setVisible(false);
+                        evolvesFromField.setVisible(true);
+                        evolvesToField.setVisible(true);
+                        evoLevelField.setVisible(true);
+                        evolvesFromLabel.setVisible(true);
+                        evolvesToLabel.setVisible(true);
+                        evoLevelLabel.setVisible(true);
+                        validTypesLabel.setVisible(false);
+                    }
+                    case 6 -> {
+                        // Show base stats fields vertically
+                        pokeAnswerField.setVisible(false);
+                        baseHpLabel.setVisible(true);
+                        baseHpField.setVisible(true);
+                        baseAtkLabel.setVisible(true);
+                        baseAtkField.setVisible(true);
+                        baseDefLabel.setVisible(true);
+                        baseDefField.setVisible(true);
+                        baseSpdLabel.setVisible(true);
+                        baseSpdField.setVisible(true);
+                    }
+                    default -> {
+                        pokeAnswerField.setVisible(true);
+                        type1Field.setVisible(false);
+                        type2Field.setVisible(false);
+                        type2Label.setVisible(false);
+                        evolvesFromField.setVisible(false);
+                        evolvesToField.setVisible(false);
+                        evoLevelField.setVisible(false);
+                        evolvesFromLabel.setVisible(false);
+                        evolvesToLabel.setVisible(false);
+                        evoLevelLabel.setVisible(false);
+                        baseHpLabel.setVisible(false);
+                        baseHpField.setVisible(false);
+                        baseAtkLabel.setVisible(false);
+                        baseAtkField.setVisible(false);
+                        baseDefLabel.setVisible(false);
+                        baseDefField.setVisible(false);
+                        baseSpdLabel.setVisible(false);
+                        baseSpdField.setVisible(false);
+                    }
                 }
             } else {
                 controller.addPokemon(
@@ -684,9 +663,7 @@ public class PokemonView extends JPanel {
         });
     }
 
-    /**
-     * Advances to the next Pokémon in the list and updates the view.
-     */
+    // shows the next pokemon and updates the stats
     public void showNextPokemon() {
         if (pokedex.isEmpty()) {
             return;
@@ -695,9 +672,7 @@ public class PokemonView extends JPanel {
         updatePokemonLabels();
     }
 
-    /**
-     * Goes to the previous Pokémon in the list and updates the view.
-     */
+    // goes to the previous pokemon and updates the stats
     public void showPreviousPokemon() {
         if (pokedex.isEmpty()) {
             return;
@@ -706,10 +681,7 @@ public class PokemonView extends JPanel {
         updatePokemonLabels();
     }
 
-    /**
-     * Updates the labels and evolution chain display for the currently selected
-     * Pokémon. Handles image, stats, and evolution chain logic.
-     */
+    // updates all of the pokemon labels with the current pokemon stats
     private void updatePokemonLabels() {
         if (pokedex.isEmpty()) {
             pokemonNameLabel.setText("No Pokémon");
@@ -745,11 +717,12 @@ public class PokemonView extends JPanel {
                 imgPath = "src/util/PokemonSprites/noData.png";
             }
 
+            // load, add, and scale the sprite of the pokemon
             ImageIcon icon = new ImageIcon(imgPath);
             Image img = icon.getImage().getScaledInstance(300, 300, Image.SCALE_SMOOTH);
             pokemonImageLabel.setIcon(new ImageIcon(img));
 
-            // Get the evolution chain for the current Pokémon
+            // checks if the pokemon has an evolution chain
             Pokemon base = null;
             Pokemon secondEvo = null;
             Pokemon thirdEvo = null;
@@ -762,26 +735,17 @@ public class PokemonView extends JPanel {
         }
     }
 
-    /**
-     * Updates the evolution chain display with the given base, second, and
-     * third evolution Pokémon.
-     *
-     * @param base The base form Pokémon.
-     * @param secondEvo The first evolution Pokémon.
-     * @param thirdEvo The second evolution Pokémon.
-     */
+    // update the small evo boxes with the current pokemon evolutions
     private void updateEvolutionBoxes(Pokemon base, Pokemon secondEvo, Pokemon thirdEvo) {
-        // Clear existing components in the evolution boxes
         boxBase.removeAll();
         boxSecond.removeAll();
         boxThird.removeAll();
 
-        // Create new evolution boxes for each Pokémon
         JPanel newBase = createEvolutionBox(base);
         JPanel newSecond = createEvolutionBox(secondEvo);
         JPanel newThird = createEvolutionBox(thirdEvo);
 
-        // Copy components from new panels to the existing ones
+        // copy the components from the new boxes to the existing ones
         for (Component c : newBase.getComponents()) {
             boxBase.add(c);
         }
@@ -792,7 +756,7 @@ public class PokemonView extends JPanel {
             boxThird.add(c);
         }
 
-        // Revalidate and repaint the boxes to reflect changes
+        // redisplay the boxes
         boxBase.revalidate();
         boxBase.repaint();
         boxSecond.revalidate();
@@ -801,18 +765,12 @@ public class PokemonView extends JPanel {
         boxThird.repaint();
     }
 
-    /**
-     * Creates a JPanel representing a single evolution box with image and name.
-     *
-     * @param p The Pokémon to display in the box, or null for "No Data".
-     * @return JPanel containing the evolution box.
-     */
+    // creates a small evolution box for displaying Pokémon evolutions
     private JPanel createEvolutionBox(Pokemon p) {
         JPanel box = new JPanel(null);
         box.setOpaque(false);
         box.setBounds(0, 0, 220, 170);
 
-        // Create image and name labels for the Pokémon
         JLabel imgLabel = new JLabel();
         imgLabel.setBounds(10, 10, 200, 120);
         imgLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -824,11 +782,7 @@ public class PokemonView extends JPanel {
         nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
         nameLabel.setVerticalAlignment(SwingConstants.CENTER);
 
-        /**
-         * Sets the image and name for the evolution box. If the Pokémon is
-         * null, displays "No Data" and the default image. Otherwise, shows the
-         * Pokémon's image and name.
-         */
+        // sets the image and name for the Pokémon
         if (p != null) {
             int num = p.getPokedexNumber();
             String imgPath = (num >= 1 && num <= 55)
@@ -848,7 +802,7 @@ public class PokemonView extends JPanel {
         return box;
     }
 
-    // Helper method for name formatting (title case for multi-word names)
+    // helper method to format Pokémon names
     private String formatPokemonName(String input) {
         String[] words = input.trim().split("\\s+");
         StringBuilder sb = new StringBuilder();
@@ -864,6 +818,7 @@ public class PokemonView extends JPanel {
         return sb.toString().trim();
     }
 
+    // updates the valid types label based on the current index
     private void updateValidTypesLabel(JLabel validTypesLabel, int currentIndex, String[] validTypes) {
         if (currentIndex == 2 || currentIndex == 3) {
             validTypesLabel.setText("<html>Valid types: <b>" + String.join(", ", validTypes) + "</b></html>");
@@ -873,6 +828,7 @@ public class PokemonView extends JPanel {
         }
     }
 
+    // updates the Pokémon list panel with all registered Pokémon
     private void updatePokemonListPanel(JPanel listPanel) {
         listPanel.removeAll();
         for (Pokemon p : pokedex) {

@@ -1,6 +1,5 @@
 package model;
 
-// Move class represents a Pokémon move with its attributes and methods.
 public class Move {
 
     private String moveName;
@@ -9,7 +8,6 @@ public class Move {
     private String moveType1;
     private String moveType2;
 
-    // Constructor for Move class
     public Move(String name, String description, String classification, String type1,
             String type2) {
         this.moveName = name;
@@ -19,7 +17,6 @@ public class Move {
         this.moveType2 = type2;
     }
 
-    // Getters for Move attributes
     public String getMoveName() {
         return moveName;
     }
@@ -38,12 +35,5 @@ public class Move {
 
     public String getMoveDescription() {
         return moveDescription;
-    }
-
-    /**
-     * Gets a formatted string representation of the move's type2
-     */
-    public String getType2Display() {
-        return (moveType2 == null || moveType2.isEmpty()) ? "N/A" : moveType2;
     }
 }

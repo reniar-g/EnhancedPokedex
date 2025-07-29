@@ -16,6 +16,7 @@ public class AddTrainerView extends JPanel {
         setOpaque(false);
     }
 
+    // method to show the add trainer screen on the main view
     public void showAddTrainer(Runnable onHome) {
         removeAll();
 
@@ -33,7 +34,6 @@ public class AddTrainerView extends JPanel {
         descLabel.setHorizontalAlignment(SwingConstants.LEFT);
         addPanel.add(descLabel);
 
-        // ID field
         JLabel idLabel = new JLabel("Trainer ID:");
         idLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         idLabel.setBounds(45, 160, 120, 20);
@@ -42,7 +42,6 @@ public class AddTrainerView extends JPanel {
         idField.setBounds(145, 155, 225, 25);
         addPanel.add(idField);
 
-        // Name field
         JLabel nameLabel = new JLabel("Name:");
         nameLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         nameLabel.setBounds(45, 195, 120, 20);
@@ -51,7 +50,6 @@ public class AddTrainerView extends JPanel {
         nameField.setBounds(145, 190, 225, 25);
         addPanel.add(nameField);
 
-        // Birth field
         JLabel birthLabel = new JLabel("Birthdate (YYYY-MM-DD):");
         birthLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         birthLabel.setBounds(45, 230, 200, 20);
@@ -60,7 +58,6 @@ public class AddTrainerView extends JPanel {
         birthField.setBounds(245, 225, 125, 25);
         addPanel.add(birthField);
 
-        // Sex field
         JLabel sexLabel = new JLabel("Sex (M/F):");
         sexLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         sexLabel.setBounds(45, 265, 120, 20);
@@ -69,7 +66,6 @@ public class AddTrainerView extends JPanel {
         sexField.setBounds(145, 260, 50, 25);
         addPanel.add(sexField);
 
-        // Hometown field
         JLabel hometownLabel = new JLabel("Hometown:");
         hometownLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         hometownLabel.setBounds(45, 300, 120, 20);
@@ -78,7 +74,6 @@ public class AddTrainerView extends JPanel {
         hometownField.setBounds(145, 295, 225, 25);
         addPanel.add(hometownField);
 
-        // Description field
         JLabel desc2Label = new JLabel("Description:");
         desc2Label.setFont(new Font("Consolas", Font.PLAIN, 15));
         desc2Label.setBounds(45, 335, 120, 20);
@@ -87,7 +82,6 @@ public class AddTrainerView extends JPanel {
         desc2Field.setBounds(145, 330, 225, 25);
         addPanel.add(desc2Field);
 
-        // Money field (display only)
         JLabel moneyLabel = new JLabel("Initial Funds:");
         moneyLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         moneyLabel.setBounds(45, 370, 120, 20);
@@ -97,10 +91,12 @@ public class AddTrainerView extends JPanel {
         moneyValueLabel.setBounds(170, 370, 225, 20);
         addPanel.add(moneyValueLabel);
 
-        // Submit button
+        // submit button
         JButton submitBtn = GUIUtils.createNavButton("Submit", 787, 345, 67, 35, null);
         addPanel.add(submitBtn);
 
+        // action listener for submit button
+        // validates the input and adds the trainer
         submitBtn.addActionListener(evt -> {
             try {
                 int id = Integer.parseInt(idField.getText().trim());
@@ -110,17 +106,19 @@ public class AddTrainerView extends JPanel {
                 String hometown = hometownField.getText().trim();
                 String description = desc2Field.getText().trim();
 
-                // Validate inputs
+                // if there is an empty fields, show error message
                 if (name.isEmpty() || birth.isEmpty() || sex.isEmpty() || hometown.isEmpty() || description.isEmpty()) {
                     JOptionPane.showMessageDialog(this, "All fields are required.");
                     return;
                 }
 
+                // must follow the format
                 if (!birth.matches("\\d{4}-\\d{2}-\\d{2}")) {
                     JOptionPane.showMessageDialog(this, "Invalid birthdate format. Use YYYY-MM-DD.");
                     return;
                 }
 
+                // accepts only m or f
                 if (!TrainerController.isValidSex(sex)) {
                     JOptionPane.showMessageDialog(this, "Sex must be 'M' or 'F'.");
                     return;
@@ -140,7 +138,7 @@ public class AddTrainerView extends JPanel {
             }
         });
 
-        // Home button
+        // home button
         JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
@@ -148,7 +146,7 @@ public class AddTrainerView extends JPanel {
         });
         addPanel.add(btnHome);
 
-        // Back button
+        // back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             if (onHome != null) {
                 onHome.run();

@@ -19,8 +19,12 @@ public class ItemManagementView extends JPanel {
         setOpaque(false);
     }
 
+    // shows the buy item panel where trainer can buy items from the shop
     public void showBuyItemPanel(Trainer trainer, Runnable onHome) {
         removeAll();
+
+        // get list of items from controller
+        List<Item> itemList = controller.getItemController().getItemList();
 
         JPanel buyPanel = new JPanel(null);
         buyPanel.setOpaque(false);
@@ -29,8 +33,6 @@ public class ItemManagementView extends JPanel {
 
         GUIUtils.addWelcomeLabel(buyPanel, "Buy Items", 35, 39, 353, 40);
 
-        // Get list of all available items
-        List<Item> itemList = controller.getItemController().getItemList();
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
@@ -58,29 +60,24 @@ public class ItemManagementView extends JPanel {
                 listPanel
         );
 
-        // Item name input
         JLabel nameLabel = new JLabel("Item Name:");
         nameLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         nameLabel.setBounds(510, 475, 100, 30);
         nameLabel.setForeground(Color.BLACK);
         buyPanel.add(nameLabel);
-
         JTextField nameField = new JTextField();
         nameField.setBounds(510, 500, 180, 30);
         buyPanel.add(nameField);
 
-        // Quantity input
         JLabel qtyLabel = new JLabel("Quantity:");
         qtyLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         qtyLabel.setBounds(710, 475, 100, 30);
         qtyLabel.setForeground(Color.BLACK);
         buyPanel.add(qtyLabel);
-
         JTextField qtyField = new JTextField("1");
         qtyField.setBounds(710, 500, 60, 30);
         buyPanel.add(qtyField);
 
-        // Buy button
         JButton buyButton = new JButton("Buy");
         buyButton.setFont(new Font("Consolas", Font.BOLD, 14));
         buyButton.setMargin(new Insets(0, 0, 0, 0));
@@ -98,6 +95,7 @@ public class ItemManagementView extends JPanel {
         detailsLabel.setOpaque(true);
         buyPanel.add(detailsLabel);
 
+        // validate and process buy action
         buyButton.addActionListener(e -> {
             String itemName = nameField.getText().trim();
             String qtyStr = qtyField.getText().trim();
@@ -131,7 +129,7 @@ public class ItemManagementView extends JPanel {
             }
             double unitPrice = 0;
             try {
-                // Remove all non-digit characters (except dot for decimals)
+                // since the data is naka P100 format, parse it to get the numeric value
                 String priceStr = found.getItemPrice().replaceAll("[^0-9.]", "");
                 unitPrice = Double.parseDouble(priceStr);
             } catch (Exception ex) {
@@ -139,28 +137,28 @@ public class ItemManagementView extends JPanel {
                 return;
             }
 
+            // check if trainer has enough money
             double totalPrice = unitPrice * quantity;
             if (trainer.getTrainerMoney() < totalPrice) {
                 JOptionPane.showMessageDialog(this, "Not enough money to buy " + quantity + " " + found.getItemName() + "(s).");
                 return;
             }
 
+            // check if item is unique and already exists in inventory
             for (int i = 0; i < quantity; i++) {
                 boolean added = trainer.addItem(found);
                 if (!added) {
                     JOptionPane.showMessageDialog(this, "Could only add " + i + " item(s): inventory full or unique item limit reached.");
-                    // Refund any partially added items
+                    // deduct the money for the items that were successfully added requirement 6
                     trainer.setTrainerMoney(trainer.getTrainerMoney() - (unitPrice * i));
                     return;
                 }
             }
-
             trainer.setTrainerMoney(trainer.getTrainerMoney() - totalPrice);
             JOptionPane.showMessageDialog(this, "Bought " + quantity + " " + found.getItemName() + "(s) for ₱" + totalPrice + ".");
             nameField.setText("");
         });
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -168,7 +166,6 @@ public class ItemManagementView extends JPanel {
         });
         buyPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             removeAll();
             revalidate();
@@ -183,8 +180,11 @@ public class ItemManagementView extends JPanel {
         repaint();
     }
 
+    // shows the sell item panel where trainer can sell items from their inventory
     public void showSellItemPanel(Trainer trainer, Runnable onHome) {
         removeAll();
+        // get trainer's inventory
+        List<Item> inv = trainer.getInventory();
 
         JPanel sellPanel = new JPanel(null);
         sellPanel.setOpaque(false);
@@ -193,12 +193,11 @@ public class ItemManagementView extends JPanel {
 
         GUIUtils.addWelcomeLabel(sellPanel, "Sell Items", 35, 39, 353, 40);
 
-        // Get trainer's inventory
-        List<Item> inv = trainer.getInventory();
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
 
+        // new list to track shown item IDs
         List<Integer> shownIds = new java.util.ArrayList<>();
         int itemNum = 1;
         for (Item item : inv) {
@@ -237,29 +236,24 @@ public class ItemManagementView extends JPanel {
         detailsLabel.setOpaque(true);
         sellPanel.add(detailsLabel);
 
-        // Item name input
         JLabel nameLabel = new JLabel("Item Name:");
         nameLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         nameLabel.setBounds(510, 475, 100, 30);
         nameLabel.setForeground(Color.BLACK);
         sellPanel.add(nameLabel);
-
         JTextField nameField = new JTextField();
         nameField.setBounds(510, 500, 180, 30);
         sellPanel.add(nameField);
 
-        // Quantity input
         JLabel qtyLabel = new JLabel("Quantity:");
         qtyLabel.setFont(new Font("Consolas", Font.PLAIN, 15));
         qtyLabel.setBounds(710, 475, 100, 30);
         qtyLabel.setForeground(Color.BLACK);
         sellPanel.add(qtyLabel);
-
         JTextField qtyField = new JTextField("1");
         qtyField.setBounds(710, 500, 60, 30);
         sellPanel.add(qtyField);
 
-        // Sell button
         JButton sellButton = new JButton("Sell");
         sellButton.setFont(new Font("Consolas", Font.BOLD, 14));
         sellButton.setMargin(new Insets(0, 0, 0, 0));
@@ -267,10 +261,12 @@ public class ItemManagementView extends JPanel {
         sellButton.setBackground(GUIUtils.POKEDEX_GREEN);
         sellPanel.add(sellButton);
 
+        // validate and process sell action
         sellButton.addActionListener(e -> {
             String itemName = nameField.getText().trim();
             String qtyText = qtyField.getText().trim();
 
+            // if item name or quantity is empty, show error popup
             if (itemName.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please enter an item name.");
                 return;
@@ -283,12 +279,12 @@ public class ItemManagementView extends JPanel {
                     JOptionPane.showMessageDialog(this, "Quantity must be positive.");
                     return;
                 }
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) { // if quantity is not a valid number or is negative, show error popup
                 JOptionPane.showMessageDialog(this, "Invalid quantity.");
                 return;
             }
 
-            // Find item in inventory
+            // find the item in inventory to sell
             Item itemToSell = null;
             for (Item i : inv) {
                 if (i.getItemName().equalsIgnoreCase(itemName)) {
@@ -302,7 +298,7 @@ public class ItemManagementView extends JPanel {
                 return;
             }
 
-            // Check if trainer has enough of the item
+            // check if trainer has enough quantity of the item to sell
             int available = trainer.getItemQuantity(itemToSell);
             if (available < quantity) {
                 JOptionPane.showMessageDialog(this,
@@ -312,7 +308,7 @@ public class ItemManagementView extends JPanel {
                 return;
             }
 
-            // Calculate sell value (50% of buy price)
+            // calculate the sell value (50% of the buy price) requirement 6
             double sellValue;
             try {
                 String priceStr = itemToSell.getItemPrice().replaceAll("[^0-9.]", "");
@@ -323,7 +319,6 @@ public class ItemManagementView extends JPanel {
                 return;
             }
 
-            // Confirm sale
             int confirm = JOptionPane.showConfirmDialog(this,
                     "Sell " + quantity + " " + itemToSell.getItemName() + "(s) for ₱"
                     + String.format("%,.2f", sellValue) + " PkD?",
@@ -331,7 +326,6 @@ public class ItemManagementView extends JPanel {
                     JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                // Process sale
                 for (int i = 0; i < quantity; i++) {
                     trainer.removeItem(itemToSell);
                 }
@@ -348,7 +342,6 @@ public class ItemManagementView extends JPanel {
             }
         });
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -356,7 +349,6 @@ public class ItemManagementView extends JPanel {
         });
         sellPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             removeAll();
             revalidate();
@@ -371,18 +363,22 @@ public class ItemManagementView extends JPanel {
         repaint();
     }
 
+    // shows the trainer's inventory where trainer can view their items
     public void showTrainerInventoryDialog(Trainer trainer, Runnable onHome) {
         removeAll();
+
         JPanel invPanel = new JPanel(null);
         invPanel.setOpaque(false);
         invPanel.setBounds(0, 0, 901, 706);
         add(invPanel);
 
         GUIUtils.addWelcomeLabel(invPanel, "Trainer Inventory", 35, 39, 353, 40);
+
         List<Item> inv = trainer.getInventory();
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
+
         List<Integer> shownIds = new ArrayList<>();
         int itemNum = 1;
         for (Item item : inv) {

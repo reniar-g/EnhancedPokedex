@@ -9,20 +9,19 @@ import util.*;
 
 public class ItemView extends JPanel {
 
-    private final ItemController controller;
     private final List<Item> itemList;
 
     private JPanel itemsWelcomePanel, itemsMainPanel;
     private JLabel itemsWelcomeDesc;
 
     public ItemView(ItemController controller, Runnable onHome) {
-        this.controller = controller;
         this.itemList = controller.getItemList();
         setLayout(null);
         setOpaque(false);
         showItemsWelcomePanel(onHome);
     }
 
+    // show the panel to view all items
     private void showViewAllItems(Runnable onHome) {
         GUIUtils.removeAllPanels(itemsMainPanel);
 
@@ -30,10 +29,8 @@ public class ItemView extends JPanel {
         itemsMainPanel.setOpaque(false);
         itemsMainPanel.setBounds(0, 0, 901, 706);
 
-        // Title
         GUIUtils.addWelcomeLabel(itemsMainPanel, "All Items", 35, 39, 353, 40);
 
-        // Scrollable list of items
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
@@ -45,16 +42,14 @@ public class ItemView extends JPanel {
             itemNum++;
         }
 
-        // Make the scrollable panel fill the big left area
         GUIUtils.createLabeledScrollPanel(
                 itemsMainPanel,
                 "<html><span style='font-size:18px;'><b>List of Items</b></span></html>",
-                34, 90, 356, 30, // Label at top left
-                45, 125, 330, 320, // Scroll panel fills most of left side
+                34, 90, 356, 30,
+                45, 125, 330, 320,
                 listPanel
         );
 
-        // Search field
         GUIUtils.SearchFieldComponents search = GUIUtils.createSearchField(
                 itemsMainPanel,
                 "Search Item:",
@@ -92,7 +87,6 @@ public class ItemView extends JPanel {
             }
         });
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -100,7 +94,6 @@ public class ItemView extends JPanel {
         });
         itemsMainPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             remove(itemsMainPanel);
             showItemsWelcomePanel(onHome);
@@ -114,6 +107,7 @@ public class ItemView extends JPanel {
         repaint();
     }
 
+    // create a jlabel for showing of the item
     private static JLabel getJLabel(Item i, int itemNum) {
         String itemText = "<html>"
                 + "<span style='font-size:13px;'><b>#" + itemNum + "  " + i.getItemName() + "</b> | " + i.getItemCategory() + "</span><br>"
@@ -128,7 +122,7 @@ public class ItemView extends JPanel {
         return itemLabel;
     }
 
-    // Show the welcome panel
+    // main menu of item
     private void showItemsWelcomePanel(Runnable onHome) {
         if (itemsWelcomePanel != null) {
             remove(itemsWelcomePanel);
@@ -154,7 +148,7 @@ public class ItemView extends JPanel {
         itemsWelcomeDesc.setOpaque(false);
         itemsWelcomePanel.add(itemsWelcomeDesc);
 
-        JButton itemsViewBtn = GUIUtils.createButton2("View All Items", 493, 345, 140, 35);
+        JButton itemsViewBtn = GUIUtils.createButton1("View All Items", 493, 345, 140, 35);
         itemsWelcomePanel.add(itemsViewBtn);
 
         JButton btnHome = MainPokedexView.homeButton(e -> {
@@ -164,7 +158,6 @@ public class ItemView extends JPanel {
         });
         itemsWelcomePanel.add(btnHome);
 
-        // Add button actions
         itemsViewBtn.addActionListener(e -> {
             remove(itemsWelcomePanel);
             showViewAllItems(onHome);

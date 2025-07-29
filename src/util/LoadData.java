@@ -5,7 +5,7 @@ import model.*;
 
 public class LoadData {
 
-    // Adds the first 55 pokemons from the official pokemon franchise
+    // adds the 55 default pokemons
     public static ArrayList<Pokemon> loadPokemons() {
         ArrayList<Pokemon> pokemons = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class LoadData {
     public static ArrayList<Item> loadItems() {
         ArrayList<Item> items = new ArrayList<>();
 
-        // Vitamins
+        // vits
         items.add(new Vitamin(1, "HP Up", "Vitamin",
                 "A nutritious drink for Pokémon.",
                 "+10 HP EVs", "P10000", "P5000"));
@@ -121,7 +121,7 @@ public class LoadData {
                 "A nutritious drink for Pokémon.",
                 "+10 Special Defense EVs", "P10000", "P5000"));
 
-        // Feathers
+        // feathers
         items.add(new Feather(6, "Health Feather", "Feather",
                 "A feather that slightly increases HP.",
                 "+1 HP EV", "P300", "P150"));
@@ -138,12 +138,12 @@ public class LoadData {
                 "A feather that slightly increases Speed.",
                 "+1 Speed EV", "P300", "P150"));
 
-        // Levelling Item
+        // levelling items
         items.add(new Levelling(10, "Rare Candy", "Leveling Item",
                 "A candy that is packed with energy.",
                 "Increases level by 1", "P4800", "P2400"));
 
-        // Evolution Stones
+        // evo stones
         items.add(new EvolutionStone(11, "Fire Stone", "Evolution Stone",
                 "A stone that radiates heat.",
                 "Evolves certain Pokémon.", "P3000", "P1500"));
@@ -209,20 +209,20 @@ public class LoadData {
         Trainer brock = new Trainer(5, "Brock Harrison", "14/06/1983", "M", "Pewter City",
                 "Rock-type Pokémon Trainer");
 
-        // Add default moves tackle and defend to each Pokemon first
+        // add default moves tackle and defend to each pokemon first
         for (Pokemon pokemon : allPokemon) {
             pokemon.getMoveSet().add(moves.get(0));  // Tackle
             pokemon.getMoveSet().add(moves.get(1));  // Defend
         }
 
-        // add Pokemon to trainer
+        // add pokemon to trainer
         ash.addPokemonToLineup(allPokemon.get(0));  // Bulbasaur
         ash.addPokemonToLineup(allPokemon.get(5));  // Charizard
         ash.addPokemonToLineup(allPokemon.get(6));  // Squirtle
 
-        // Add Pikachu with two HM moves and two TM moves
+        // add pikachu with two HM moves and two TM moves
         Pokemon ashPikachu = allPokemon.get(24); // Pikachu
-        ashPikachu.getMoveSet().clear(); // Remove default moves
+        ashPikachu.getMoveSet().clear(); // remove default moves
         ashPikachu.getMoveSet().add(moves.get(6));  // Flash (HM, Electric)
         ashPikachu.getMoveSet().add(moves.get(7));  // Thunder Wave (HM, Electric)
         ashPikachu.getMoveSet().add(moves.get(8));  // Thunder Shock (TM, Electric)
