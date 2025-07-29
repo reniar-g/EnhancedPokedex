@@ -8,6 +8,7 @@ import javax.swing.*;
 import model.Item;
 import model.Trainer;
 import util.GUIUtils;
+import model.Pokemon;
 
 public class ItemManagementView extends JPanel {
 
@@ -361,6 +362,181 @@ public class ItemManagementView extends JPanel {
 
         revalidate();
         repaint();
+    }
+
+    public void showUseItemDialog(Trainer trainer, Runnable onHome) {
+        removeAll();
+
+        JPanel usePanel = new JPanel(null);
+        usePanel.setOpaque(false);
+        usePanel.setBounds(0, 0, 901, 706);
+        add(usePanel);
+
+        GUIUtils.addWelcomeLabel(usePanel, "Use Items", 35, 39, 353, 40);
+
+        // Create inventory panel
+        JPanel inventoryPanel = new JPanel();
+        inventoryPanel.setLayout(new BoxLayout(inventoryPanel, BoxLayout.Y_AXIS));
+        inventoryPanel.setOpaque(false);
+
+        List<Item> inventory = trainer.getInventory();
+        ButtonGroup inventoryGroup = new ButtonGroup();
+
+        // Track shown item IDs to avoid duplicates
+        List<Integer> shownIds = new ArrayList<>();
+        int itemNum = 1;
+        for (Item item : inventory) {
+            if (!shownIds.contains(item.getItemId())) {
+                int qty = trainer.getItemQuantity(item);
+                JRadioButton radio = new JRadioButton(
+                        "#" + itemNum + " " + item.getItemName() +
+                                " (" + item.getItemCategory() + ") x" + qty
+                );
+                radio.setFont(new Font("Consolas", Font.PLAIN, 14));
+                radio.setOpaque(false);
+                radio.setActionCommand(String.valueOf(item.getItemId()));
+                inventoryGroup.add(radio);
+                inventoryPanel.add(radio);
+                shownIds.add(item.getItemId());
+                itemNum++;
+            }
+        }
+
+        // Create Pokémon panel
+        JPanel pokemonPanel = new JPanel();
+        pokemonPanel.setLayout(new BoxLayout(pokemonPanel, BoxLayout.Y_AXIS));
+        pokemonPanel.setOpaque(false);
+
+        // Combine lineup and storage for selection
+        List<Pokemon> allPokemon = new ArrayList<>();
+        if (trainer.getPokemonLineup() != null) {
+            allPokemon.addAll(trainer.getPokemonLineup());
+        }
+        if (trainer.getPokemonStorage() != null) {
+            allPokemon.addAll(trainer.getPokemonStorage());
+        }
+
+        ButtonGroup pokemonGroup = new ButtonGroup();
+        for (Pokemon p : allPokemon) {
+            String location = trainer.getPokemonLineup() != null &&
+                    trainer.getPokemonLineup().contains(p) ? "Lineup" : "Storage";
+            JRadioButton radio = new JRadioButton(
+                    "#" + p.getPokedexNumber() + " " + p.getPokemonName() +
+                            " (Lv." + p.getBaseLevel() + ", " + location + ")"
+            );
+            radio.setFont(new Font("Consolas", Font.PLAIN, 14));
+            radio.setOpaque(false);
+            radio.setActionCommand(String.valueOf(allPokemon.indexOf(p)));
+            pokemonGroup.add(radio);
+            pokemonPanel.add(radio);
+        }
+
+        // Add scroll panes
+        GUIUtils.createLabeledScrollPanel(
+                usePanel,
+                "<html><span style='font-size:18px;'><b>Inventory (" + shownIds.size() + " items)</b></span></html>",
+                34, 90, 356, 30,
+                45, 125, 330, 140,
+                inventoryPanel
+        );
+
+        GUIUtils.createLabeledScrollPanel(
+                usePanel,
+                "<html><span style='font-size:18px;'><b>Your Pokémon (" + allPokemon.size() + ")</b></span></html>",
+                34, 270, 356, 30,
+                45, 305, 330, 135,
+                pokemonPanel
+        );
+
+        // Add use button
+        JButton useBtn = GUIUtils.createButton1("Use Item", 493, 345, 140, 35);
+        usePanel.add(useBtn);
+
+        // Home button
+        JButton btnHome = MainPokedexView.homeButton(evt -> {
+            if (onHome != null) {
+                onHome.run();
+            }
+        });
+        usePanel.add(btnHome);
+
+        // Back button
+        JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
+            removeAll();
+            revalidate();
+            repaint();
+            if (onHome != null) {
+                onHome.run();
+            }
+        });
+        usePanel.add(backBtn);
+
+        revalidate();
+        repaint();
+
+        useBtn.addActionListener(evt -> {
+            // Get selected item and Pokémon
+            ButtonModel selectedItem = inventoryGroup.getSelection();
+            ButtonModel selectedPokemon = pokemonGroup.getSelection();
+
+            if (selectedItem == null || selectedPokemon == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Please select both an item and a Pokémon.",
+                        "Selection Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            int itemId = Integer.parseInt(selectedItem.getActionCommand());
+            int pokemonIndex = Integer.parseInt(selectedPokemon.getActionCommand());
+
+            // Find the actual item instance
+            Item itemToUse = null;
+            for (Item item : inventory) {
+                if (item.getItemId() == itemId) {
+                    itemToUse = item;
+                    break;
+                }
+            }
+
+            if (itemToUse == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Selected item not found in inventory.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            if (pokemonIndex < 0 || pokemonIndex >= allPokemon.size()) {
+                JOptionPane.showMessageDialog(this,
+                        "Selected Pokémon not found.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Pokemon pokemon = allPokemon.get(pokemonIndex);
+
+            // Use the item through the controller
+            TrainerController.ItemUseResult result = controller.useItem(trainer, itemToUse, pokemon);
+
+            if (result.success) {
+                JOptionPane.showMessageDialog(this,
+                        result.message,
+                        "Item Used",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                // Refresh the view if the item was consumed
+                if (!itemToUse.getItemCategory().equalsIgnoreCase("Held")) {
+                    showUseItemDialog(trainer, onHome);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        result.message,
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 
     // shows the trainer's inventory where trainer can view their items

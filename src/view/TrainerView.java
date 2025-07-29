@@ -254,7 +254,17 @@ public class TrainerView extends JPanel {
         // --- Action handlers ---
         buyBtn.addActionListener(evt -> showBuyItemPanel(trainer, onHome));
         sellBtn.addActionListener(evt -> showSellItemPanel(trainer, onHome));
-        useBtn.addActionListener(evt -> JOptionPane.showMessageDialog(this, "Use Item: Not yet implemented."));
+        useBtn.addActionListener(evt -> {
+            removeAll();
+            if (itemManagementView == null) {
+                itemManagementView = new ItemManagementView(controller);
+            }
+            itemManagementView.setBounds(0, 0, 901, 706);
+            add(itemManagementView);
+            itemManagementView.showUseItemDialog(trainer, () -> showManageItems(trainer, onHome));
+            revalidate();
+            repaint();
+        });
         viewInvBtn.addActionListener(evt -> showTrainerInventoryDialog(trainer, onHome));
     }
 

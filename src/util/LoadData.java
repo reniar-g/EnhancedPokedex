@@ -146,43 +146,43 @@ public class LoadData {
         // evo stones
         items.add(new EvolutionStone(11, "Fire Stone", "Evolution Stone",
                 "A stone that radiates heat.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "fire"));
 
         items.add(new EvolutionStone(12, "Water Stone", "Evolution Stone",
                 "A stone with a blue and watery appearance.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "water"));
 
         items.add(new EvolutionStone(13, "Thunder Stone", "Evolution Stone",
                 "A stone that sparkles with electricity.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "thunder"));
 
         items.add(new EvolutionStone(14, "Leaf Stone", "Evolution Stone",
                 "A stone with a leaf pattern.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "leaf"));
 
         items.add(new EvolutionStone(15, "Moon Stone", "Evolution Stone",
                 "A stone that glows faintly in the moonlight.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "moon"));
 
         items.add(new EvolutionStone(16, "Sun Stone", "Evolution Stone",
                 "A stone that glows like the sun.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "sun"));
 
         items.add(new EvolutionStone(17, "Shiny Stone", "Evolution Stone",
                 "A stone that sparkles brightly.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "shiny"));
 
         items.add(new EvolutionStone(18, "Dusk Stone", "Evolution Stone",
                 "A dark and ominous stone.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "dusk"));
 
         items.add(new EvolutionStone(19, "Dawn Stone", "Evolution Stone",
                 "A stone that sparkles like the morning sky.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "dawn"));
 
         items.add(new EvolutionStone(20, "Ice Stone", "Evolution Stone",
                 "A stone that is cold to the touch.",
-                "Evolves certain Pokémon.", "P3000", "P1500"));
+                "Evolves certain Pokémon.", "P3000", "P1500", "ice"));
 
         return items;
     }

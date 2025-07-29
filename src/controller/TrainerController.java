@@ -148,6 +148,17 @@ public class TrainerController {
                 }
             }
 
+            if (item instanceof EvolutionStone stone) {
+                if (stone.canEvolveWithStone(pokemon)) {
+                    stone.useStone(pokemon);
+                    return new ItemUseResult(true, pokemon.getBaseLevel(),
+                            pokemon.getPokemonName() + " evolved using " + stone.getItemName() + "!");
+                } else {
+                    return new ItemUseResult(false, pokemon.getBaseLevel(),
+                            pokemon.getPokemonName() + " cannot evolve with " + stone.getItemName());
+                }
+            }
+
             return new ItemUseResult(false, pokemon.getBaseLevel(), "Unknown item type");
         } catch (Exception e) {
             return new ItemUseResult(false, pokemon.getBaseLevel(), e.getMessage());
