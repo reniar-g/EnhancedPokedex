@@ -27,9 +27,7 @@ public class TrainerView extends JPanel {
         showTrainersWelcomePanel(onHome);
     }
 
-    // Welcome panel with Add, View, Manage buttons
     private void showTrainersWelcomePanel(Runnable onHome) {
-        // Remove existing panels first
         removeAll();
 
         trainersWelcomePanel = new JPanel(null);
@@ -93,7 +91,6 @@ public class TrainerView extends JPanel {
         selectBtn.addActionListener(evt -> showManageTrainers(onHome));
     }
 
-    // Manage trainers panel with Buy, Sell, Manage Pokémons buttons
     private void showManageTrainers(Runnable onHome) {
         removeAll();
 
@@ -129,7 +126,6 @@ public class TrainerView extends JPanel {
         JButton selectBtn = GUIUtils.createButton1("Select", 493, 345, 140, 35);
         trainersMainPanel.add(selectBtn);
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
@@ -137,7 +133,6 @@ public class TrainerView extends JPanel {
         });
         trainersMainPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainersWelcomePanel(onHome);
         });
@@ -159,7 +154,6 @@ public class TrainerView extends JPanel {
         });
     }
 
-    // After selecting a trainer, show manage items or pokemons
     private void showTrainerActionMenu(Trainer trainer, Runnable onHome) {
         removeAll();
 
@@ -203,7 +197,6 @@ public class TrainerView extends JPanel {
         managePokeBtn.addActionListener(evt -> showManagePokemons(trainer, onHome));
     }
 
-    // Manage Items: Buy, Sell, Use, View Inventory
     private void showManageItems(Trainer trainer, Runnable onHome) {
         removeAll();
 
@@ -212,7 +205,6 @@ public class TrainerView extends JPanel {
         mainPanel.setBounds(0, 0, 901, 706);
 
         GUIUtils.addWelcomeLabel(mainPanel, "Manage Items", 35, 39, 353, 40);
-        // Description label
         JLabel descLabel = new JLabel("<html><div style='width:320px; text-align:justify;'>"
                 + "<b>Welcome to the Item Management Panel!</b><br><br>"
                 + "Here you can buy, sell, use, or view your trainer's items."
@@ -223,7 +215,6 @@ public class TrainerView extends JPanel {
         descLabel.setHorizontalAlignment(SwingConstants.LEFT);
         mainPanel.add(descLabel);
 
-        // Buttons for actions
         JButton buyBtn = GUIUtils.createButton1("Buy Item", 493, 345, 140, 35);
         JButton sellBtn = GUIUtils.createButton1("Sell Item", 640, 345, 140, 35);
         JButton useBtn = GUIUtils.createButton1("Use Item", 493, 387, 140, 35);
@@ -233,7 +224,6 @@ public class TrainerView extends JPanel {
         mainPanel.add(useBtn);
         mainPanel.add(viewInvBtn);
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(evt -> {
             if (onHome != null) {
                 onHome.run();
@@ -241,7 +231,6 @@ public class TrainerView extends JPanel {
         });
         mainPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, evt -> {
             showTrainerActionMenu(trainer, onHome);
         });
@@ -251,7 +240,6 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        // --- Action handlers ---
         buyBtn.addActionListener(evt -> showBuyItemPanel(trainer, onHome));
         sellBtn.addActionListener(evt -> showSellItemPanel(trainer, onHome));
         useBtn.addActionListener(evt -> {
@@ -268,7 +256,6 @@ public class TrainerView extends JPanel {
         viewInvBtn.addActionListener(evt -> showTrainerInventoryDialog(trainer, onHome));
     }
 
-    // View management components
     private ItemManagementView itemManagementView;
     private PokemonManagementView pokemonManagementView;
 
@@ -296,7 +283,6 @@ public class TrainerView extends JPanel {
         repaint();
     }
 
-    // View Inventory dialog
     private void showTrainerInventoryDialog(Trainer trainer, Runnable onHome) {
         removeAll();
         if (itemManagementView == null) {
@@ -309,7 +295,6 @@ public class TrainerView extends JPanel {
         repaint();
     }
 
-    // Manage Pokémons: Display both lineups and allow actions
     private void showManagePokemons(Trainer trainer, Runnable onHome) {
         removeAll();
 
@@ -319,17 +304,15 @@ public class TrainerView extends JPanel {
 
         GUIUtils.addWelcomeLabel(pokePanel, "Manage Pokémon", 35, 39, 353, 40);
 
-        // Create lineup panel
         JPanel lineupListPanel = new JPanel();
         lineupListPanel.setLayout(new BoxLayout(lineupListPanel, BoxLayout.Y_AXIS));
         lineupListPanel.setOpaque(false);
 
-        // Initialize PokemonManagementView if needed
         if (pokemonManagementView == null) {
             pokemonManagementView = new PokemonManagementView(controller);
         }
 
-        // Add lineup Pokémon
+        // add the trainer's active pokemon lineup
         List<Pokemon> lineup = trainer.getPokemonLineup();
         if (lineup.isEmpty()) {
             JLabel emptyLabel = new JLabel("No Pokémon in active lineup");
@@ -341,12 +324,11 @@ public class TrainerView extends JPanel {
             }
         }
 
-        // Create storage panel
         JPanel storageListPanel = new JPanel();
         storageListPanel.setLayout(new BoxLayout(storageListPanel, BoxLayout.Y_AXIS));
         storageListPanel.setOpaque(false);
 
-        // Add storage Pokémon
+        // add the storage pokemon
         List<Pokemon> storage = trainer.getPokemonStorage();
         if (storage.isEmpty()) {
             JLabel emptyLabel = new JLabel("No Pokémon in storage");
@@ -358,7 +340,6 @@ public class TrainerView extends JPanel {
             }
         }
 
-        // Add lineup scroll panel
         GUIUtils.createLabeledScrollPanel(
                 pokePanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
@@ -367,7 +348,6 @@ public class TrainerView extends JPanel {
                 lineupListPanel
         );
 
-        // Add storage scroll panel
         GUIUtils.createLabeledScrollPanel(
                 pokePanel,
                 "<html><span style='font-size:18px;'><b>Storage (" + storage.size() + "/20)</b></span></html>",
@@ -376,7 +356,6 @@ public class TrainerView extends JPanel {
                 storageListPanel
         );
 
-        // Action buttons
         JButton addPokemonBtn = GUIUtils.createButton1("Add Pokémon", 493, 345, 140, 35);
         JButton switchBtn = GUIUtils.createButton1("Switch to Storage", 640, 345, 140, 35);
         JButton releaseBtn = GUIUtils.createButton1("Release Pokémon", 493, 387, 140, 35);
@@ -403,7 +382,6 @@ public class TrainerView extends JPanel {
         revalidate();
         repaint();
 
-        // Action handlers for Pokémon management using PokemonManagementView
         addPokemonBtn.addActionListener(evt -> {
             removeAll();
             if (pokemonManagementView == null) {

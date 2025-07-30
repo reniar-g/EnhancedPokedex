@@ -52,7 +52,6 @@ public class ViewTrainersView extends JPanel {
                 listPanel
         );
 
-        // Search field
         GUIUtils.SearchFieldComponents search = GUIUtils.createSearchField(
                 mainPanel,
                 "Search Trainer:",
@@ -85,7 +84,6 @@ public class ViewTrainersView extends JPanel {
             }
         });
 
-        // Home button
         JButton btnHome = MainPokedexView.homeButton(e -> {
             if (onHome != null) {
                 onHome.run();
@@ -93,7 +91,6 @@ public class ViewTrainersView extends JPanel {
         });
         mainPanel.add(btnHome);
 
-        // Back button
         JButton backBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
             if (onHome != null) {
                 onHome.run();
@@ -107,6 +104,7 @@ public class ViewTrainersView extends JPanel {
 
     private static JLabel getJLabelWithPokemonAndInventory(Trainer t, int trainerNum) {
         StringBuilder lineup = new StringBuilder();
+        // gets the active lineup of the trainer
         if (t.getPokemonLineup() != null && !t.getPokemonLineup().isEmpty()) {
             for (Pokemon p : t.getPokemonLineup()) {
                 lineup.append(p.getPokemonName()).append(", ");

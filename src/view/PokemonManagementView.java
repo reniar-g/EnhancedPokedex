@@ -39,7 +39,7 @@ public class PokemonManagementView extends JPanel {
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
 
-        // Get all Pokémon from the Pokédex
+        // get all of the Pokémon from the controller
         List<Pokemon> allPokemon = controller.getPokemonController().getPokedex();
 
         ButtonGroup group = new ButtonGroup();
@@ -126,36 +126,28 @@ public class PokemonManagementView extends JPanel {
         });
     }
 
-    /**
-     * Creates a formatted label with Pokemon details including moves
-     */
     public JLabel createPokemonDetailsLabel(Pokemon p, boolean isLineup) {
         StringBuilder sb = new StringBuilder();
         sb.append("<html><div style='width:250px;'>");
 
-        // Pokemon basic info
         sb.append("<span style='font-size:13px;'><b>")
                 .append(p.getPokemonName())
                 .append(" (Level ").append(p.getBaseLevel()).append(")</b></span><br>");
 
-        // Type
         sb.append("Type: ").append(p.getPokemonType1());
         if (p.getPokemonType2() != null && !p.getPokemonType2().isEmpty()) {
             sb.append("/").append(p.getPokemonType2());
         }
         sb.append("<br>");
 
-        // Stats
         sb.append("HP: ").append((int) p.getHp())
                 .append(" | ATK: ").append((int) p.getAttack())
                 .append(" | DEF: ").append((int) p.getDefense())
                 .append(" | SPD: ").append((int) p.getSpeed())
                 .append("<br>");
 
-        // Location
         sb.append("<b>Location: ").append(isLineup ? "Active Lineup" : "Storage").append("</b><br>");
 
-        // Moves
         sb.append("<b>Moves:</b><br>");
         List<Move> moves = p.getMoveSet();
         if (moves.isEmpty()) {
@@ -169,7 +161,6 @@ public class PokemonManagementView extends JPanel {
             }
         }
 
-        // Evolution info if available
         if (p.getEvolvesTo() != null && !p.getEvolvesTo().toString().isEmpty()) {
             sb.append("<br>Evolves to: ").append(p.getEvolvesTo());
             if (p.getEvolutionLevel() > 0) {
@@ -196,7 +187,6 @@ public class PokemonManagementView extends JPanel {
 
         GUIUtils.addWelcomeLabel(switchPanel, "Switch Pokémon", 35, 39, 353, 40);
 
-        // Create lineup panel
         JPanel lineupPanel = new JPanel();
         lineupPanel.setLayout(new BoxLayout(lineupPanel, BoxLayout.Y_AXIS));
         lineupPanel.setOpaque(false);
@@ -218,7 +208,6 @@ public class PokemonManagementView extends JPanel {
             radio.setFont(new Font("Consolas", Font.PLAIN, 12));
         }
 
-        // Create storage panel
         JPanel storagePanel = new JPanel();
         storagePanel.setLayout(new BoxLayout(storagePanel, BoxLayout.Y_AXIS));
         storagePanel.setOpaque(false);
@@ -240,7 +229,6 @@ public class PokemonManagementView extends JPanel {
             radio.setFont(new Font("Consolas", Font.PLAIN, 12));
         }
 
-        // Add scroll panes
         GUIUtils.createLabeledScrollPanel(
                 switchPanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
@@ -259,7 +247,6 @@ public class PokemonManagementView extends JPanel {
         storageScrollPane.setOpaque(false);
         storageScrollPane.getViewport().setOpaque(false);
 
-        // Add switch button
         JButton switchBtn = GUIUtils.createButton1("Switch", 493, 345, 140, 35);
         switchPanel.add(switchBtn);
 
@@ -284,12 +271,11 @@ public class PokemonManagementView extends JPanel {
         repaint();
 
         switchBtn.addActionListener(evt -> {
-            // Get selected Pokémon from lineup or storage
             ButtonModel lineupSelected = lineupGroup.getSelection();
             ButtonModel storageSelected = storageGroup.getSelection();
 
+            // if no selection is made, show error message
             if (lineupSelected != null && storageSelected == null) {
-                // Moving from lineup to storage
                 int index = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
                 Pokemon pokemon = lineup.get(index);
                 TrainerController.SwitchResult result = controller.switchPokemon(trainer, pokemon, false);
@@ -301,8 +287,8 @@ public class PokemonManagementView extends JPanel {
                 } else {
                     JOptionPane.showMessageDialog(this, result.message, "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                // if the pokemon is successfully switched, return to home
             } else if (storageSelected != null && lineupSelected == null) {
-                // Moving from storage to lineup
                 int index = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
                 Pokemon pokemon = storage.get(index);
                 TrainerController.SwitchResult result = controller.switchPokemon(trainer, pokemon, true);
@@ -314,24 +300,23 @@ public class PokemonManagementView extends JPanel {
                 } else {
                     JOptionPane.showMessageDialog(this, result.message, "Error", JOptionPane.ERROR_MESSAGE);
                 }
+                // if both selections are made, switch the pokemon from lineup to storage and vice versa
             } else if (lineupSelected != null && storageSelected != null) {
-                // Swap between lineup and storage
                 int lineupIndex = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
                 int storageIndex = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
                 Pokemon lineupPokemon = lineup.get(lineupIndex);
                 Pokemon storagePokemon = storage.get(storageIndex);
 
-                // First move lineup pokemon to storage
                 TrainerController.SwitchResult result1 = controller.switchPokemon(trainer, lineupPokemon, false);
                 if (!result1.success) {
                     JOptionPane.showMessageDialog(this, result1.message, "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Then move storage pokemon to lineup
+                // move the storage pokemon to lineup
                 TrainerController.SwitchResult result2 = controller.switchPokemon(trainer, storagePokemon, true);
                 if (!result2.success) {
-                    // If failed, try to move the first pokemon back
+                    // if the switch fails, revert the first switch
                     controller.switchPokemon(trainer, lineupPokemon, true);
                     JOptionPane.showMessageDialog(this, result2.message, "Error", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -360,7 +345,6 @@ public class PokemonManagementView extends JPanel {
 
         GUIUtils.addWelcomeLabel(releasePanel, "Release Pokémon", 35, 39, 353, 40);
 
-        // Create lineup panel
         JPanel lineupPanel = new JPanel();
         lineupPanel.setLayout(new BoxLayout(lineupPanel, BoxLayout.Y_AXIS));
         lineupPanel.setOpaque(false);
@@ -382,7 +366,6 @@ public class PokemonManagementView extends JPanel {
             radio.setFont(new Font("Consolas", Font.PLAIN, 12));
         }
 
-        // Create storage panel
         JPanel storagePanel = new JPanel();
         storagePanel.setLayout(new BoxLayout(storagePanel, BoxLayout.Y_AXIS));
         storagePanel.setOpaque(false);
@@ -404,7 +387,6 @@ public class PokemonManagementView extends JPanel {
             radio.setFont(new Font("Consolas", Font.PLAIN, 12));
         }
 
-        // Add scroll panes
         GUIUtils.createLabeledScrollPanel(
                 releasePanel,
                 "<html><span style='font-size:18px;'><b>Active Lineup (" + lineup.size() + "/6)</b></span></html>",
@@ -423,7 +405,6 @@ public class PokemonManagementView extends JPanel {
         storageScrollPane.setOpaque(false);
         storageScrollPane.getViewport().setOpaque(false);
 
-        // Add release button
         JButton releaseBtn = GUIUtils.createButton1("Release", 493, 345, 140, 35);
         releasePanel.add(releaseBtn);
 
@@ -447,8 +428,9 @@ public class PokemonManagementView extends JPanel {
         revalidate();
         repaint();
 
+        // release button action listener
+        // checks which pokemon is selected from lineup or storage and releases it
         releaseBtn.addActionListener(evt -> {
-            // Get selected Pokémon from lineup or storage
             ButtonModel lineupSelected = lineupGroup.getSelection();
             ButtonModel storageSelected = storageGroup.getSelection();
 
@@ -466,9 +448,10 @@ public class PokemonManagementView extends JPanel {
             );
 
             if (confirm != JOptionPane.YES_OPTION) {
-                return;
+                return; // canceled release
             }
 
+            // if lineup is selected, release from lineup
             if (lineupSelected != null) {
                 int index = Integer.parseInt(lineupSelected.getActionCommand().split(":")[1]);
                 Pokemon pokemon = lineup.get(index);
@@ -487,6 +470,7 @@ public class PokemonManagementView extends JPanel {
                             "Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
+                // if storage is selected, release from storage
             } else if (storageSelected != null) {
                 int index = Integer.parseInt(storageSelected.getActionCommand().split(":")[1]);
                 Pokemon pokemon = storage.get(index);
@@ -519,7 +503,6 @@ public class PokemonManagementView extends JPanel {
 
         GUIUtils.addWelcomeLabel(teachMovePanel, "Teach Moves", 35, 39, 353, 40);
 
-        //Select Pokémon
         JPanel selectPokemonPanel = new JPanel(null);
         selectPokemonPanel.setOpaque(false);
         selectPokemonPanel.setBounds(0, 0, 901, 706);
@@ -530,7 +513,7 @@ public class PokemonManagementView extends JPanel {
         selectPokemonLabel.setBounds(45, 105, 334, 20);
         selectPokemonPanel.add(selectPokemonLabel);
 
-        // Combine lineup and storage for selection
+        // get all Pokémon from trainer's lineup and storage
         List<Pokemon> allPokemon = new ArrayList<>();
         allPokemon.addAll(trainer.getPokemonLineup());
         allPokemon.addAll(trainer.getPokemonStorage());
@@ -563,7 +546,6 @@ public class PokemonManagementView extends JPanel {
         pokemonScroll.getViewport().setOpaque(false);
         selectPokemonPanel.add(pokemonScroll);
 
-        // Next button (only enabled when a Pokémon is selected)
         JButton nextBtn = GUIUtils.createButton1("Next", 493, 345, 140, 35);
         nextBtn.setEnabled(false);
         selectPokemonPanel.add(nextBtn);
@@ -585,21 +567,18 @@ public class PokemonManagementView extends JPanel {
         });
         selectPokemonPanel.add(backBtn);
 
-        // Enable Next button when a Pokémon is selected
         pokemonGroup.getElements().asIterator().forEachRemaining(button -> {
             button.addActionListener(e -> nextBtn.setEnabled(true));
         });
 
-        // Add teach move panel (initially invisible)
         JPanel teachPanel = new JPanel(null);
         teachPanel.setOpaque(false);
         teachPanel.setBounds(0, 0, 901, 706);
         teachPanel.setVisible(false);
         teachMovePanel.add(teachPanel);
 
-        // Next button action
         nextBtn.addActionListener(evt -> {
-            // Get selected Pokémon
+            // Get selected Pokémon and show teach move panel
             ButtonModel selected = pokemonGroup.getSelection();
             if (selected == null) {
                 return;
@@ -608,16 +587,13 @@ public class PokemonManagementView extends JPanel {
             int index = Integer.parseInt(selected.getActionCommand());
             Pokemon pokemon = allPokemon.get(index);
 
-            // Clear the teach panel before adding new components
             teachPanel.removeAll();
             teachPanel.revalidate();
             teachPanel.repaint();
 
-            // Show teach move panel
             selectPokemonPanel.setVisible(false);
             teachPanel.setVisible(true);
 
-            // Current moves panel
             JPanel currentMovesPanel = new JPanel();
             currentMovesPanel.setLayout(new BoxLayout(currentMovesPanel, BoxLayout.Y_AXIS));
             currentMovesPanel.setOpaque(false);
@@ -637,7 +613,6 @@ public class PokemonManagementView extends JPanel {
                 currentMovesPanel.add(radio);
             }
 
-            // Available moves panel
             JPanel availableMovesPanel = new JPanel();
             availableMovesPanel.setLayout(new BoxLayout(availableMovesPanel, BoxLayout.Y_AXIS));
             availableMovesPanel.setOpaque(false);
@@ -659,7 +634,6 @@ public class PokemonManagementView extends JPanel {
                 }
             }
 
-            // Create scroll panes for both panels
             GUIUtils.createLabeledScrollPanel(
                     teachPanel,
                     "<html><span style='font-size:18px;'><b>Current Moves</b></span></html>",
@@ -676,16 +650,14 @@ public class PokemonManagementView extends JPanel {
                     availableMovesPanel
             );
 
-            // Teach button
             JButton teachBtn = GUIUtils.createButton1("Teach Move", 493, 345, 140, 35);
             teachPanel.add(teachBtn);
 
-            teachBtn.addActionListener(e -> {
+            teachBtn.addActionListener(e -> { // teaches the selected move to the selected pokemon
                 ButtonModel selectedCurrentMove = currentMovesGroup.getSelection();
                 ButtonModel selectedNewMove = availableMovesGroup.getSelection();
 
                 if (selectedCurrentMove == null) {
-                    // Check if pokemon has space for a new move
                     if (currentMoves.size() >= 4) {
                         JOptionPane.showMessageDialog(this,
                                 "Please select a move to replace.",
@@ -703,7 +675,6 @@ public class PokemonManagementView extends JPanel {
                     return;
                 }
 
-                // Get selected moves
                 Move newMove = availableMoves.get(
                         Integer.parseInt(selectedNewMove.getActionCommand())
                 );
@@ -715,7 +686,7 @@ public class PokemonManagementView extends JPanel {
                     );
                 }
 
-                // Use TrainerController's teachMove method which includes type compatibility check
+                // teach the move using the controller
                 TrainerController.TeachMoveResult result = controller.teachMove(pokemon, newMove, oldMove);
 
                 if (result.success) {
@@ -737,14 +708,12 @@ public class PokemonManagementView extends JPanel {
                 }
             });
 
-            // Back to pokemon selection button
             JButton backToPokemonBtn = GUIUtils.createNavButton("Back", 787, 387, 67, 35, e -> {
                 teachPanel.setVisible(false);
                 selectPokemonPanel.setVisible(true);
             });
             teachPanel.add(backToPokemonBtn);
 
-            // Home button for teach panel
             JButton teachHomebtn = MainPokedexView.homeButton(e -> {
                 if (onHome != null) {
                     onHome.run();

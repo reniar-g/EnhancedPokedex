@@ -1,3 +1,7 @@
+### Compiled Output ###
+bin/
+out/
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
@@ -30,3 +34,4 @@ bin/
 *.xml
 .idea/workspace.xml
 *.xml
+/.idea
